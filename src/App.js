@@ -30,7 +30,7 @@ const cacheRtl = createCache({
 function App() {
   return (
     <ThemeProvider theme={darkTheme}>
-      {/* <CssBaseline /> */}
+      <CssBaseline />
     <Header />
   </ThemeProvider>
   );
