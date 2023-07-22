@@ -32,16 +32,7 @@ const darkTheme = createTheme({
     components: {
       MuiCssBaseline: {
         styleOverrides: `
-        @font-face {
-          font-family: Vazir;
-          src: url('Vazir.eot');
-          src: url('Vazir.eot?#iefix') format('embedded-opentype'),
-               url('Vazir.woff2') format('woff2'),
-               url('Vazir.woff') format('woff'),
-               url('Vazir.ttf') format('truetype');
-          font-weight: normal;
-          font-style: normal;
-        }
+
         @font-face {
           font-family: Vazir;
           src: url('Vazir-Bold.eot');
@@ -72,26 +63,7 @@ const darkTheme = createTheme({
           font-weight: 500;
           font-style: normal;
         }
-        @font-face {
-          font-family: Vazir;
-          src: url('Vazir-Light.eot');
-          src: url('Vazir-Light.eot?#iefix') format('embedded-opentype'),
-               url('Vazir-Light.woff2') format('woff2'),
-               url('Vazir-Light.woff') format('woff'),
-               url('Vazir-Light.ttf') format('truetype');
-          font-weight: 300;
-          font-style: normal;
-        }
-        @font-face {
-          font-family: Vazir;
-          src: url('Vazir-Thin.eot');
-          src: url('Vazir-Thin.eot?#iefix') format('embedded-opentype'),
-               url('Vazir-Thin.woff2') format('woff2'),
-               url('Vazir-Thin.woff') format('woff'),
-               url('Vazir-Thin.ttf') format('truetype');
-          font-weight: 100;
-          font-style: normal;
-        }
+
         
         `,
       },
