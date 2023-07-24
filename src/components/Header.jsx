@@ -7,25 +7,56 @@ import Button from "@mui/material/Button";
 import logo from "../assets/logo.png";
 import { useTheme } from "@mui/material/styles";
 import { styled } from "@mui/system";
+import { createContext } from "react";
 
-import {  Link } from "react-router-dom";
+import { Link } from "react-router-dom";
+import ButtonTrade from "./ButtonTrade";
+import ButtonChooze from "./ButtonChooze";
 
 
 const CardBox = styled("Box")({
   display: "flex",
   padding: 2,
   backgroundColor: "rgba(256,256,256,0.1)",
-  borderRadius: 12,
+  borderRadius: 6,
   justifyContent: "center",
 });
 
+const pages = [
+  {
+   content : "صفحه اصلی",
+    to : "/"
+  },
+  {
+    content : "اپ",
+    to :"/app"
+  },
+  {
+    content : "ارتباط با ما",
+    to : "/contact-us"
+  },
+  {
+    content :"راهنمای مبادله",
+    to : "/help"
+  },
+  {
+    content :"سوالات متداول",
+    to : "/faq"
+  },
+  {
+    content :"قوانین",
+    to : "/rules"
+  },
+]
+
 export default function Header() {
 
-
+  const UserContext = createContext();
   const theme = useTheme();
 
+
   return (
-    <AppBar elevation={0} position="static">
+    <AppBar sx={{ marginBottom: 3 }} elevation={0} position="static">
       <Container maxWidth="xl">
         <Toolbar disableGutters>
           <Box
@@ -45,34 +76,48 @@ export default function Header() {
             }}
           >
             <CardBox>
+              {pages.map(page => (
+                <Link style={{ textDecoration: 'none' }} to={page.to}>
+                  <ButtonChooze content={page.content} />
+                </Link>
 
+              ))}
+
+
+              {/* 
               <Link style={{ textDecoration : 'none' }} to="/">
-                <Button sx={{ color: "white", display: "block" }} >
-                  صفحه اصلی
-                </Button>
+                <ButtonChooze content="صفحه اصلی" />
               </Link>
 
               <Link style={{ textDecoration : 'none' }} to="/app">
-              <Button sx={{ color: "white", display: "block" }} >
-                  اپ
-                </Button>
+                <ButtonChooze content="اپ" />
               </Link>
 
               <Link style={{ textDecoration : 'none' }} to="/contact-us">
-              <Button sx={{ color: "white", display: "block" }} >
-                   ارتباط با ما
-                </Button>
+                <ButtonChooze content="ارتباط با ما" />
               </Link>
+
+              <Link style={{ textDecoration : 'none' }} to="/help">
+                <ButtonChooze content="راهنمای مبادله" />
+              </Link>
+
+              <Link style={{ textDecoration : 'none' }} to="/faq">
+                <ButtonChooze content="سوالات متداول" />
+
+              </Link>
+
+              <Link style={{ textDecoration : 'none' }} to="/rules">
+                <ButtonChooze content="قوانین" />
+              </Link> */}
 
             </CardBox>
           </Box>
 
-          <Box sx={{ flexGrow: 0 }}>
-            <Button variant="contained" color="primary">
-              Contained
-            </Button>
 
-          </Box>
+          <ButtonTrade content=" اتصال به کیف پول" />
+
+
+
         </Toolbar>
       </Container>
     </AppBar>

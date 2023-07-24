@@ -16,6 +16,9 @@ import Page404 from "./page/Page404";
 import vazirBold from "./assets/fonts/Vazir-Bold.woff2";
 import vazirBlack from "./assets/fonts/Vazir-Black.woff2";
 import vazirMedium from "./assets/fonts/Vazir-Medium.woff2";
+import Help from "./page/Help";
+import FAQ from "./page/FAQ";
+import Rules from "./page/Rules";
 
 const darkTheme = createTheme({
   direction: "rtl",
@@ -29,7 +32,17 @@ const darkTheme = createTheme({
       paper: "rgba(0,0,0,0)",
       default: "#000044",
     },
-    shadows: "none",
+    shadows: {
+      0 : "rgba(38, 105, 245, 0.25) 0px 0px 16px ",
+      1 : "rgba(38, 105, 245, 0.25) 0px 0px 16px ",
+      2 : "rgba(38, 105, 245, 0.25) 0px 0px 16px ",
+      3 : "rgba(38, 105, 245, 0.25) 0px 0px 16px ",
+      4 : "rgba(38, 105, 245, 0.25) 0px 0px 16px ",
+      5 : "rgba(38, 105, 245, 0.25) 0px 0px 16px ",
+      6 : "rgba(38, 105, 245, 0.25) 0px 0px 16px ",
+      7 : "rgba(38, 105, 245, 0.25) 0px 0px 16px ",
+      8 : "rgba(38, 105, 245, 0.25) 0px 0px 16px ",
+    }
   },
   typography: {
     fontFamily: "Vazir",
@@ -90,6 +103,9 @@ function App() {
           <Route path="/" element={<LandingPage />} />
           <Route path="/app" element={<AppTrade />} />
           <Route path="/contact-us" element={<ContactUs />} />
+          <Route path="/help" element={<Help />} />
+          <Route path="/faq" element={<FAQ />} />
+          <Route path="/rules" element={<Rules />} />
           <Route path="*" element={<Page404 />} />
         </Routes>
       </BrowserRouter>
