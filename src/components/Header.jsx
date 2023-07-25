@@ -7,11 +7,13 @@ import Button from "@mui/material/Button";
 import logo from "../assets/logo.png";
 import { useTheme } from "@mui/material/styles";
 import { styled } from "@mui/system";
-import { createContext } from "react";
+
 
 import { Link } from "react-router-dom";
 import ButtonTrade from "./ButtonTrade";
 import ButtonChooze from "./ButtonChooze";
+
+import { useState } from "react";
 
 
 const CardBox = styled("Box")({
@@ -24,48 +26,56 @@ const CardBox = styled("Box")({
 
 const pages = [
   {
-   content : "صفحه اصلی",
-    to : "/"
+    content: "صفحه اصلی",
+    to: "/",
+    // active : false,
   },
   {
-    content : "اپ",
-    to :"/app"
+    content: "اپ",
+    to: "/app",
+    // active : false,
   },
   {
-    content : "ارتباط با ما",
-    to : "/contact-us"
+    content: "ارتباط با ما",
+    to: "/contact-us",
+    // active : false,
   },
   {
-    content :"راهنمای مبادله",
-    to : "/help"
+    content: "راهنمای مبادله",
+    to: "/help",
+    // active : false,
   },
   {
-    content :"سوالات متداول",
-    to : "/faq"
+    content: "سوالات متداول",
+    to: "/faq",
+    // active : false,
   },
   {
-    content :"قوانین",
-    to : "/rules"
+    content: "قوانین",
+    to: "/rules",
+    // active : false,
   },
 ]
 
 export default function Header() {
 
-  const UserContext = createContext();
   const theme = useTheme();
+  const [active, setActive] = useState(-1);
+  const changeColor = (id) => { setActive(id) };
 
 
   return (
     <AppBar sx={{ marginBottom: 3 }} elevation={0} position="static">
       <Container maxWidth="xl">
         <Toolbar disableGutters>
+
+
           <Box
             component="img"
             sx={{ display: "flex", mr: 1, width: "13vw" }}
             alt="The house from the offer."
             src={logo}
           />
-
 
 
           <Box
@@ -76,46 +86,18 @@ export default function Header() {
             }}
           >
             <CardBox>
-              {pages.map(page => (
-                <Link style={{ textDecoration: 'none' }} to={page.to}>
-                  <ButtonChooze content={page.content} />
+
+              {pages.map((page, index) => (
+                <Link key={index} style={{ textDecoration: 'none' }} to={page.to}>
+                  <ButtonChooze id={index} content={page.content} active={active === index} changeColor={changeColor} />
                 </Link>
-
               ))}
-
-
-              {/* 
-              <Link style={{ textDecoration : 'none' }} to="/">
-                <ButtonChooze content="صفحه اصلی" />
-              </Link>
-
-              <Link style={{ textDecoration : 'none' }} to="/app">
-                <ButtonChooze content="اپ" />
-              </Link>
-
-              <Link style={{ textDecoration : 'none' }} to="/contact-us">
-                <ButtonChooze content="ارتباط با ما" />
-              </Link>
-
-              <Link style={{ textDecoration : 'none' }} to="/help">
-                <ButtonChooze content="راهنمای مبادله" />
-              </Link>
-
-              <Link style={{ textDecoration : 'none' }} to="/faq">
-                <ButtonChooze content="سوالات متداول" />
-
-              </Link>
-
-              <Link style={{ textDecoration : 'none' }} to="/rules">
-                <ButtonChooze content="قوانین" />
-              </Link> */}
 
             </CardBox>
           </Box>
 
 
           <ButtonTrade content=" اتصال به کیف پول" />
-
 
 
         </Toolbar>

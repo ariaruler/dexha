@@ -3,16 +3,17 @@ import Button from "@mui/material/Button";
 import { useState } from "react";
 
 
-export default function ButtonChooze(props) {
-    
-  const [active , setActive] = useState(false);
+export default function ButtonChooze({active , id , content , changeColor}) {
+
+  console.log(active)
+  
   const ButtonStyle = {
-     color: active ? "#fff" : "gray"  
+     color: active ? "#fff" : "#beb7cb"  
  };
 
   return (
-    <Button key={props.content} sx={ButtonStyle} onClick={()=>{setActive(true)}}>
-        {props.content}
+    <Button id={id} key={content} sx={ButtonStyle} onClick={() => changeColor(id)}>
+        {content}
     </Button>
   );
 }
