@@ -13,12 +13,14 @@ const Item = styled(Paper)(({ theme }) => ({
   color: theme.palette.text.secondary,
 }));
 
+const cardBorderRadius = "12px";
+
 export default function AppTrade() {
   return (
     <Container maxWidth="lg">
       <Grid container spacing={2}>
         <Grid item xs={4}>
-        <Tradecard />
+        <Tradecard borderRadius={cardBorderRadius} />
         </Grid>
         <Grid item xs={8}>
           <Item>xs=8</Item>

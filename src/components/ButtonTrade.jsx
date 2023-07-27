@@ -3,7 +3,7 @@ import Button from "@mui/material/Button";
 
 export default function ButtonTrade(props) {
   const ButtonStyle = {
-    borderRadius: 1.5,
+    borderRadius: props.borderRadius,
     padding: "8px 40px ",
     width: props.width,
     height : props.height,

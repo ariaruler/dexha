@@ -20,6 +20,7 @@ import Help from "./page/Help";
 import FAQ from "./page/FAQ";
 import Rules from "./page/Rules";
 
+
 const darkTheme = createTheme({
   direction: "rtl",
   palette: {
@@ -96,7 +97,6 @@ function App() {
     <CacheProvider value={cacheRtl}>
     <ThemeProvider theme={darkTheme}>
       <CssBaseline />
-
       <BrowserRouter>
         <Header />
         <Routes>

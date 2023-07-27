@@ -12,43 +12,18 @@ import { useState } from "react";
 
 import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
 import Avatar from "@mui/material/Avatar";
-import SimpleDialog from "./PopUp";
+import PopUp from "./PopUp";
 
-const inputHieght = 52;
+import InputTrade from "./InputTrade";
 
-const CardBox = styled(Box)({
-  display: "flex",
-  padding: 20,
-  backgroundColor: "rgba(256,256,256,0.1)",
-  borderRadius: 12,
-  justifyContent: "center",
-});
 
-const input = {
-  backgroundColor: "rgba(256,256,256,0.1)",
-  border: "none",
-  width: "100%",
-  height: inputHieght,
-  alignItems: "center",
-  flexDirection: "column",
-  justifyContent: "center",
-  borderRadius: 1.5,
-  "& fieldset": {
-    border: "none",
-    height: inputHieght,
-  },
-};
+import { ArrowDropDown } from "@mui/icons-material";
+import AvatarCC from "./AvatarCC";
+import SmButton from "./SmButton";
 
-const smallButton = {
-  color: "#fff",
-  borderColor: "#fff",
-  width: "60%",
-  "&:hover": {
-    color: "#fff",
-    borderColor: "#fff",
-    backgroundColor: "transparent",
-  },
-};
+const inputHieght = 54;
+const bigbuttonBorderRadius = "8px";
+
 
 const iconCircle = {
   animation: "spin 2s linear infinite",
@@ -64,7 +39,16 @@ const iconCircle = {
 
 const feeButton = {
   height: inputHieght,
-}
+  width: "100%",
+  borderRadius :bigbuttonBorderRadius,
+  border : '1px solid #beb7cb',
+  color: '#beb7cb',
+  "&:hover": {
+    border : '1px solid #beb7cb',
+    color: '#beb7cb',
+    backgroundColor: 'transparent'
+  },
+};
 
 const pages = [
   {
@@ -78,11 +62,8 @@ const pages = [
   },
 ];
 
-export default function Tradecard() {
-  const [active, setActive] = useState(-1);
-  const changeColor = (id) => {
-    setActive(id);
-  };
+export default function Tradecard(props) {
+
   const emails = ["username@gmail.com", "user02@gmail.com"];
   const [open, setOpen] = useState(false);
   const [selectedValue, setSelectedValue] = useState(emails[1]);
@@ -94,6 +75,20 @@ export default function Tradecard() {
   const handleClose = (value) => {
     setOpen(false);
     setSelectedValue(value);
+  };
+
+
+  const CardBox = styled(Box)({
+    display: "flex",
+    padding: 20,
+    backgroundColor: "rgba(256,256,256,0.1)",
+    borderRadius: props.borderRadius,
+    justifyContent: "center",
+  });
+
+  const [active, setActive] = useState(-1);
+  const changeColor = (id) => {
+    setActive(id);
   };
 
   return (
@@ -112,27 +107,14 @@ export default function Tradecard() {
         </Grid>
 
         <Grid item xs={12}>
-          <TextField
-            sx={input}
-            id="outlined-basic"
+        <InputTrade
             label="پرداخت"
-            InputProps={{
-              endAdornment: (
-                <Button
-                  onClick={handleClickOpen}
-                  sx={smallButton}
-                  variant="outlined"
-                  size="medium"
-                  startIcon={<ArrowDropDownIcon />}
-                >
-                  medium
-                  <Avatar
-                    sx={{ width: 20, height: 20, margin: "0 4px " }}
-                    src="/static/images/avatar/1.jpg"
-                  />
-                </Button>
-              ),
-            }}
+
+            height={inputHieght}
+            borderRadius={bigbuttonBorderRadius}
+            endAdornment={
+              <SmButton handleClickOpen={handleClickOpen} />
+            }
           />
         </Grid>
 
@@ -141,30 +123,17 @@ export default function Tradecard() {
         </Grid>
 
         <Grid item xs={12}>
-          <TextField
-            sx={input}
-            id="outlined-basic"
+          <InputTrade
             label="دریافت"
-            InputProps={{
-              endAdornment: (
-                <Button
-                  onClick={handleClickOpen}
-                  sx={smallButton}
-                  variant="outlined"
-                  size="medium"
-                  startIcon={<ArrowDropDownIcon />}
-                >
-                  medium
-                  <Avatar
-                    sx={{ width: 20, height: 20, margin: "0 4px" }}
-                    src="/static/images/avatar/1.jpg"
-                  />
-                </Button>
-              ),
-            }}
+            height={inputHieght}
+            borderRadius={bigbuttonBorderRadius}
+            endAdornment={
+              <SmButton handleClickOpen={handleClickOpen} />
+            }
           />
         </Grid>
-        <SimpleDialog
+        <PopUp
+          borderRadius={props.borderRadius}
           selectedValue={selectedValue}
           open={open}
           onClose={handleClose}
@@ -172,10 +141,11 @@ export default function Tradecard() {
 
         <Grid item xs={12}>
           <ButtonTrade
+            borderRadius={bigbuttonBorderRadius}
             content="تبادل"
             width="100%"
-            height={inputHieght}
             fontSize="1.3em"
+            height={50}
           />
         </Grid>
 
@@ -187,10 +157,6 @@ export default function Tradecard() {
             startIcon={<ArrowDropDownIcon />}
           >
             medium
-            <Avatar
-              sx={{ width: 20, height: 20, margin: "0 4px " }}
-              src="/static/images/avatar/1.jpg"
-            />
           </Button>
         </Grid>
       </Grid>

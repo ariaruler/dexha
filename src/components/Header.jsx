@@ -97,7 +97,7 @@ export default function Header() {
           </Box>
 
 
-          <ButtonTrade content=" اتصال به کیف پول" />
+          <ButtonTrade  content=" اتصال به کیف پول" />
 
 
         </Toolbar>
