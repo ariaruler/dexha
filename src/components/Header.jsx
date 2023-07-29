@@ -3,9 +3,9 @@ import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
 import Toolbar from "@mui/material/Toolbar";
 import Container from "@mui/material/Container";
-import Button from "@mui/material/Button";
+
 import logo from "../assets/logo.png";
-import { useTheme } from "@mui/material/styles";
+
 import { styled } from "@mui/system";
 
 
@@ -59,7 +59,7 @@ const pages = [
 
 export default function Header() {
 
-  const theme = useTheme();
+
   const [active, setActive] = useState(-1);
   const changeColor = (id) => { setActive(id) };
 
@@ -97,7 +97,7 @@ export default function Header() {
           </Box>
 
 
-          <ButtonTrade  content=" اتصال به کیف پول" />
+          <ButtonTrade  borderRadius='6px' content=" اتصال به کیف پول" />
 
 
         </Toolbar>
