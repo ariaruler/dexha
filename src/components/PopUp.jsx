@@ -1,5 +1,5 @@
 import * as React from "react";
-
+import Button from '@mui/material/Button'
 import List from "@mui/material/List";
 import ListItem from "@mui/material/ListItem";
 import ListItemAvatar from "@mui/material/ListItemAvatar";
@@ -33,9 +33,11 @@ import MuiAccordionDetails from "@mui/material/AccordionDetails";
 import styled from "@emotion/styled";
 
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import ToggleButtons from "./TogglrButtons";
 
 const inputHieght = 54;
 const bigbuttonBorderRadius = "8px";
+const marginOfAccordion = '1px 2em'
 
 const emails = [
   "username@gmail.com",
@@ -92,7 +94,7 @@ const AccordionDetails = styled(MuiAccordionDetails)(({ theme }) => ({
 
 const expandstyle = {
   fontSize : '2em',
-  margin : 2,
+  margin : 1,
 }
 
 export default function PopUp(props) {
@@ -141,8 +143,8 @@ export default function PopUp(props) {
               }}
               xs={12}
             >
-              <IconButton onClick={() => setOpenSetting(false)} aria-label="close">
-               <ArrowForwardIosSharpIcon />
+              <IconButton onClick={() => setOpenSetting(false)} >
+               <ArrowForwardIosSharpIcon sx={{fontSize : theme.typography.fontSize}} />
               </IconButton>
               <IconButton onClick={handleClose} aria-label="close">
                 <CloseIcon />
@@ -163,8 +165,8 @@ export default function PopUp(props) {
                 "& .MuiAccordionSummary-content": {
                   justifyContent: " space-between ",
                 },
-                padding: 1,
-                borderBottom: "1px  solid #beb7cb",
+                margin:  marginOfAccordion,
+                borderBottom: `1px  solid ${theme.palette.secondary.contrastText}`,
               }}
             >
               <Typography
@@ -173,22 +175,11 @@ export default function PopUp(props) {
                   alignItems: "center",
                 }}
               >
-                Collapsible Group Item #1
+                بازه قیمت
               </Typography>
             </MuiAccordionSummary>
             <AccordionDetails>
-              <Typography
-                sx={{
-                  display: "flex",
-                  alignItems: "center",
-                }}
-              >
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                Suspendisse malesuada lacus ex, sit amet blandit leo lobortis
-                eget. Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                Suspendisse malesuada lacus ex, sit amet blandit leo lobortis
-                eget.
-              </Typography>
+            <ToggleButtons first='0.1%' second='0.1%' third='0.1%' />
             </AccordionDetails>
           </Accordion>
           <Accordion
@@ -204,8 +195,8 @@ export default function PopUp(props) {
                 "& .MuiAccordionSummary-content": {
                   justifyContent: " space-between ",
                 },
-                padding: 1,
-                borderBottom: "1px  solid #beb7cb",
+                margin:  marginOfAccordion,
+                borderBottom: `1px  solid ${theme.palette.secondary.contrastText}` ,
               }}
             >
               <Typography
@@ -214,33 +205,28 @@ export default function PopUp(props) {
                   alignItems: "center",
                 }}
               >
-                Collapsible Group Item #2
+                سرعت واکنش
               </Typography>
             </MuiAccordionSummary>
             <AccordionDetails>
-              <Typography
-                sx={{
-                  display: "flex",
-                  alignItems: "center",
-                }}
-              >
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                Suspendisse malesuada lacus ex, sit amet blandit leo lobortis
-                eget. Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                Suspendisse malesuada lacus ex, sit amet blandit leo lobortis
-                eget.
-              </Typography>
+            <ToggleButtons  first='معمولی' second='سریع' third='سرعت زیاد'  />
             </AccordionDetails>
           </Accordion>
           <Accordion>
-            <MuiAccordionSummary
+            <Button
+            endIcon={<Android12Switch defaultChecked /> }
+            defaultExpanded={true}
+                onChange={() => {}}
               sx={{
                 alignItem: "center",
                 "& .MuiAccordionSummary-content": {
                   justifyContent: " space-between ",
                 },
-                padding: 1,
-                borderBottom: "1px  solid #beb7cb",
+                '&$expanded': {
+                  transform: 'none',
+                },
+                margin:  marginOfAccordion,
+                borderBottom: `1px  solid ${theme.palette.secondary.contrastText}`,
               }}
             >
               <Typography
@@ -249,10 +235,10 @@ export default function PopUp(props) {
                   alignItems: "center",
                 }}
               >
-                Collapsible Group Item #3
+               قابلیت بازگشت وجه
               </Typography>
-              <Android12Switch defaultChecked />
-            </MuiAccordionSummary>
+
+            </Button>
           </Accordion>
           <Accordion
             expanded={expanded === "panel3"}
@@ -267,8 +253,8 @@ export default function PopUp(props) {
                 "& .MuiAccordionSummary-content": {
                   justifyContent: " space-between ",
                 },
-                padding: 1,
-                borderBottom: "1px  solid #beb7cb",
+                margin:  marginOfAccordion,
+                borderBottom: `1px  solid ${theme.palette.secondary.contrastText}`,
               }}
             >
               <Typography
@@ -277,20 +263,17 @@ export default function PopUp(props) {
                   alignItems: "center",
                 }}
               >
-                Collapsible Group Item #3
+               صرافی های فعال
               </Typography>
             </MuiAccordionSummary>
             <AccordionDetails>
             <List>
               {emails.map((email) => (
                 <ListItem
-                  sx={{ padding: 0, borderBottom: "1px  solid #beb7cb" }}
+                  sx={{fontSize : .1, borderBottom: `1px  solid ${theme.palette.secondary.contrastText}` }}
                   disableGutters
                 >
                   <ListItemButton key={email}>
-                    <ListItemAvatar>
-                      <AvatarCC />
-                    </ListItemAvatar>
                     <ListItemText primary={email} />
                     <Android12Switch defaultChecked />
                   </ListItemButton>
@@ -306,21 +289,23 @@ export default function PopUp(props) {
             <Grid
               item
               sx={{
-                margin: 1,
+                margin: 2,
                 display: "flex",
                 justifyContent: " space-between ",
               }}
               xs={12}
             >
+              <Typography sx={{display : 'flex' ,alignItems : 'center'}}>
               توکن خود را انتخواب کنید
-              <IconButton onClick={handleClose} aria-label="close">
+              </Typography>
+              <IconButton sx={{padding : 0}} onClick={handleClose} aria-label="close">
                 <CloseIcon />
               </IconButton>
             </Grid>
             <Grid item sx={{ margin: "1px 0 " }} xs={12}>
               <InputTrade
                 label="جستجو"
-                height={inputHieght}
+                height={48}
                 borderRadius={bigbuttonBorderRadius}
                 endAdornment={<SearchIcon sx={{ marginLeft: 20 }} />}
               />
@@ -330,15 +315,15 @@ export default function PopUp(props) {
           <DialogContent
             sx={{
               padding: 0,
-              borderBottom: "1px  solid #beb7cb",
-              borderTop: "1px  solid #beb7cb",
+              borderBottom: `1px  solid ${theme.palette.secondary.contrastText}`,
+              borderTop: `1px  solid ${theme.palette.secondary.contrastText}`,
             }}
             dividers
           >
             <List>
               {emails.map((email) => (
                 <ListItem
-                  sx={{ padding: 0, borderBottom: "1px  solid #beb7cb" }}
+                  sx={{ padding: 0, borderBottom: `1px  solid ${theme.palette.secondary.contrastText}` }}
                   disableGutters
                 >
                   <ListItemButton key={email}>

@@ -1,14 +1,15 @@
 import * as React from "react";
 import Button from "@mui/material/Button";
-import { useState } from "react";
+
+import { useTheme } from "@emotion/react";
 
 
 export default function ButtonChooze(props) {
 
-
+ const theme = useTheme()
   
   const ButtonStyle = {
-     color: props.active ? "#fff" : "#beb7cb"  
+     color: props.active ? theme.palette.primary.contrastText : theme.palette.secondary.contrastText
  };
 
   return (

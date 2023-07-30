@@ -4,17 +4,19 @@ import styled from "@emotion/styled";
 import { ArrowDropDown } from "@mui/icons-material";
 import AvatarCC from "./AvatarCC";
 
+import { useTheme } from "@emotion/react";
+
 export default function SmButton(props) {
 
-
+  const theme = useTheme()
 
   const SmButton = styled(Button)({
-    color: "#beb7cb",
-    borderColor: "#beb7cb",
+    color: theme.palette.secondary.contrastText ,
+    borderColor: theme.palette.secondary.contrastText ,
     width: "60%",
     "&:hover": {
-      color: "#beb7cb",
-      borderColor: "#beb7cb",
+      color: theme.palette.secondary.contrastText ,
+      borderColor: theme.palette.secondary.contrastText ,
       backgroundColor: "transparent",
     },
   });

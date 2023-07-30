@@ -32,7 +32,7 @@ const darkTheme = createTheme({
     },
     secondary: {
       main: "#f7931a",
-      contrastText : "#beb7cb",
+      contrastText : "#5f7bb0",
     },
     mode: "dark",
     divider: "rgba(0,0,0,0)",
@@ -54,6 +54,7 @@ const darkTheme = createTheme({
   },
   typography: {
     fontFamily: "Vazir",
+    fontSize: 13,
   },
   components: {
     MuiCssBaseline: {
@@ -68,7 +69,6 @@ const darkTheme = createTheme({
       @font-face {
         font-family: Vazir;
     src: url(${vazirBlack}) format('woff2'),
-
         font-weight: 900;
         font-style: normal;
       }

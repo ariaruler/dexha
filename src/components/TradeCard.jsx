@@ -1,29 +1,27 @@
 import Box from "@mui/material/Box";
 import { styled } from "@mui/system";
-import TextField from "@mui/material/TextField";
 import Grid from "@mui/material/Grid";
 import ChangeCircleOutlinedIcon from "@mui/icons-material/ChangeCircleOutlined";
 
-import Button from "@mui/material/Button";
+
 import ButtonTrade from "./ButtonTrade";
 
 import ButtonChooze from "./ButtonChooze";
 import { useState } from "react";
 
-import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
-import Avatar from "@mui/material/Avatar";
+
 import PopUp from "./PopUp";
 
 import InputTrade from "./InputTrade";
 
-
-import { ArrowDropDown } from "@mui/icons-material";
-import AvatarCC from "./AvatarCC";
+import { useTheme } from "@emotion/react";
 import SmButton from "./SmButton";
+import Buttonfee from "./Buttonfee";
+
+
 
 const inputHieght = 54;
 const bigbuttonBorderRadius = "8px";
-
 
 const iconCircle = {
   animation: "spin 2s linear infinite",
@@ -34,19 +32,6 @@ const iconCircle = {
     "100%": {
       transform: "rotate(0deg)",
     },
-  },
-};
-
-const feeButton = {
-  height: inputHieght,
-  width: "100%",
-  borderRadius :bigbuttonBorderRadius,
-  border : '1px solid #beb7cb',
-  color: '#beb7cb',
-  "&:hover": {
-    border : '1px solid #beb7cb',
-    color: '#beb7cb',
-    backgroundColor: 'transparent'
   },
 };
 
@@ -63,6 +48,7 @@ const pages = [
 ];
 
 export default function Tradecard(props) {
+  const theme = useTheme();
 
   const emails = ["username@gmail.com", "user02@gmail.com"];
   const [open, setOpen] = useState(false);
@@ -77,7 +63,6 @@ export default function Tradecard(props) {
     setSelectedValue(value);
   };
 
-
   const CardBox = styled(Box)({
     display: "flex",
     padding: 20,
@@ -90,6 +75,7 @@ export default function Tradecard(props) {
   const changeColor = (id) => {
     setActive(id);
   };
+
 
   return (
     <CardBox>
@@ -107,14 +93,11 @@ export default function Tradecard(props) {
         </Grid>
 
         <Grid item xs={12}>
-        <InputTrade
+          <InputTrade
             label="پرداخت"
-
             height={inputHieght}
             borderRadius={bigbuttonBorderRadius}
-            endAdornment={
-              <SmButton handleClickOpen={handleClickOpen} />
-            }
+            endAdornment={<SmButton handleClickOpen={handleClickOpen} />}
           />
         </Grid>
 
@@ -127,9 +110,7 @@ export default function Tradecard(props) {
             label="دریافت"
             height={inputHieght}
             borderRadius={bigbuttonBorderRadius}
-            endAdornment={
-              <SmButton handleClickOpen={handleClickOpen} />
-            }
+            endAdornment={<SmButton handleClickOpen={handleClickOpen} />}
           />
         </Grid>
         <PopUp
@@ -144,20 +125,13 @@ export default function Tradecard(props) {
             borderRadius={bigbuttonBorderRadius}
             content="تبادل"
             width="100%"
-            fontSize="1.3em"
+            fontSize="1.2em"
             height={50}
           />
         </Grid>
 
         <Grid item xs={12}>
-          <Button
-            sx={feeButton}
-            variant="outlined"
-            size="medium"
-            startIcon={<ArrowDropDownIcon />}
-          >
-            medium
-          </Button>
+            <Buttonfee inputHieght={inputHieght} bigbuttonBorderRadius={bigbuttonBorderRadius} />
         </Grid>
       </Grid>
     </CardBox>
