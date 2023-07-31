@@ -213,8 +213,8 @@ export default function PopUp(props) {
             </AccordionDetails>
           </Accordion>
           <Accordion>
-            <Button
-            endIcon={<Android12Switch defaultChecked /> }
+            <MuiAccordionSummary
+            expandIcon={<Android12Switch defaultChecked /> }
             defaultExpanded={true}
                 onChange={() => {}}
               sx={{
@@ -222,7 +222,7 @@ export default function PopUp(props) {
                 "& .MuiAccordionSummary-content": {
                   justifyContent: " space-between ",
                 },
-                '&$expanded': {
+                '& .MuiAccordionSummary-expandIconWrapper': {
                   transform: 'none',
                 },
                 margin:  marginOfAccordion,
@@ -238,7 +238,7 @@ export default function PopUp(props) {
                قابلیت بازگشت وجه
               </Typography>
 
-            </Button>
+            </MuiAccordionSummary>
           </Accordion>
           <Accordion
             expanded={expanded === "panel3"}
