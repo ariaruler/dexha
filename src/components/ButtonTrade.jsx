@@ -10,6 +10,7 @@ export default function ButtonTrade(props) {
     fontWeight : 900,
     fontSize : props.fontSize,
     boxShadow : "rgba(38, 105, 245, 0.25) 0px 0px 16px ",
+    margin : props.margin,
   };
 
   return (

@@ -9,7 +9,10 @@ export default function ButtonChooze(props) {
  const theme = useTheme()
   
   const ButtonStyle = {
-     color: props.active ? theme.palette.primary.contrastText : theme.palette.secondary.contrastText
+     color: props.active ? theme.palette.primary.contrastText : theme.palette.secondary.contrastText,
+     "&:hover" :{
+      backgroundColor : 'transparent'
+     }
  };
 
   return (

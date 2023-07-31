@@ -71,7 +71,7 @@ export default function Tradecard(props) {
     justifyContent: "center",
   });
 
-  const [active, setActive] = useState(-1);
+  const [active, setActive] = useState(0);
   const changeColor = (id) => {
     setActive(id);
   };

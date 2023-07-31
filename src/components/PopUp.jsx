@@ -34,6 +34,7 @@ import styled from "@emotion/styled";
 
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import ToggleButtons from "./TogglrButtons";
+import ButtonTrade from "./ButtonTrade";
 
 const inputHieght = 54;
 const bigbuttonBorderRadius = "8px";
@@ -144,7 +145,7 @@ export default function PopUp(props) {
               xs={12}
             >
               <IconButton onClick={() => setOpenSetting(false)} >
-               <ArrowForwardIosSharpIcon sx={{fontSize : theme.typography.fontSize}} />
+               <ArrowForwardIosSharpIcon sx={{fontSize : theme.typography.fontSize }} />
               </IconButton>
               <IconButton onClick={handleClose} aria-label="close">
                 <CloseIcon />
@@ -267,21 +268,41 @@ export default function PopUp(props) {
               </Typography>
             </MuiAccordionSummary>
             <AccordionDetails>
-            <List>
+
               {emails.map((email) => (
-                <ListItem
-                  sx={{fontSize : .1, borderBottom: `1px  solid ${theme.palette.secondary.contrastText}` }}
-                  disableGutters
-                >
-                  <ListItemButton key={email}>
-                    <ListItemText primary={email} />
-                    <Android12Switch defaultChecked />
-                  </ListItemButton>
-                </ListItem>
+                         <Accordion>
+                         <MuiAccordionSummary
+                         expandIcon={<Android12Switch defaultChecked /> }
+                         defaultExpanded={true}
+                             onChange={() => {}}
+                           sx={{
+                             alignItem: "center",
+                             "& .MuiAccordionSummary-content": {
+                               justifyContent: " space-between ",
+                             },
+                             '& .MuiAccordionSummary-expandIconWrapper': {
+                               transform: 'none',
+                             },
+                             margin:  marginOfAccordion,
+                             borderBottom: `1px  solid ${theme.palette.secondary.contrastText}`,
+                           }}
+                         >
+                           <Typography
+                             sx={{
+                               display: "flex",
+                               alignItems: "center",
+                             }}
+                           >
+                            {email}
+                           </Typography>
+             
+                         </MuiAccordionSummary>
+                       </Accordion>
               ))}
-            </List>
+
             </AccordionDetails>
           </Accordion>
+          <ButtonTrade content='بازگشت به تنظیمات پیشفرض' margin={3} borderRadius='6px' />  
         </>
       ) : (
         <>
