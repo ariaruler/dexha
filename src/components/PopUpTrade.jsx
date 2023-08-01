@@ -98,9 +98,10 @@ const expandstyle = {
   margin : 1,
 }
 
-export default function PopUp(props) {
+export default function PopUpTrade(props) {
   const [openSetting, setOpenSetting] = useState(false);
   const theme = useTheme();
+  console.log(props.borderRadius);
   const Dialogstyle = {
     "& .MuiPaper-root": {
       maxWidth: 400,
@@ -133,7 +134,7 @@ export default function PopUp(props) {
     >
       {openSetting ? (
         <>
-         <DialogTitle sx={{ backgroundColor: "rgba(256,256,256,0.1)" }}>
+         <DialogTitle sx={{ backgroundColor: theme.palette.background.paper }}>
             <Grid
               item
               sx={{

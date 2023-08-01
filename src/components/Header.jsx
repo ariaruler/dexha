@@ -65,7 +65,7 @@ export default function Header() {
 
 
   return (
-    <AppBar sx={{ marginBottom: 3 }} elevation={0} position="static">
+    <AppBar sx={{ marginBottom: 3 ,backgroundColor:'transparent'}} elevation={0} position="static">
       <Container maxWidth="xl">
         <Toolbar disableGutters>
 
