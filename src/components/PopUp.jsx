@@ -1,5 +1,5 @@
 import * as React from "react";
-import Button from '@mui/material/Button'
+import Button from "@mui/material/Button";
 import List from "@mui/material/List";
 import ListItem from "@mui/material/ListItem";
 import ListItemAvatar from "@mui/material/ListItemAvatar";
@@ -24,21 +24,21 @@ import InputTrade from "./InputTrade";
 import SearchIcon from "@mui/icons-material/Search";
 import CloseIcon from "@mui/icons-material/Close";
 
-import ArrowForwardIosSharpIcon from "@mui/icons-material/ArrowForwardIosSharp";
+
 import MuiAccordion from "@mui/material/Accordion";
 import MuiAccordionSummary from "@mui/material/AccordionSummary";
 import MuiAccordionDetails from "@mui/material/AccordionDetails";
 
-
 import styled from "@emotion/styled";
 
-import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import ToggleButtons from "./TogglrButtons";
 import ButtonTrade from "./ButtonTrade";
+import PopUpTitle from "./PopUpTitle";
 
 const inputHieght = 54;
 const bigbuttonBorderRadius = "8px";
-const marginOfAccordion = '1px 2em'
+const marginOfAccordion = "1px 2em";
 
 const emails = [
   "username@gmail.com",
@@ -86,17 +86,15 @@ const Accordion = styled((props) => (
   },
 }));
 
-
-
 const AccordionDetails = styled(MuiAccordionDetails)(({ theme }) => ({
   padding: theme.spacing(2),
   borderTop: "1px solid rgba(0, 0, 0, .125)",
 }));
 
 const expandstyle = {
-  fontSize : '2em',
-  margin : 1,
-}
+  fontSize: "2em",
+  margin: 1,
+};
 
 export default function PopUp(props) {
   const [openSetting, setOpenSetting] = useState(false);
@@ -104,14 +102,14 @@ export default function PopUp(props) {
   const Dialogstyle = {
     "& .MuiPaper-root": {
       maxWidth: 400,
-      height: openSetting ? 'auto' : 556,
+      height: openSetting ? "auto" : 556,
       maxHeight: 556,
       backgroundColor: theme.palette.background.default,
       backgroundImage: "none",
       borderRadius: props.borderRadius,
     },
   };
-  const { onClose, selectedValue, open } = props;
+  const { onClose, selectedValue, open, id } = props;
 
   const handleClose = () => {
     onClose(selectedValue);
@@ -123,187 +121,17 @@ export default function PopUp(props) {
     setExpanded(newExpanded ? panel : false);
   };
 
+  const closePopUp = () => setOpenSetting(false)
+
   return (
     <Dialog
       sx={Dialogstyle}
       maxWidth="xs"
       fullWidth={true}
       onClose={handleClose}
-      open={open}
+      open={open === id}
     >
-      {openSetting ? (
-        <>
-         <DialogTitle sx={{ backgroundColor: "rgba(256,256,256,0.1)" }}>
-            <Grid
-              item
-              sx={{
-
-                display: "flex",
-                justifyContent: " space-between ",
-              }}
-              xs={12}
-            >
-              <IconButton onClick={() => setOpenSetting(false)} >
-               <ArrowForwardIosSharpIcon sx={{fontSize : theme.typography.fontSize ,width : '22px'}} />
-              </IconButton>
-              <IconButton onClick={handleClose} aria-label="close">
-                <CloseIcon />
-              </IconButton>
-            </Grid>
-          </DialogTitle>
-
-          <Accordion
-            expanded={expanded === "panel1"}
-            onChange={handleChange("panel1")}
-          >
-            <MuiAccordionSummary
-             expandIcon={<ExpandMoreIcon sx={expandstyle}  />}
-              aria-controls="panel1d-content"
-              id="panel1d-header"
-              sx={{
-                alignItem: "center",
-                "& .MuiAccordionSummary-content": {
-                  justifyContent: " space-between ",
-                },
-                margin:  marginOfAccordion,
-                borderBottom: `1px  solid ${theme.palette.secondary.contrastText}`,
-              }}
-            >
-              <Typography
-                sx={{
-                  display: "flex",
-                  alignItems: "center",
-                }}
-              >
-                بازه قیمت
-              </Typography>
-            </MuiAccordionSummary>
-            <AccordionDetails>
-            <ToggleButtons first='0.1%' second='0.1%' third='0.1%' />
-            </AccordionDetails>
-          </Accordion>
-          <Accordion
-            expanded={expanded === "panel2"}
-            onChange={handleChange("panel2")}
-          >
-            <MuiAccordionSummary
-            expandIcon={<ExpandMoreIcon sx={expandstyle}  />}
-              aria-controls="panel2d-content"
-              id="panel2d-header"
-              sx={{
-                alignItem: "center",
-                "& .MuiAccordionSummary-content": {
-                  justifyContent: " space-between ",
-                },
-                margin:  marginOfAccordion,
-                borderBottom: `1px  solid ${theme.palette.secondary.contrastText}` ,
-              }}
-            >
-              <Typography
-                sx={{
-                  display: "flex",
-                  alignItems: "center",
-                }}
-              >
-                سرعت واکنش
-              </Typography>
-            </MuiAccordionSummary>
-            <AccordionDetails>
-            <ToggleButtons  first='معمولی' second='سریع' third='سرعت زیاد'  />
-            </AccordionDetails>
-          </Accordion>
-          <Accordion>
-            <MuiAccordionSummary
-            expandIcon={<Android12Switch defaultChecked /> }
-            defaultExpanded={true}
-                onChange={() => {}}
-              sx={{
-                alignItem: "center",
-                "& .MuiAccordionSummary-content": {
-                  justifyContent: " space-between ",
-                },
-                '& .MuiAccordionSummary-expandIconWrapper': {
-                  transform: 'none',
-                },
-                margin:  marginOfAccordion,
-                borderBottom: `1px  solid ${theme.palette.secondary.contrastText}`,
-              }}
-            >
-              <Typography
-                sx={{
-                  display: "flex",
-                  alignItems: "center",
-                }}
-              >
-               قابلیت بازگشت وجه
-              </Typography>
-
-            </MuiAccordionSummary>
-          </Accordion>
-          <Accordion
-            expanded={expanded === "panel3"}
-            onChange={handleChange("panel3")}
-          >
-            <MuiAccordionSummary
-            expandIcon={<ExpandMoreIcon sx={expandstyle} />}
-              aria-controls="panel3d-content"
-              id="panel3d-header"
-              sx={{
-                alignItem: "center",
-                "& .MuiAccordionSummary-content": {
-                  justifyContent: " space-between ",
-                },
-                margin:  marginOfAccordion,
-                borderBottom: `1px  solid ${theme.palette.secondary.contrastText}`,
-              }}
-            >
-              <Typography
-                sx={{
-                  display: "flex",
-                  alignItems: "center",
-                }}
-              >
-               صرافی های فعال
-              </Typography>
-            </MuiAccordionSummary>
-            <AccordionDetails>
-
-              {emails.map((email) => (
-                         <Accordion>
-                         <MuiAccordionSummary
-                         expandIcon={<Android12Switch defaultChecked /> }
-                         defaultExpanded={true}
-                             onChange={() => {}}
-                           sx={{
-                             alignItem: "center",
-                             "& .MuiAccordionSummary-content": {
-                               justifyContent: " space-between ",
-                             },
-                             '& .MuiAccordionSummary-expandIconWrapper': {
-                               transform: 'none',
-                             },
-                             margin:  marginOfAccordion,
-                             borderBottom: `1px  solid ${theme.palette.secondary.contrastText}`,
-                           }}
-                         >
-                           <Typography
-                             sx={{
-                               display: "flex",
-                               alignItems: "center",
-                             }}
-                           >
-                            {email}
-                           </Typography>
-             
-                         </MuiAccordionSummary>
-                       </Accordion>
-              ))}
-
-            </AccordionDetails>
-          </Accordion>
-          <ButtonTrade content='بازگشت به تنظیمات پیشفرض' margin={3} borderRadius='6px' />  
-        </>
-      ) : (
+      {!openSetting ? (
         <>
           <DialogTitle sx={{ backgroundColor: "rgba(256,256,256,0.1)" }}>
             <Grid
@@ -315,10 +143,14 @@ export default function PopUp(props) {
               }}
               xs={12}
             >
-              <Typography sx={{display : 'flex' ,alignItems : 'center'}}>
-              توکن خود را انتخاب کنید
+              <Typography sx={{ display: "flex", alignItems: "center" }}>
+                توکن خود را انتخاب کنید
               </Typography>
-              <IconButton sx={{padding : 0}} onClick={handleClose} aria-label="close">
+              <IconButton
+                sx={{ padding: 0 }}
+                onClick={handleClose}
+                aria-label="close"
+              >
                 <CloseIcon />
               </IconButton>
             </Grid>
@@ -343,7 +175,10 @@ export default function PopUp(props) {
             <List>
               {emails.map((email) => (
                 <ListItem
-                  sx={{ padding: 0, borderBottom: `1px  solid ${theme.palette.secondary.contrastText}` }}
+                  sx={{
+                    padding: 0,
+                    borderBottom: `1px  solid ${theme.palette.secondary.contrastText}`,
+                  }}
                   disableGutters
                 >
                   <ListItemButton key={email}>
@@ -369,6 +204,161 @@ export default function PopUp(props) {
               تنظیمات
             </Grid>
           </DialogActions>
+        </>
+      ) : (
+        <>
+        <PopUpTitle closePopUp={closePopUp} handleClose={handleClose} />
+
+          <Accordion
+            expanded={expanded === "panel1"}
+            onChange={handleChange("panel1")}
+          >
+            <MuiAccordionSummary
+              expandIcon={<ExpandMoreIcon sx={expandstyle} />}
+              aria-controls="panel1d-content"
+              id="panel1d-header"
+              sx={{
+                alignItem: "center",
+                "& .MuiAccordionSummary-content": {
+                  justifyContent: " space-between ",
+                },
+                margin: marginOfAccordion,
+                borderBottom: `1px  solid ${theme.palette.secondary.contrastText}`,
+              }}
+            >
+              <Typography
+                sx={{
+                  display: "flex",
+                  alignItems: "center",
+                }}
+              >
+                بازه قیمت
+              </Typography>
+            </MuiAccordionSummary>
+            <AccordionDetails>
+              <ToggleButtons first="0.1%" second="0.1%" third="0.1%" />
+            </AccordionDetails>
+          </Accordion>
+          <Accordion
+            expanded={expanded === "panel2"}
+            onChange={handleChange("panel2")}
+          >
+            <MuiAccordionSummary
+              expandIcon={<ExpandMoreIcon sx={expandstyle} />}
+              aria-controls="panel2d-content"
+              id="panel2d-header"
+              sx={{
+                alignItem: "center",
+                "& .MuiAccordionSummary-content": {
+                  justifyContent: " space-between ",
+                },
+                margin: marginOfAccordion,
+                borderBottom: `1px  solid ${theme.palette.secondary.contrastText}`,
+              }}
+            >
+              <Typography
+                sx={{
+                  display: "flex",
+                  alignItems: "center",
+                }}
+              >
+                سرعت واکنش
+              </Typography>
+            </MuiAccordionSummary>
+            <AccordionDetails>
+              <ToggleButtons first="معمولی" second="سریع" third="سرعت زیاد" />
+            </AccordionDetails>
+          </Accordion>
+          <Accordion>
+            <MuiAccordionSummary
+              expandIcon={<Android12Switch defaultChecked />}
+              defaultExpanded={true}
+              onChange={() => {}}
+              sx={{
+                alignItem: "center",
+                "& .MuiAccordionSummary-content": {
+                  justifyContent: " space-between ",
+                },
+                "& .MuiAccordionSummary-expandIconWrapper": {
+                  transform: "none",
+                },
+                margin: marginOfAccordion,
+                borderBottom: `1px  solid ${theme.palette.secondary.contrastText}`,
+              }}
+            >
+              <Typography
+                sx={{
+                  display: "flex",
+                  alignItems: "center",
+                }}
+              >
+                قابلیت بازگشت وجه
+              </Typography>
+            </MuiAccordionSummary>
+          </Accordion>
+          <Accordion
+            expanded={expanded === "panel3"}
+            onChange={handleChange("panel3")}
+          >
+            <MuiAccordionSummary
+              expandIcon={<ExpandMoreIcon sx={expandstyle} />}
+              aria-controls="panel3d-content"
+              id="panel3d-header"
+              sx={{
+                alignItem: "center",
+                "& .MuiAccordionSummary-content": {
+                  justifyContent: " space-between ",
+                },
+                margin: marginOfAccordion,
+                borderBottom: `1px  solid ${theme.palette.secondary.contrastText}`,
+              }}
+            >
+              <Typography
+                sx={{
+                  display: "flex",
+                  alignItems: "center",
+                }}
+              >
+                صرافی های فعال
+              </Typography>
+            </MuiAccordionSummary>
+            <AccordionDetails>
+              {emails.map((email) => (
+                <Accordion>
+                  <MuiAccordionSummary
+                    expandIcon={<Android12Switch defaultChecked />}
+                    defaultExpanded={true}
+                    onChange={() => {}}
+                    sx={{
+                      alignItem: "center",
+                      "& .MuiAccordionSummary-content": {
+                        justifyContent: " space-between ",
+                      },
+                      "& .MuiAccordionSummary-expandIconWrapper": {
+                        transform: "none",
+                      },
+                      margin: marginOfAccordion,
+                      borderBottom: `1px  solid ${theme.palette.secondary.contrastText}`,
+                    }}
+                  >
+                    <Typography
+                      sx={{
+                        display: "flex",
+                        alignItems: "center",
+                      }}
+                    >
+                      {email}
+                    </Typography>
+                  </MuiAccordionSummary>
+                </Accordion>
+              ))}
+            </AccordionDetails>
+          </Accordion>
+          <ButtonTrade
+            content="بازگشت به تنظیمات پیشفرض"
+            margin={3}
+            borderRadius="6px"
+          />
         </>
       )}
     </Dialog>

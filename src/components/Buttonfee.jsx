@@ -26,7 +26,7 @@ export default function Buttonfee({ inputHieght, bigbuttonBorderRadius }) {
     borderRadius: bigbuttonBorderRadius,
     border: `1px solid ${theme.palette.secondary.contrastText}`,
     color: theme.palette.primary.contrastText,
-
+    fontsize: .001*theme.typography.fontsize,
   };
 
   return (

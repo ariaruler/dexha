@@ -14,7 +14,7 @@ export default function ButtonTrade(props) {
   };
 
   return (
-    <Button elevation={0} sx={ButtonStyle} variant="contained" color="primary">
+    <Button onClick={props.handleClickOpen} elevation={0} sx={ButtonStyle} variant="contained" color="primary">
       {props.content}
     </Button>
   );

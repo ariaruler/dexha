@@ -11,7 +11,8 @@ export default function InputTrade(props) {
     const input = {
         backgroundColor: "rgba(256,256,256,0.1)",
         border: "none",
-        // width: "100%",
+        width: "100%",
+        margin: props.margin,
         height: props.inputHieght,
         alignItems: "center",
         flexDirection: "column",
@@ -21,11 +22,24 @@ export default function InputTrade(props) {
           border: "none",
           height: props.inputHieght,
         },
+        '& input[type=number]': {
+          '-moz-appearance': 'textfield'
+      },
+      '& input[type=number]::-webkit-outer-spin-button': {
+          '-webkit-appearance': 'none',
+          margin: 0
+      },
+      '& input[type=number]::-webkit-inner-spin-button': {
+          '-webkit-appearance': 'none',
+          margin: 0
+      }
       };
 
   return (
     <TextField
             sx={input}
+            disabled={props.disabled}
+            type={props.type}
             id="outlined-basic"
             label={props.label}
             InputProps={{

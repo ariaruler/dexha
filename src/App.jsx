@@ -1,5 +1,5 @@
 import Header from "./components/Header";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter } from "react-router-dom";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 
 import rtlPlugin from "stylis-plugin-rtl";
@@ -8,17 +8,12 @@ import createCache from "@emotion/cache";
 import { CacheProvider } from "@emotion/react";
 
 import CssBaseline from "@mui/material/CssBaseline";
-import AppTrade from "./page/AppTrade";
-import LandingPage from "./page/LandingPage";
-import ContactUs from "./page/ContactUs";
-import Page404 from "./page/Page404";
 
 import vazirBold from "./assets/fonts/Vazir-Bold.woff2";
 import vazirBlack from "./assets/fonts/Vazir-Black.woff2";
 import vazirMedium from "./assets/fonts/Vazir-Medium.woff2";
-import Help from "./page/Help";
-import FAQ from "./page/FAQ";
-import Rules from "./page/Rules";
+
+import AnimatedRoutes from "./components/AnimatedRoutes";
 
 const darkTheme = createTheme({
   direction: "rtl",
@@ -28,16 +23,16 @@ const darkTheme = createTheme({
     // },
     primary: {
       main: "#0561ff",
-      contrastText : '#fff',
+      contrastText: "#fff",
     },
     secondary: {
       main: "#f7931a",
-      contrastText : "#5f7bb0",
+      contrastText: "#5f7bb0",
     },
     mode: "dark",
     divider: "rgba(0,0,0,0)",
     background: {
-      paper: "rgba(0,0,0,0)",
+      paper: "rgba(256,256,256,0.1)",
       default: "#000044",
     },
     shadows: {
@@ -95,15 +90,8 @@ function App() {
         <CssBaseline />
         <BrowserRouter>
           <Header />
-          <Routes>
-            <Route path="/" element={<LandingPage />} />
-            <Route path="/app" element={<AppTrade />} />
-            <Route path="/contact-us" element={<ContactUs />} />
-            <Route path="/help" element={<Help />} />
-            <Route path="/faq" element={<FAQ />} />
-            <Route path="/rules" element={<Rules />} />
-            <Route path="*" element={<Page404 />} />
-          </Routes>
+
+          <AnimatedRoutes />
         </BrowserRouter>
       </ThemeProvider>
     </CacheProvider>

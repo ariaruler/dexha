@@ -17,6 +17,7 @@ import InputTrade from "./InputTrade";
 import { useTheme } from "@emotion/react";
 import SmButton from "./SmButton";
 import Buttonfee from "./Buttonfee";
+import PopUpTrade from "./PopUpTrade";
 
 
 
@@ -37,29 +38,30 @@ const iconCircle = {
 
 const pages = [
   {
+    content: "نرخ استاندارد",
+  },
+  {
     content: "بهترین قیمت",
   },
   {
     content: "نرخ ثابت",
   },
-  {
-    content: "نرخ استاندارد",
-  },
+
 ];
 
 export default function Tradecard(props) {
   const theme = useTheme();
 
   const emails = ["username@gmail.com", "user02@gmail.com"];
-  const [open, setOpen] = useState(false);
+  const [open, setOpen] = useState(-1);
   const [selectedValue, setSelectedValue] = useState(emails[1]);
 
-  const handleClickOpen = () => {
-    setOpen(true);
+  const handleClickOpen = (id) => {
+    setOpen(id);
   };
 
   const handleClose = (value) => {
-    setOpen(false);
+    setOpen(-1);
     setSelectedValue(value);
   };
 
@@ -95,9 +97,10 @@ export default function Tradecard(props) {
         <Grid item xs={12}>
           <InputTrade
             label="پرداخت"
+            type="number"
             height={inputHieght}
             borderRadius={bigbuttonBorderRadius}
-            endAdornment={<SmButton handleClickOpen={handleClickOpen} />}
+            endAdornment={<SmButton id={0} handleClickOpen={() => {handleClickOpen(0)}} />}
           />
         </Grid>
 
@@ -108,12 +111,14 @@ export default function Tradecard(props) {
         <Grid item xs={12}>
           <InputTrade
             label="دریافت"
+            type="number"
             height={inputHieght}
             borderRadius={bigbuttonBorderRadius}
-            endAdornment={<SmButton handleClickOpen={handleClickOpen} />}
+            endAdornment={<SmButton id={0} handleClickOpen={() => {handleClickOpen(0)}} />}
           />
         </Grid>
         <PopUp
+        id={0}
           borderRadius={props.borderRadius}
           selectedValue={selectedValue}
           open={open}
@@ -122,6 +127,8 @@ export default function Tradecard(props) {
 
         <Grid item xs={12}>
           <ButtonTrade
+          handleClickOpen={() => {handleClickOpen(2)}}
+          id={2}
             borderRadius={bigbuttonBorderRadius}
             content="تبادل"
             width="100%"
@@ -129,6 +136,14 @@ export default function Tradecard(props) {
             height={50}
           />
         </Grid>
+
+        <PopUpTrade
+        id={2}
+          borderRadius={props.borderRadius}
+          selectedValue={selectedValue}
+          open={open}
+          onClose={handleClose}
+        />        
 
         <Grid item xs={12}>
             <Buttonfee inputHieght={inputHieght} bigbuttonBorderRadius={bigbuttonBorderRadius} />
