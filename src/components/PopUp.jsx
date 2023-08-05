@@ -24,7 +24,6 @@ import InputTrade from "./InputTrade";
 import SearchIcon from "@mui/icons-material/Search";
 import CloseIcon from "@mui/icons-material/Close";
 
-
 import MuiAccordion from "@mui/material/Accordion";
 import MuiAccordionSummary from "@mui/material/AccordionSummary";
 import MuiAccordionDetails from "@mui/material/AccordionDetails";
@@ -35,6 +34,9 @@ import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import ToggleButtons from "./TogglrButtons";
 import ButtonTrade from "./ButtonTrade";
 import PopUpTitle from "./PopUpTitle";
+
+import { AnimatePresence } from "framer-motion";
+import { motion } from "framer-motion";
 
 const inputHieght = 54;
 const bigbuttonBorderRadius = "8px";
@@ -97,7 +99,9 @@ const expandstyle = {
 };
 
 export default function PopUp(props) {
-  const [openSetting, setOpenSetting] = useState(false);
+  const [openSetting, setOpenSetting] = useState(0);
+  console.log(openSetting);
+
   const theme = useTheme();
   const Dialogstyle = {
     "& .MuiPaper-root": {
@@ -121,247 +125,293 @@ export default function PopUp(props) {
     setExpanded(newExpanded ? panel : false);
   };
 
-  const closePopUp = () => setOpenSetting(false)
-
   return (
-    <Dialog
-      sx={Dialogstyle}
-      maxWidth="xs"
-      fullWidth={true}
-      onClose={handleClose}
-      open={open === id}
-    >
-      {!openSetting ? (
-        <>
-          <DialogTitle sx={{ backgroundColor: "rgba(256,256,256,0.1)" }}>
-            <Grid
-              item
-              sx={{
-                margin: 2,
-                display: "flex",
-                justifyContent: " space-between ",
-              }}
-              xs={12}
-            >
-              <Typography sx={{ display: "flex", alignItems: "center" }}>
-                توکن خود را انتخاب کنید
-              </Typography>
-              <IconButton
-                sx={{ padding: 0 }}
-                onClick={handleClose}
-                aria-label="close"
+    <AnimatePresence>
+      <motion.div
+        initial={{ opacity: 0, width: 0 }}
+        animate={{ opacity: 1, width: "100%" }}
+        exit={{ opacity: 0, width: 0 }}
+      >
+        <Dialog
+          sx={Dialogstyle}
+          maxWidth="xs"
+          fullWidth={true}
+          onClose={handleClose}
+          open={open === id}
+        >
+          {openSetting === 0 ? (
+            <>
+              <DialogTitle
+                sx={{ backgroundColor: theme.palette.background.paper }}
               >
-                <CloseIcon />
-              </IconButton>
-            </Grid>
-            <Grid item sx={{ margin: "1px 0 " }} xs={12}>
-              <InputTrade
-                label="جستجو"
-                inputHieght={52}
-                borderRadius={bigbuttonBorderRadius}
-                endAdornment={<SearchIcon sx={{ marginLeft: 20 }} />}
-              />
-            </Grid>
-          </DialogTitle>
-
-          <DialogContent
-            sx={{
-              padding: 0,
-              borderBottom: `1px  solid ${theme.palette.secondary.contrastText}`,
-              borderTop: `1px  solid ${theme.palette.secondary.contrastText}`,
-            }}
-            dividers
-          >
-            <List>
-              {emails.map((email) => (
-                <ListItem
-                  sx={{
-                    padding: 0,
-                    borderBottom: `1px  solid ${theme.palette.secondary.contrastText}`,
-                  }}
-                  disableGutters
+                <motion.div
+                  initial={{ opacity: 0, width: 0 }}
+                  animate={{ opacity: 1, width: "100%" }}
+                  exit={{ opacity: 0, width: 0 }}
                 >
-                  <ListItemButton key={email}>
-                    <ListItemAvatar>
-                      <AvatarCC />
-                    </ListItemAvatar>
-                    <ListItemText primary={email} />
-                  </ListItemButton>
-                </ListItem>
-              ))}
-            </List>
-          </DialogContent>
-
-          <DialogActions
-            onClick={() => setOpenSetting(true)}
-            sx={{ backgroundColor: "rgba(256,256,256,0.1)" }}
-          >
-            <Grid
-              item
-              sx={{ margin: 1, display: "flex", justifyContent: " center " }}
-              xs={12}
-            >
-              تنظیمات
-            </Grid>
-          </DialogActions>
-        </>
-      ) : (
-        <>
-        <PopUpTitle closePopUp={closePopUp} handleClose={handleClose} />
-
-          <Accordion
-            expanded={expanded === "panel1"}
-            onChange={handleChange("panel1")}
-          >
-            <MuiAccordionSummary
-              expandIcon={<ExpandMoreIcon sx={expandstyle} />}
-              aria-controls="panel1d-content"
-              id="panel1d-header"
-              sx={{
-                alignItem: "center",
-                "& .MuiAccordionSummary-content": {
-                  justifyContent: " space-between ",
-                },
-                margin: marginOfAccordion,
-                borderBottom: `1px  solid ${theme.palette.secondary.contrastText}`,
-              }}
-            >
-              <Typography
-                sx={{
-                  display: "flex",
-                  alignItems: "center",
-                }}
-              >
-                بازه قیمت
-              </Typography>
-            </MuiAccordionSummary>
-            <AccordionDetails>
-              <ToggleButtons first="0.1%" second="0.1%" third="0.1%" />
-            </AccordionDetails>
-          </Accordion>
-          <Accordion
-            expanded={expanded === "panel2"}
-            onChange={handleChange("panel2")}
-          >
-            <MuiAccordionSummary
-              expandIcon={<ExpandMoreIcon sx={expandstyle} />}
-              aria-controls="panel2d-content"
-              id="panel2d-header"
-              sx={{
-                alignItem: "center",
-                "& .MuiAccordionSummary-content": {
-                  justifyContent: " space-between ",
-                },
-                margin: marginOfAccordion,
-                borderBottom: `1px  solid ${theme.palette.secondary.contrastText}`,
-              }}
-            >
-              <Typography
-                sx={{
-                  display: "flex",
-                  alignItems: "center",
-                }}
-              >
-                سرعت واکنش
-              </Typography>
-            </MuiAccordionSummary>
-            <AccordionDetails>
-              <ToggleButtons first="معمولی" second="سریع" third="سرعت زیاد" />
-            </AccordionDetails>
-          </Accordion>
-          <Accordion>
-            <MuiAccordionSummary
-              expandIcon={<Android12Switch defaultChecked />}
-              defaultExpanded={true}
-              onChange={() => {}}
-              sx={{
-                alignItem: "center",
-                "& .MuiAccordionSummary-content": {
-                  justifyContent: " space-between ",
-                },
-                "& .MuiAccordionSummary-expandIconWrapper": {
-                  transform: "none",
-                },
-                margin: marginOfAccordion,
-                borderBottom: `1px  solid ${theme.palette.secondary.contrastText}`,
-              }}
-            >
-              <Typography
-                sx={{
-                  display: "flex",
-                  alignItems: "center",
-                }}
-              >
-                قابلیت بازگشت وجه
-              </Typography>
-            </MuiAccordionSummary>
-          </Accordion>
-          <Accordion
-            expanded={expanded === "panel3"}
-            onChange={handleChange("panel3")}
-          >
-            <MuiAccordionSummary
-              expandIcon={<ExpandMoreIcon sx={expandstyle} />}
-              aria-controls="panel3d-content"
-              id="panel3d-header"
-              sx={{
-                alignItem: "center",
-                "& .MuiAccordionSummary-content": {
-                  justifyContent: " space-between ",
-                },
-                margin: marginOfAccordion,
-                borderBottom: `1px  solid ${theme.palette.secondary.contrastText}`,
-              }}
-            >
-              <Typography
-                sx={{
-                  display: "flex",
-                  alignItems: "center",
-                }}
-              >
-                صرافی های فعال
-              </Typography>
-            </MuiAccordionSummary>
-            <AccordionDetails>
-              {emails.map((email) => (
-                <Accordion>
-                  <MuiAccordionSummary
-                    expandIcon={<Android12Switch defaultChecked />}
-                    defaultExpanded={true}
-                    onChange={() => {}}
+                  <Grid
+                    item
                     sx={{
-                      alignItem: "center",
-                      "& .MuiAccordionSummary-content": {
-                        justifyContent: " space-between ",
-                      },
-                      "& .MuiAccordionSummary-expandIconWrapper": {
-                        transform: "none",
-                      },
-                      margin: marginOfAccordion,
+                      margin: 2,
+                      display: "flex",
+                      justifyContent: " space-between ",
+                    }}
+                    xs={12}
+                  >
+                    <Typography sx={{ display: "flex", alignItems: "center" }}>
+                      توکن خود را انتخاب کنید
+                    </Typography>
+                    <IconButton
+                      sx={{ padding: 0 }}
+                      onClick={handleClose}
+                      aria-label="close"
+                    >
+                      <CloseIcon />
+                    </IconButton>
+                  </Grid>
+                  <Grid item sx={{ margin: "1px 0 " }} xs={12}>
+                    <InputTrade
+                      label="جستجو"
+                      inputHieght={52}
+                      borderRadius={bigbuttonBorderRadius}
+                      endAdornment={<SearchIcon sx={{ marginLeft: 20 }} />}
+                    />
+                  </Grid>
+                </motion.div>
+              </DialogTitle>
+
+              <DialogContent
+                sx={{
+                  padding: 0,
+                  borderBottom: `1px  solid ${theme.palette.secondary.contrastText}`,
+                  borderTop: `1px  solid ${theme.palette.secondary.contrastText}`,
+                }}
+                dividers
+              >
+                                <motion.div
+                  initial={{ opacity: 0, width: 0 }}
+                  animate={{ opacity: 1, width: "100%" }}
+                  exit={{ opacity: 0, width: 0 }}
+                >
+
+                <List>
+                  {emails.map((email) => (
+                    <ListItem
+                    sx={{
+                      padding: 0,
                       borderBottom: `1px  solid ${theme.palette.secondary.contrastText}`,
                     }}
-                  >
-                    <Typography
-                      sx={{
-                        display: "flex",
-                        alignItems: "center",
-                      }}
+                    disableGutters
                     >
-                      {email}
-                    </Typography>
-                  </MuiAccordionSummary>
-                </Accordion>
-              ))}
-            </AccordionDetails>
-          </Accordion>
-          <ButtonTrade
-            content="بازگشت به تنظیمات پیشفرض"
-            margin={3}
-            borderRadius="6px"
-          />
+                      <ListItemButton key={email}>
+                        <ListItemAvatar>
+                          <AvatarCC />
+                        </ListItemAvatar>
+                        <ListItemText primary={email} />
+                      </ListItemButton>
+                    </ListItem>
+                  ))}
+                </List>
+                  </motion.div>
+              </DialogContent>
+
+              <DialogActions
+                onClick={() => setOpenSetting(openSetting + 1)}
+                sx={{ backgroundColor: theme.palette.background.paper }}
+              >
+                                <motion.div
+                  initial={{ opacity: 0, width: 0 }}
+                  animate={{ opacity: 1, width: "100%" }}
+                  exit={{ opacity: 0, width: 0 }}
+                >
+
+                <Grid
+                  item
+                  sx={{
+                    margin: 1,
+                    display: "flex",
+                    justifyContent: " center ",
+                  }}
+                  xs={12}
+                  >
+                  تنظیمات
+                </Grid>
+                  </motion.div>
+              </DialogActions>
+            </>
+          ) : (
+            <motion.Fragment
+              // initial={{ opacity: 0, width: 0 }}
+              // animate={{ opacity: 1, width: "auto" }}
+              // exit={{ opacity: 0, width: 0 }}
+            >
+            <>
+              <PopUpTitle
+                header="تنظیمات"
+                previosStep={() => setOpenSetting(openSetting - 1)}
+                handleClose={handleClose}
+                />
+
+              <Accordion
+                expanded={expanded === "panel1"}
+                onChange={handleChange("panel1")}
+                >
+                <MuiAccordionSummary
+                  expandIcon={<ExpandMoreIcon sx={expandstyle} />}
+                  aria-controls="panel1d-content"
+                  id="panel1d-header"
+                  sx={{
+                    alignItem: "center",
+                    "& .MuiAccordionSummary-content": {
+                      justifyContent: " space-between ",
+                    },
+                    margin: marginOfAccordion,
+                    borderBottom: `1px  solid ${theme.palette.secondary.contrastText}`,
+                  }}
+                  >
+                  <Typography
+                    sx={{
+                      display: "flex",
+                      alignItems: "center",
+                    }}
+                    >
+                    بازه قیمت
+                  </Typography>
+                </MuiAccordionSummary>
+                <AccordionDetails>
+                  <ToggleButtons first="0.1%" second="0.1%" third="0.1%" />
+                </AccordionDetails>
+              </Accordion>
+              <Accordion
+                expanded={expanded === "panel2"}
+                onChange={handleChange("panel2")}
+                >
+                <MuiAccordionSummary
+                  expandIcon={<ExpandMoreIcon sx={expandstyle} />}
+                  aria-controls="panel2d-content"
+                  id="panel2d-header"
+                  sx={{
+                    alignItem: "center",
+                    "& .MuiAccordionSummary-content": {
+                      justifyContent: " space-between ",
+                    },
+                    margin: marginOfAccordion,
+                    borderBottom: `1px  solid ${theme.palette.secondary.contrastText}`,
+                  }}
+                  >
+                  <Typography
+                    sx={{
+                      display: "flex",
+                      alignItems: "center",
+                    }}
+                    >
+                    سرعت واکنش
+                  </Typography>
+                </MuiAccordionSummary>
+                <AccordionDetails>
+                  <ToggleButtons
+                    first="معمولی"
+                    second="سریع"
+                    third="سرعت زیاد"
+                    />
+                </AccordionDetails>
+              </Accordion>
+              <Accordion>
+                <MuiAccordionSummary
+                  expandIcon={<Android12Switch defaultChecked />}
+                  defaultExpanded={true}
+                  onChange={() => {}}
+                  sx={{
+                    alignItem: "center",
+                    "& .MuiAccordionSummary-content": {
+                      justifyContent: " space-between ",
+                    },
+                    "& .MuiAccordionSummary-expandIconWrapper": {
+                      transform: "none",
+                    },
+                    margin: marginOfAccordion,
+                    borderBottom: `1px  solid ${theme.palette.secondary.contrastText}`,
+                  }}
+                  >
+                  <Typography
+                    sx={{
+                      display: "flex",
+                      alignItems: "center",
+                    }}
+                    >
+                    قابلیت بازگشت وجه
+                  </Typography>
+                </MuiAccordionSummary>
+              </Accordion>
+              <Accordion
+                expanded={expanded === "panel3"}
+                onChange={handleChange("panel3")}
+                >
+                <MuiAccordionSummary
+                  expandIcon={<ExpandMoreIcon sx={expandstyle} />}
+                  aria-controls="panel3d-content"
+                  id="panel3d-header"
+                  sx={{
+                    alignItem: "center",
+                    "& .MuiAccordionSummary-content": {
+                      justifyContent: " space-between ",
+                    },
+                    margin: marginOfAccordion,
+                    borderBottom: `1px  solid ${theme.palette.secondary.contrastText}`,
+                  }}
+                  >
+                  <Typography
+                    sx={{
+                      display: "flex",
+                      alignItems: "center",
+                    }}
+                    >
+                    صرافی های فعال
+                  </Typography>
+                </MuiAccordionSummary>
+                <AccordionDetails>
+                  {emails.map((email) => (
+                    <Accordion>
+                      <MuiAccordionSummary
+                        expandIcon={<Android12Switch defaultChecked />}
+                        defaultExpanded={true}
+                        onChange={() => {}}
+                        sx={{
+                          alignItem: "center",
+                          "& .MuiAccordionSummary-content": {
+                            justifyContent: " space-between ",
+                          },
+                          "& .MuiAccordionSummary-expandIconWrapper": {
+                            transform: "none",
+                          },
+                          margin: marginOfAccordion,
+                          borderBottom: `1px  solid ${theme.palette.secondary.contrastText}`,
+                        }}
+                        >
+                        <Typography
+                          sx={{
+                            display: "flex",
+                            alignItems: "center",
+                          }}
+                          >
+                          {email}
+                        </Typography>
+                      </MuiAccordionSummary>
+                    </Accordion>
+                  ))}
+                </AccordionDetails>
+              </Accordion>
+              <ButtonTrade
+                content="بازگشت به تنظیمات پیشفرض"
+                margin={3}
+                borderRadius="6px"
+                />
         </>
-      )}
-    </Dialog>
+            </motion.Fragment>
+          )}
+        </Dialog>
+      </motion.div>
+    </AnimatePresence>
   );
 }
 //

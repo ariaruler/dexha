@@ -6,6 +6,7 @@ import AvatarCC from "./AvatarCC";
 
 import { useTheme } from "@emotion/react";
 
+
 export default function SmButton(props) {
 
   const theme = useTheme()
@@ -13,7 +14,8 @@ export default function SmButton(props) {
   const SmButton = styled(Button)({
     color: theme.palette.secondary.contrastText ,
     borderColor: theme.palette.secondary.contrastText ,
-    width: "60%",
+    width: props.width,
+    // padding: 'auto 5em',
     "&:hover": {
       color: theme.palette.secondary.contrastText ,
       borderColor: theme.palette.secondary.contrastText ,
@@ -26,7 +28,7 @@ export default function SmButton(props) {
       onClick={props.handleClickOpen}
       variant="outlined"
       size="medium"
-      startIcon={<ArrowDropDown />}
+      startIcon={ props.dropDownIcon ? <ArrowDropDown /> : undefined }
     >
       medium
       <AvatarCC />

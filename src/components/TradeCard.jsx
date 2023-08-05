@@ -100,7 +100,7 @@ export default function Tradecard(props) {
             type="number"
             height={inputHieght}
             borderRadius={bigbuttonBorderRadius}
-            endAdornment={<SmButton id={0} handleClickOpen={() => {handleClickOpen(0)}} />}
+            endAdornment={<SmButton width='60%' dropDownIcon={true} id={0} handleClickOpen={() => {handleClickOpen(0)}} />}
           />
         </Grid>
 
@@ -114,7 +114,7 @@ export default function Tradecard(props) {
             type="number"
             height={inputHieght}
             borderRadius={bigbuttonBorderRadius}
-            endAdornment={<SmButton id={0} handleClickOpen={() => {handleClickOpen(0)}} />}
+            endAdornment={<SmButton width='60%'  dropDownIcon={true} id={0} handleClickOpen={() => {handleClickOpen(0)}} />}
           />
         </Grid>
         <PopUp
