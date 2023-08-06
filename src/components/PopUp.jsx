@@ -150,6 +150,25 @@ export default function PopUp(props) {
   }
   , []);
 
+
+
+  const {
+    data,
+    fetchNextPage,
+    hasNextPage,
+    isFetchingNextPage,
+    status,
+  } = useInfiniteQuery("posts", fetchPosts, {
+    getNextPageParam: (lastPage, pages) => {
+      const morePagesExist = lastPage.data.length === 10;
+      if (!morePagesExist) {
+        return undefined;
+      }
+      return pages.length * 10;
+    },
+  });
+
+
   return (
     <AnimatePresence>
       <motion.div
