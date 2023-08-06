@@ -15,6 +15,8 @@ import vazirMedium from "./assets/fonts/Vazir-Medium.woff2";
 
 import AnimatedRoutes from "./components/AnimatedRoutes";
 
+
+
 const darkTheme = createTheme({
   direction: "rtl",
   palette: {
