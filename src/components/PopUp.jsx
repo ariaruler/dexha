@@ -35,6 +35,7 @@ import { AnimatePresence } from "framer-motion";
 import { motion } from "framer-motion";
 
 import axios from "axios";
+import { useInfiniteQuery } from "react-query";
 
 
 const inputHieght = 54;
@@ -128,16 +129,47 @@ export default function PopUp(props) {
 
   const [currencies, setCurrencies] = useState([]);
 
-  useEffect(() => {
-    axios
-      .get(
-        "https://bamanchange.com/exchange/api/currencies?active=true&flow=standard&buy=true&sell=true"
-      )
-      .then((res) => {
-        console.log(res);
-        setCurrencies(res.data);
-      });
-  }, []);
+  useEffect(
+  //   () => {
+  //   axios
+  //     .get(
+  //       "https://bamanchange.com/exchange/api/currencies?active=true&flow=standard&buy=true&sell=true"
+  //     )
+  //     .then((res) => {
+  //       console.log(res);
+  //       setCurrencies(res.data);
+  //     });
+
+  
+  // }
+  
+  () =>{
+
+    axios.get("https://bamanchange.com/exchange/api/currencies?active=true&flow=standard&buy=true&sell=true$_start=&_limit=10").then((res) => {
+             console.log(res);
+            setCurrencies(res.data);
+          });
+  }
+  , []);
+
+
+
+  const {
+    data,
+    fetchNextPage,
+    hasNextPage,
+    isFetchingNextPage,
+    status,
+  } = useInfiniteQuery("posts", fetchPosts, {
+    getNextPageParam: (lastPage, pages) => {
+      const morePagesExist = lastPage.data.length === 10;
+      if (!morePagesExist) {
+        return undefined;
+      }
+      return pages.length * 10;
+    },
+  });
+
 
   return (
     <AnimatePresence>
