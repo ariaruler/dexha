@@ -18,19 +18,32 @@ export default function Buttonfee({ inputHieght, bigbuttonBorderRadius }) {
   const feeButton = {
     height: inputHieght,
     maxHeight: inputHieght,
+    minHeight : "0 !important" ,
     "& .MuiAccordionSummary-content": {
       display: "flex",
       justifyContent: "space-between",
     },
+    "& .muirtl-o4b71y-MuiAccordionSummary-content.Mui-expanded": {
+      margin : 0,
+      transition : 'none'
+    },
     width: "100%",
     borderRadius: bigbuttonBorderRadius,
-    border: `1px solid ${theme.palette.secondary.contrastText}`,
+    border: `none`,
     color: theme.palette.primary.contrastText,
-    fontsize: .001*theme.typography.fontsize,
+    fontsize: .0000001*theme.typography.fontsize,
+
   };
 
+  const feeButtonMother ={
+    backgroundColor: 'transparent',
+    backgroundImage : 'none',
+    transition : 'none',
+    boxShadow : 'none',
+  }
+
   return (
-    <MuiAccordion>
+    <MuiAccordion sx={feeButtonMother}>
       <MuiAccordionSummary
         expandIcon={<ExpandMoreIcon />}
         sx={feeButton}

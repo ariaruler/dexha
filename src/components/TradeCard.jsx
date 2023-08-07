@@ -1,7 +1,7 @@
 import Box from "@mui/material/Box";
 import { styled } from "@mui/system";
 import Grid from "@mui/material/Grid";
-import ChangeCircleOutlinedIcon from "@mui/icons-material/ChangeCircleOutlined";
+import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 
 
 import ButtonTrade from "./ButtonTrade";
@@ -24,17 +24,7 @@ import PopUpTrade from "./PopUpTrade";
 const inputHieght = 54;
 const bigbuttonBorderRadius = "8px";
 
-const iconCircle = {
-  animation: "spin 2s linear infinite",
-  "@keyframes spin": {
-    "0%": {
-      transform: "rotate(360deg)",
-    },
-    "100%": {
-      transform: "rotate(0deg)",
-    },
-  },
-};
+
 
 const pages = [
   {
@@ -73,6 +63,16 @@ export default function Tradecard(props) {
     justifyContent: "center",
   });
 
+  const iconCircle = {
+    transition: 'transform .3s ease-in-out',
+    backgroundColor: theme.palette.background.paper,
+    borderRadius : '50%',
+    '&:hover' :{
+  
+      transform: 'rotate(180deg)',
+    }
+  };
+
   const [active, setActive] = useState(0);
   const changeColor = (id) => {
     setActive(id);
@@ -105,7 +105,7 @@ export default function Tradecard(props) {
         </Grid>
 
         <Grid item xs={12} sx={{ display: "flex", justifyContent: "center" }}>
-          <ChangeCircleOutlinedIcon sx={iconCircle} />
+          <KeyboardArrowDownIcon sx={iconCircle}  />
         </Grid>
 
         <Grid item xs={12}>

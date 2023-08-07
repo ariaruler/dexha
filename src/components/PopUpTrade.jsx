@@ -4,11 +4,13 @@ import Dialog from "@mui/material/Dialog";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 
 import {
+  Avatar,
   Checkbox,
   DialogActions,
   DialogContent,
   FormControlLabel,
   Grid,
+  Typography,
 } from "@mui/material";
 import { useTheme } from "@mui/material/styles";
 import { useState } from "react";
@@ -23,6 +25,10 @@ import TableBody from "@mui/material/TableBody";
 import TableCell from "@mui/material/TableCell";
 import TableContainer from "@mui/material/TableContainer";
 import TableRow from "@mui/material/TableRow";
+
+import ArrowCircleLeftIcon from "@mui/icons-material/ArrowCircleLeft";
+import Grid2 from "@mui/material/Unstable_Grid2/Grid2";
+import { Grid3x3Outlined } from "@mui/icons-material";
 
 const inputHieght = 54;
 const bigbuttonBorderRadius = "8px";
@@ -47,7 +53,7 @@ export default function PopUpTrade(props) {
     setStep(0);
   };
 
-  const previosStep = () => (setStep(step - 1) );
+  const previosStep = () => setStep(step - 1);
 
   return (
     <>
@@ -63,40 +69,129 @@ export default function PopUpTrade(props) {
                 open={open === id}
               >
                 <PopUpTitle
-                  header='شروع تبادل'
+                  header="شروع تبادل"
                   handleClose={handleClose}
                   displayNone={true}
                 />
 
-                <DialogContent sx={{ padding: "2px 2em" }}>
-                  <Grid item xs={12}>
-                    <InputTrade
-                      disabled={true}
-                      margin="1em auto"
-                      label="پرداخت"
-                      height={inputHieght}
-                      borderRadius={bigbuttonBorderRadius}
-                      endAdornment={<SmButton width="40%" />}
-                    />
-                  </Grid>
-
+                <DialogContent
+                  sx={{
+                    padding: "2px 2em",
+                    display: "flex",
+                    justifyContent: "center",
+                    alignItems: "center",
+                  }}
+                >
                   <Grid
-                    item
-                    xs={12}
-                    sx={{ display: "flex", justifyContent: "center" }}
+                    sx={{
+                      display: "flex",
+                      justifyContent: "center",
+                      alignItems: "center",
+                    }}
+                    container
+                    spacing={2}
                   >
-                    <KeyboardArrowDownIcon />
-                  </Grid>
-
-                  <Grid item xs={12}>
-                    <InputTrade
-                      disabled={true}
-                      margin="1em auto"
-                      label="دریافت"
-                      height={inputHieght}
-                      borderRadius={bigbuttonBorderRadius}
-                      endAdornment={<SmButton width="40%" />}
-                    />
+                    <Grid
+                      sx={{ display: "flex", justifyContent: "center" }}
+                      item
+                      xs={4}
+                    >
+                      <Grid
+                        sx={{
+                          display: "flex",
+                          justifyContent: "center",
+                          alignItems: "center",
+                        }}
+                        container
+                      >
+                        <Grid
+                          sx={{ display: "flex", justifyContent: "center" }}
+                          item
+                          xs={12}
+                        >
+                          <Avatar
+                            src="/static/images/avatar/1.jpg"
+                            sx={{ width: 56, height: 56 }}
+                          />
+                        </Grid>
+                        <Grid
+                          sx={{ display: "flex", justifyContent: "center" }}
+                          item
+                          xs={12}
+                        >
+                          <Typography variant="h5" component="h2">
+                            Heading
+                          </Typography>
+                        </Grid>
+                        <Grid
+                          sx={{ display: "flex", justifyContent: "center" }}
+                          item
+                          xs={12}
+                        >
+                          <Typography  component="h2">
+                            ارسال می کنید
+                          </Typography>
+                        </Grid>
+                      </Grid>
+                    </Grid>
+                    <Grid
+                      sx={{
+                        display: "flex",
+                        justifyContent: "center",
+                        alignItems: "center",
+                      }}
+                      item
+                      xs={4}
+                    >
+                      <ArrowCircleLeftIcon sx={{ width: 36, height: 36 }} />
+                    </Grid>
+                    <Grid
+                      sx={{
+                        display: "flex",
+                        justifyContent: "center",
+                        alignItems: "center",
+                      }}
+                      item
+                      xs={4}
+                    >
+                      <Grid
+                        sx={{
+                          display: "flex",
+                          justifyContent: "center",
+                          alignItems: "center",
+                        }}
+                        container
+                      >
+                        <Grid
+                          sx={{ display: "flex", justifyContent: "center" }}
+                          item
+                          xs={12}
+                        >
+                          <Avatar
+                            src="/static/images/avatar/1.jpg"
+                            sx={{ width: 56, height: 56 }}
+                          />
+                        </Grid>
+                        <Grid
+                          sx={{ display: "flex", justifyContent: "center" }}
+                          item
+                          xs={12}
+                        >
+                          <Typography variant="h5" component="h2">
+                            Heading
+                          </Typography>
+                        </Grid>
+                        <Grid
+                          sx={{ display: "flex", justifyContent: "center" }}
+                          item
+                          xs={12}
+                        >
+                          <Typography  component="h2">
+                            ارسال می کنید
+                          </Typography>
+                        </Grid>
+                      </Grid>
+                    </Grid>
                   </Grid>
                 </DialogContent>
                 <DialogContent sx={{ padding: "2px 2em" }}>
@@ -112,7 +207,7 @@ export default function PopUpTrade(props) {
 
                   <Grid item xs={12}>
                     <FormControlLabel
-                      control={<Checkbox />}
+                      control={<Checkbox color="secondary" />}
                       label="باز پرداخت به همین کیف پول باشد"
                     />
                   </Grid>
@@ -147,7 +242,7 @@ export default function PopUpTrade(props) {
                   </Grid>
                 </DialogActions>
               </Dialog>
-            )
+            );
             break;
           case 1:
             return (
@@ -159,7 +254,7 @@ export default function PopUpTrade(props) {
                 open={open === id}
               >
                 <PopUpTitle
-                  header='تائید'
+                  header="تائید"
                   previosStep={previosStep}
                   handleClose={handleClose}
                 />

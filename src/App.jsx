@@ -18,22 +18,25 @@ import AnimatedRoutes from "./components/AnimatedRoutes";
 const darkTheme = createTheme({
   direction: "rtl",
   palette: {
-    // common:{
-    //   white: '#000'
-    // },
+    common:{
+      white: '#fff'
+    },
     primary: {
       main: "#0561ff",
       contrastText: "#fff",
     },
     secondary: {
       main: "#f7931a",
-      contrastText: "#5f7bb0",
+      contrastText: "#7896cf",
     },
     mode: "dark",
     divider: "rgba(0,0,0,0)",
     background: {
       paper: "rgba(256,256,256,0.1)",
       default: "#000044",
+    },
+    grey:{
+      '50' : 'rgba(58, 72, 97, 0.5)',
     },
     shadows: {
       0: "rgba(38, 105, 245, 0.25) 0px 0px 16px ",
