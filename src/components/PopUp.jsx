@@ -6,7 +6,6 @@ import Dialog from "@mui/material/Dialog";
 
 import Typography from "@mui/material/Typography";
 
-import AvatarCC from "./AvatarCC";
 import {
   DialogActions,
   DialogContent,
@@ -34,9 +33,10 @@ import PopUpTitle from "./PopUpTitle";
 import { AnimatePresence } from "framer-motion";
 import { motion } from "framer-motion";
 
-import axios from "axios";
-import { useInfiniteQuery } from "react-query";
 
+import { useInfiniteQuery } from "react-query";
+// import InfiniteLoadingList from 'react-simple-infinite-loading'
+import CC from "./CC";
 
 const inputHieght = 54;
 const bigbuttonBorderRadius = "8px";
@@ -121,54 +121,12 @@ export default function PopUp(props) {
 
   const [expanded, setExpanded] = useState(-1);
 
-
-
   const handleChange = (panel) => (event, newExpanded) => {
     setExpanded(newExpanded ? panel : false);
   };
 
   const [currencies, setCurrencies] = useState([]);
 
-  useEffect(
-  //   () => {
-  //   axios
-  //     .get(
-  //       "https://bamanchange.com/exchange/api/currencies?active=true&flow=standard&buy=true&sell=true"
-  //     )
-  //     .then((res) => {
-  //       console.log(res);
-  //       setCurrencies(res.data);
-  //     });
-
-  
-  // }
-  
-  () =>{
-
-    axios.get("https://bamanchange.com/exchange/api/currencies?active=true&flow=standard&buy=true&sell=true$_start=&_limit=10").then((res) => {
-             console.log(res);
-            setCurrencies(res.data);
-          });
-  }
-  , []);
-
-
-
-  const {
-    data,
-    fetchNextPage,
-    hasNextPage,
-    isFetchingNextPage,
-    status,
-  } = useInfiniteQuery("posts", fetchPosts, {
-    getNextPageParam: (lastPage, pages) => {
-      const morePagesExist = lastPage.data.length === 10;
-      if (!morePagesExist) {
-        return undefined;
-      }
-      return pages.length * 10;
-    },
-  });
 
 
   return (
@@ -195,8 +153,6 @@ export default function PopUp(props) {
                   animate={{ opacity: 1, width: "100%" }}
                   exit={{ opacity: 0, width: 0 }}
                 >
-
-
                   <Grid
                     item
                     sx={{
@@ -231,8 +187,8 @@ export default function PopUp(props) {
               <DialogContent
                 sx={{
                   padding: 0,
-                  borderBottom: `1px  solid ${theme.palette.grey['50']}`,
-                  borderTop: `1px  solid ${theme.palette.grey['50']}`,
+                  borderBottom: `1px  solid ${theme.palette.grey["50"]}`,
+                  borderTop: `1px  solid ${theme.palette.grey["50"]}`,
                 }}
                 dividers
               >
@@ -241,34 +197,7 @@ export default function PopUp(props) {
                   animate={{ opacity: 1, width: "100%" }}
                   exit={{ opacity: 0, width: 0 }}
                 >
-                  {currencies.map((x) => (
-                      <React.Suspense >
-                    <Accordion>
-                        <MuiAccordionSummary
-                          sx={{
-                            height: "56px",
-                            alignItem: "center",
-
-                            "& .MuiAccordionSummary-expandIconWrapper": {
-                              transform: "none",
-                            },
-                            margin: marginOfAccordion,
-                            borderBottom: `1px  solid ${theme.palette.grey['50']}`,
-                          }}
-                        >
-                          <AvatarCC image={x.image} />
-                          <Typography>{x.name}</Typography>
-                        </MuiAccordionSummary>
-                        <AccordionDetails>
-                          <ToggleButtons
-                            first="0.1%"
-                            second="0.1%"
-                            third="0.1%"
-                          />
-                        </AccordionDetails>
-                    </Accordion>
-                      </React.Suspense>
-                  ))}
+                  <CC />
                 </motion.div>
               </DialogContent>
 
@@ -322,7 +251,7 @@ export default function PopUp(props) {
                         justifyContent: " space-between ",
                       },
                       margin: marginOfAccordion,
-                      borderBottom: `1px  solid ${theme.palette.grey['50']}`,
+                      borderBottom: `1px  solid ${theme.palette.grey["50"]}`,
                     }}
                   >
                     <Typography
@@ -352,7 +281,7 @@ export default function PopUp(props) {
                         justifyContent: " space-between ",
                       },
                       margin: marginOfAccordion,
-                      borderBottom: `1px  solid ${theme.palette.grey['50']}`,
+                      borderBottom: `1px  solid ${theme.palette.grey["50"]}`,
                     }}
                   >
                     <Typography
@@ -373,10 +302,10 @@ export default function PopUp(props) {
                   </AccordionDetails>
                 </Accordion>
                 <Accordion>
-
-
                   <MuiAccordionSummary
-                    expandIcon={<Android12Switch  color='secondary'  defaultChecked />}
+                    expandIcon={
+                      <Android12Switch color="secondary" defaultChecked />
+                    }
                     defaultExpanded={true}
                     onChange={() => {}}
                     sx={{
@@ -388,7 +317,7 @@ export default function PopUp(props) {
                         transform: "none",
                       },
                       margin: marginOfAccordion,
-                      borderBottom: `1px  solid ${theme.palette.grey['50']}`,
+                      borderBottom: `1px  solid ${theme.palette.grey["50"]}`,
                     }}
                   >
                     <Typography
@@ -415,7 +344,7 @@ export default function PopUp(props) {
                         justifyContent: " space-between ",
                       },
                       margin: marginOfAccordion,
-                      borderBottom: `1px  solid ${theme.palette.grey['50']}`,
+                      borderBottom: `1px  solid ${theme.palette.grey["50"]}`,
                     }}
                   >
                     <Typography
@@ -431,7 +360,9 @@ export default function PopUp(props) {
                     {emails.map((email) => (
                       <Accordion>
                         <MuiAccordionSummary
-                          expandIcon={<Android12Switch  color='secondary' defaultChecked />}
+                          expandIcon={
+                            <Android12Switch color="secondary" defaultChecked />
+                          }
                           defaultExpanded={true}
                           onChange={() => {}}
                           sx={{
@@ -443,7 +374,7 @@ export default function PopUp(props) {
                               transform: "none",
                             },
                             margin: marginOfAccordion,
-                            borderBottom: `1px  solid ${theme.palette.grey['50']}`,
+                            borderBottom: `1px  solid ${theme.palette.grey["50"]}`,
                           }}
                         >
                           <Typography
