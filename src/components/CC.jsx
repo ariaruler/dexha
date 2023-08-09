@@ -78,19 +78,19 @@ export default function CC() {
 //   };
 
 useEffect(() => {
-    handleFetch({ _limit: 0 });
+    handleFetch(1);
   }, []);
  
 
 
 
   function handleFetch(params) {
-    const strParams = qs.stringify(params);
-    let url = "https://bamanchange.com/exchange/api/currencies?active=&flow=fixed-rate&buy=&sell=";
+    // const strParams = qs.stringify(params);
+    let url = `https://bamanchange.com/exchange/api/currencies/?_limit=${params}`;
 
-    if (strParams) {
-      url = url + "/?" + strParams;
-    }
+    // if (strParams) {
+    //   url = url + "/?" + strParams;
+    // }
 
     fetch(url)
       .then(res => res.json())
@@ -99,6 +99,8 @@ useEffect(() => {
       })
       .catch(err => console.log(err));
   }
+
+  console.log(comments.length);
   return (
     //   <div>
     //     <h1>demo: react-infinite-scroll-component</h1>
@@ -125,7 +127,7 @@ useEffect(() => {
 
     <InfiniteScroll
         pageStart={0}
-        loadMore={() => handleFetch({ _limit: comments.length + 0 })}
+        loadMore={(e) => handleFetch(e++)}
         hasMore={true || false}
         useWindow={false}
         loader={
