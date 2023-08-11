@@ -14,7 +14,7 @@ export default function SmButton(props) {
   const SmButton = styled(Button)({
     color: theme.palette.secondary.contrastText ,
     borderColor: theme.palette.secondary.contrastText ,
-    width: props.width,
+    width: '50%',
     // padding: 'auto 5em',
     "&:hover": {
       color: theme.palette.secondary.contrastText ,

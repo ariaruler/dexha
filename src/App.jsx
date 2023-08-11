@@ -14,6 +14,8 @@ import vazirBlack from "./assets/fonts/Vazir-Black.woff2";
 import vazirMedium from "./assets/fonts/Vazir-Medium.woff2";
 
 import AnimatedRoutes from "./components/AnimatedRoutes";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { useEffect, useRef } from "react";
 
 
 
@@ -89,7 +91,14 @@ const cacheRtl = createCache({
 });
 
 function App() {
+
+
+
+const client = new QueryClient()
+
   return (
+    <QueryClientProvider client={client}>
+
     <CacheProvider value={cacheRtl}>
       <ThemeProvider theme={darkTheme}>
         <CssBaseline />
@@ -100,6 +109,7 @@ function App() {
         </BrowserRouter>
       </ThemeProvider>
     </CacheProvider>
+    </QueryClientProvider>
   );
 }
 

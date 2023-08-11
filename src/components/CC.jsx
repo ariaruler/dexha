@@ -1,6 +1,4 @@
-import React from "react";
-import { render } from "react-dom";
-import InfiniteScroll from "react-infinite-scroller";
+import React, { useRef } from "react";
 
 import MuiAccordionSummary from "@mui/material/AccordionSummary";
 import MuiAccordionDetails from "@mui/material/AccordionDetails";
@@ -13,16 +11,11 @@ import { useTheme } from "@mui/material/styles";
 import Typography from "@mui/material/Typography";
 import ToggleButtons from "./TogglrButtons";
 
-import qs from "qs";
+import { useQuery } from "@tanstack/react-query";
+import { Box } from "@mui/material";
 
 const marginOfAccordion = "1px 2em";
 
-const style = {
-  height: 30,
-  border: "1px solid green",
-  margin: 6,
-  padding: 8,
-};
 
 const Accordion = styled((props) => (
   <MuiAccordion disableGutters elevation={0} square {...props} />
@@ -42,102 +35,64 @@ const AccordionDetails = styled(MuiAccordionDetails)(({ theme }) => ({
 }));
 
 export default function CC() {
-  const [currencies, setCurrencies] = useState([]);
-  const [comments, setComments] = useState([]);
-
-//   useEffect(() => {
-//     axios
-//       .get(
-//         "https://bamanchange.com/exchange/api/currencies?active=true&flow=standard&buy=true&sell=true$_start=&_limit=10"
-//       )
-//       .then((res) => {
-//         console.log(res);
-//         setCurrencies(res.data);
-//       });
-//   }, []);
-
   const theme = useTheme();
 
-//   const [items, setItems] = useState(Array.from({ length: 20 }));
+  const url = `https://bamanchange.com/exchange/api/currencies?active=true&flow=standard&buy=true&sell=true`;
 
-//   console.log(items);
+  const { data, isLoading, isError } = useQuery(
+    ["cur"],
+    () => {
+      return axios.get(url);
+    },
+    true
+  );
 
-//   const fetchMoreData = () => {
-//     // a fake async api call like which sends
-//     // 20 more records in .5 secs
-//     setTimeout(() => {
-//         axios
-//         .get(
-//           "https://bamanchange.com/exchange/api/currencies?active=true&flow=standard&buy=true&sell=true$_start=&_limit=10"
-//         )
-//         .then((res) => {
-//           console.log(res);
-//           setCurrencies(res.data);
-//         });
-//     }, 500);
-//   };
-
-useEffect(() => {
-    handleFetch(1);
-  }, []);
- 
-
-
-
-  function handleFetch(params) {
-    // const strParams = qs.stringify(params);
-    let url = `https://bamanchange.com/exchange/api/currencies/?_limit=${params}`;
-
-    // if (strParams) {
-    //   url = url + "/?" + strParams;
-    // }
-
-    fetch(url)
-      .then(res => res.json())
-      .then(res => {
-        setComments(res);
-      })
-      .catch(err => console.log(err));
+  if (isLoading) {
+    return (
+      <Box
+        sx={{
+          height: 300,
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+        }}
+      >
+        <Typography variant="h5"> چند لحظه صبر کنید...</Typography>
+      </Box>
+    );
   }
 
-  console.log(comments.length);
-  return (
-    //   <div>
-    //     <h1>demo: react-infinite-scroll-component</h1>
-    //     <hr />
-    //     <InfiniteScroll
-    //       dataLength={items.length}
-    //       next={fetchMoreData}
-    //       hasMore={true}
-    //       loader={<h4>Loading...</h4>}
-    //       height={400}
-    //       endMessage={
-    //         <p style={{ textAlign: "center" }}>
-    //           <b>Yay! You have seen it all</b>
-    //         </p>
-    //       }
-    //     >
-    //       {items.map((i, index) => (
-    //         <div style={style} key={index}>
-    //           div - #{index}
-    //         </div>
-    //       ))}
-    //     </InfiniteScroll>
-    //   </div>
+  if (isError) {
+    return (
+      <Box
+        sx={{
+          height: 300,
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+        }}
+      >
+        <Typography variant="h5"> خطا در گرفتن اطلاعات</Typography>
+      </Box>
+    );
+  }
 
-    <InfiniteScroll
-        pageStart={0}
-        loadMore={(e) => handleFetch(e++)}
-        hasMore={true || false}
-        useWindow={false}
-        loader={
-          <div key="loading" className="loader">
-            Loading ...
-          </div>
-      }
-    >
-      {comments.map((x) => (
-        <Accordion>
+  console.log(data);
+  return (
+    // <InfiniteScroll
+    //     pageStart={0}
+    //     loadMore={(e) => handleFetch(e++)}
+    //     hasMore={true || false}
+    //     useWindow={false}
+    //     loader={
+    //       <div key="loading" className="loader">
+    //         Loading ...
+    //       </div>
+    //   }
+    // >
+    <>
+      {data?.data.map((x, i) => (
+        <Accordion key={i}>
           <MuiAccordionSummary
             sx={{
               height: "56px",
@@ -150,7 +105,7 @@ useEffect(() => {
               borderBottom: `1px  solid ${theme.palette.grey["50"]}`,
             }}
           >
-            {/* <AvatarCC image={x.image} /> */}
+            <AvatarCC image={x.image} />
             <Typography sx={{ textTransform: "uppercase" }}>
               {x.name}
             </Typography>
@@ -159,29 +114,8 @@ useEffect(() => {
             <ToggleButtons first="0.1%" second="0.1%" third="0.1%" />
           </AccordionDetails>
         </Accordion>
-
-/* 
-<table>
-<thead>
-  <tr>
-    <th>ID</th>
-    <th>Name</th>
-    <th>Email</th>
-  </tr>
-</thead>
-<tbody className="table-body">
-  {comments.map(x => (
-    <tr key={x.id}>
-      <td>{x.id}</td>
-      <td>{x.name}</td>
-      <td>{x.email}</td>
-    </tr>
-  ))}
-</tbody>
-</table> */
-
-
       ))}
-    </InfiniteScroll>
+    </>
+    // </InfiniteScroll>
   );
 }
