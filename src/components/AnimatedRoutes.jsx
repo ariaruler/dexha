@@ -26,6 +26,7 @@ export default function AnimatedRoutes(props) {
       <Route path="/rules" element={<Rules />} />
       <Route path="*" element={<Page404 />} />
     </Routes>
+    
     </AnimatePresence>
   );
 }
