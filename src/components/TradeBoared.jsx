@@ -113,7 +113,7 @@ export default function TradeBoared() {
               item
               xs={12}
             >
-              <Typography component="h2">ارسال می کنید</Typography>
+              <Typography component="h2">دریافت می کنید</Typography>
             </Grid>
           </Grid>
         </Grid>
