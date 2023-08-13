@@ -35,7 +35,6 @@ import { motion } from "framer-motion";
 
 
 import { useInfiniteQuery } from "@tanstack/react-query";
-// import InfiniteLoadingList from 'react-simple-infinite-loading'
 import CC from "./CC";
 
 const inputHieght = 54;
