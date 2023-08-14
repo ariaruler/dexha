@@ -23,6 +23,7 @@ const darkTheme = createTheme({
   direction: "rtl",
   palette: {
     common:{
+      main: '#fff',
       white: '#fff'
     },
     primary: {
