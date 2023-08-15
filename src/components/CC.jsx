@@ -96,7 +96,7 @@ export default function CC() {
               {x.ticker}
             </Typography>
           </MuiAccordionSummary>
-          <AccordionDetails sx={{ padding: "15px 30px !important" }}>
+          <AccordionDetails sx={{ padding: "1em 3em !important" }}>
             {x.network.map((x) => (
               <Button
               variant="outlined"
