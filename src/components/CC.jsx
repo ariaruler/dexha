@@ -9,13 +9,10 @@ import axios from "axios";
 import { useState, useEffect } from "react";
 import { useTheme } from "@mui/material/styles";
 import Typography from "@mui/material/Typography";
-import ToggleButtons from "./TogglrButtons";
 
-import { useInfiniteQuery } from "@tanstack/react-query";
 import InfiniteScroll from "react-infinite-scroller";
 
 
-import { useQuery } from "@tanstack/react-query";
 import { Box, Button } from "@mui/material";
 
 const marginOfAccordion = "1px 2em";
@@ -38,63 +35,10 @@ const AccordionDetails = styled(MuiAccordionDetails)(({ theme }) => ({
 }));
 
 
-// function useIntersectionObserver({
-//   root,
-//   target,
-//   onIntersect,
-//   threshold = 1.0,
-//   rootMargin = '0px',
-//   enabled = true,
-// }) {
-//   React.useEffect(() => {
-//     if (!enabled) {
-//       return
-//     }
-
-//     const observer = new IntersectionObserver(
-//       entries =>
-//         entries.forEach(entry => entry.isIntersecting && onIntersect()),
-//       {
-//         root: root && root.current,
-//         rootMargin,
-//         threshold,
-//       }
-//     )
-
-//     const el = target && target.current
-
-//     if (!el) {
-//       return
-//     }
-
-//     observer.observe(el)
-
-//     return () => {
-//       observer.unobserve(el)
-//     }
-//   }, [target.current, enabled])
-// }
-
-
 export default function CC() {
   const theme = useTheme();
 
   const [comments, setComments] = useState([]);
-
-  // const limit = 10;
-  // const handleFetch = () => {
-  //   return axios.get(
-  //     `https://bamanchange.com/exchange/api/currencies?active=true&flow=standard&buy=true&sell=true&_limit=${limit}`
-  //   );
-  // };
-
-  // const handleFetch = async ({ pageParam = 10 }) => {
-  //   const response = await fetch(
-  //     `https://bamanchange.com/exchange/api/currencies?active=true&flow=standard&buy=true&sell=true&_limit=${pageParam}`
-  //   );
-  //   const results = await response.json();
-  //   return { results, nextPage: pageParam + 1, totalPages: 1000 };
-  // };
 
   useEffect(() => {
     handleFetch(10);
@@ -111,95 +55,6 @@ export default function CC() {
       })
       .catch(err => console.log(err));
   }
-
-  // const {
-  //   data,
-  //   isLoading,
-  //   isError,
-  //   hasNextPage,
-  //   fetchNextPage,
-  //   isFetchingNextPage,
-  // } = useInfiniteQuery(
-  //   ["posts"], 
-  //   handleFetch,
-  //   true,
-  //    {getNextPageParam(lastPage) {
-  //     if (lastPage.nextPage < lastPage.totalPages) return lastPage.nextPage;
-  //     return undefined;
-  //   },
-  // }
-  // );
-
-
-    // const {
-    //   status,
-    //   data,
-    //   error,
-    //   isFetching,
-    //   isFetchingMore,
-    //   fetchMore,
-    //   canFetchMore,
-    //   isError,
-    //   isLoading,
-    // } = useInfiniteQuery(
-    //   ['projects'],
-    //   async (key, nextId = 10) => {
-    //     const { data } = await axios.get('https://bamanchange.com/exchange/api/currencies?active=true&flow=standard&buy=true&sell=true&_limit=' + nextId)
-    //     return data
-    //   },
-    //   {
-    //     getFetchMore: lastGroup => {
-    //       console.log(lastGroup);
-    //       return lastGroup.nextId
-    //     },
-    //   }
-    // )
-  
-
-  // const { data, isLoading, isError } = useQuery(
-  //   ["cur"],
-  //   handleFetch,
-  //   true
-  // );
-  // const loadMoreButtonRef = React.useRef()
-
-  // useIntersectionObserver({
-  //   target: loadMoreButtonRef,
-  //   onIntersect: fetchMore,
-  //   enabled: canFetchMore,
-  // })
-  
-  // if (isLoading) {
-  //   return (
-  //     <Box
-  //       sx={{
-  //         height: 300,
-  //         display: "flex",
-  //         justifyContent: "center",
-  //         alignItems: "center",
-  //       }}
-  //     >
-  //       <Typography variant="h5"> چند لحظه صبر کنید...</Typography>
-  //     </Box>
-  //   );
-  // }
-
-  // if (isError) {
-  //   return (
-  //     <Box
-  //       sx={{
-  //         height: 300,
-  //         display: "flex",
-  //         justifyContent: "center",
-  //         alignItems: "center",
-  //       }}
-  //     >
-  //       <Typography variant="h5"> خطا در گرفتن اطلاعات</Typography>
-  //     </Box>
-  //   );
-  // }
-
-
 
 
   console.log(comments);
@@ -221,8 +76,7 @@ export default function CC() {
         </Box>
       }
     >
-    <>
-    {/* <InfiniteScroller hasMore={hasNextPage} loadMore={fetchNextPage}> */}
+
       {comments.map((x, i) => (
         <Accordion key={i}>
           <MuiAccordionSummary
@@ -255,20 +109,6 @@ export default function CC() {
           </AccordionDetails>
         </Accordion>
       ))}
-      {/* </InfiniteScroller> */}
-      {/* {isFetchingNextPage && <h1>Fetching next page</h1>} */}
-      {/* <button
-              ref={loadMoreButtonRef}
-              onClick={() => fetchMore()}
-              disabled={!canFetchMore || isFetchingMore}
-            >
-              {isFetchingMore
-                ? 'Loading more...'
-                : canFetchMore
-                ? 'Load More'
-                : 'Nothing more to load'}
-            </button> */}
-      </>
     </InfiniteScroll>
   );
 }
