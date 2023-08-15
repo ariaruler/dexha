@@ -262,7 +262,7 @@ export default function PopUp(props) {
                       بازه قیمت
                     </Typography>
                   </MuiAccordionSummary>
-                  <AccordionDetails>
+                  <AccordionDetails sx={{ padding: '15px 30px !important' }}>
                     <ToggleButtons first="0.1%" second="0.1%" third="0.1%" />
                   </AccordionDetails>
                 </Accordion>
@@ -292,7 +292,7 @@ export default function PopUp(props) {
                       سرعت واکنش
                     </Typography>
                   </MuiAccordionSummary>
-                  <AccordionDetails>
+                  <AccordionDetails sx={{ padding: '15px 30px !important' }}>
                     <ToggleButtons
                       first="معمولی"
                       second="سریع"
