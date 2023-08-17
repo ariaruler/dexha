@@ -87,6 +87,11 @@ const darkTheme = createTheme({
   shadows : {
     1 : 'rgb(9, 22, 46) 0px 6px 12px 0px'
   },
+  shape : {
+    borderRadius : [
+      '6px', '8px', '12px'
+    ]
+  }
 });
 
 const cacheRtl = createCache({

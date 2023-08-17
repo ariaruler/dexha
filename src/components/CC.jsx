@@ -41,7 +41,7 @@ export default function CC() {
   const [comments, setComments] = useState([]);
 
   useEffect(() => {
-    handleFetch(10);
+    handleFetch(15);
   }, []);
 
   function handleFetch(param) {
@@ -53,7 +53,7 @@ export default function CC() {
       .then(res => {
         setComments(res);
       })
-      .catch(err => console.log(err));
+
   }
 
 
@@ -61,7 +61,7 @@ export default function CC() {
   return (
     <InfiniteScroll
         pageStart={10}
-        loadMore={(e) => handleFetch(e+=5)}
+        loadMore={(e) => handleFetch(e+10)}
         hasMore={true || false}
         useWindow={false}
         loader={
@@ -100,7 +100,7 @@ export default function CC() {
             {x.network.map((x) => (
               <Button
               variant="outlined"
-              sx={{ borderRadius: 1000, margin: 0.5 }}
+              sx={{ borderRadius: 1000, margin: 0.5 ,border:2, "&:hover" : { border:2,}}}
                 color="common"
               >
                 {x}

@@ -7,7 +7,7 @@ import Container from "@mui/material/Container";
 import logo from "../assets/logo.png";
 
 import { styled } from "@mui/system";
-
+import { useTheme } from "@emotion/react";
 
 import { Link } from "react-router-dom";
 import ButtonTrade from "./ButtonTrade";
@@ -16,13 +16,7 @@ import ButtonChooze from "./ButtonChooze";
 import { useState } from "react";
 
 
-const CardBox = styled("Box")({
-  display: "flex",
-  padding: 2,
-  backgroundColor: "rgba(256,256,256,0.1)",
-  borderRadius: 6,
-  justifyContent: "center",
-});
+
 
 const pages = [
   {
@@ -62,6 +56,17 @@ export default function Header() {
 
   const [active, setActive] = useState(-1);
   const changeColor = (id) => { setActive(id) };
+
+  const theme = useTheme()
+
+
+  const CardBox = styled("Box")({
+    display: "flex",
+    padding: 2,
+    backgroundColor: "rgba(256,256,256,0.1)",
+    borderRadius: theme.shape.borderRadius['0'],
+    justifyContent: "center",
+  });
 
 
   return (

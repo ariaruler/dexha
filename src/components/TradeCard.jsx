@@ -22,7 +22,7 @@ import PopUpTrade from "./PopUpTrade";
 
 
 const inputHieght = 54;
-const bigbuttonBorderRadius = "8px";
+
 
 
 
@@ -99,7 +99,7 @@ export default function Tradecard(props) {
             label="پرداخت"
             type="number"
             height={inputHieght}
-            borderRadius={bigbuttonBorderRadius}
+            borderRadius={theme.shape.borderRadius['1']}
             endAdornment={<SmButton dropDownIcon={true} id={0} handleClickOpen={() => {handleClickOpen(0)}} />}
           />
         </Grid>
@@ -113,7 +113,7 @@ export default function Tradecard(props) {
             label="دریافت"
             type="number"
             height={inputHieght}
-            borderRadius={bigbuttonBorderRadius}
+            borderRadius={theme.shape.borderRadius['1']}
             endAdornment={<SmButton dropDownIcon={true} id={0} handleClickOpen={() => {handleClickOpen(0)}} />}
           />
         </Grid>
@@ -129,7 +129,7 @@ export default function Tradecard(props) {
           <ButtonTrade
           handleClickOpen={() => {handleClickOpen(2)}}
           id={2}
-            borderRadius={bigbuttonBorderRadius}
+            borderRadius={theme.shape.borderRadius['1']}
             content="تبادل"
             width="100%"
             fontSize="1.2em"
@@ -146,7 +146,7 @@ export default function Tradecard(props) {
         />        
 
         <Grid item xs={12}>
-            <Buttonfee inputHieght={inputHieght} bigbuttonBorderRadius={bigbuttonBorderRadius} />
+            <Buttonfee inputHieght={inputHieght} />
         </Grid>
       </Grid>
     </CardBox>
