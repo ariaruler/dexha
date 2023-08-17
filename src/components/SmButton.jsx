@@ -30,7 +30,7 @@ export default function SmButton(props) {
       onClick={props.handleClickOpen}
       variant="outlined"
       size="medium"
-      startIcon={ props.dropDownIcon ? <ArrowDropDown sx={{margin : 0}} /> : undefined }
+      startIcon={ props.dropDownIcon ? <ArrowDropDown /> : undefined }
     >
       medium
       <AvatarCC />
