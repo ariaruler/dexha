@@ -124,8 +124,6 @@ export default function PopUp(props) {
     setExpanded(newExpanded ? panel : false);
   };
 
-  const [currencies, setCurrencies] = useState([]);
-
 
 
   return (
@@ -136,6 +134,7 @@ export default function PopUp(props) {
         exit={{ opacity: 0, width: 0 }}
       >
         <Dialog
+          id={props.id}
           sx={Dialogstyle}
           maxWidth="xs"
           fullWidth={true}
@@ -196,7 +195,7 @@ export default function PopUp(props) {
                   animate={{ opacity: 1, width: "100%" }}
                   exit={{ opacity: 0, width: 0 }}
                 >
-                  <CC />
+                  <CC id={props.id} />
                 </motion.div>
               </DialogContent>
 

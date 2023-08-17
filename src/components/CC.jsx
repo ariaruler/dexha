@@ -6,11 +6,13 @@ import MuiAccordion from "@mui/material/Accordion";
 import styled from "@emotion/styled";
 import AvatarCC from "./AvatarCC";
 import axios from "axios";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
+import { UserContext } from './TradeCard'
 import { useTheme } from "@mui/material/styles";
 import Typography from "@mui/material/Typography";
 
 import InfiniteScroll from "react-infinite-scroller";
+import qs from "qs";
 
 
 import { Box, Button } from "@mui/material";
@@ -35,17 +37,30 @@ const AccordionDetails = styled(MuiAccordionDetails)(({ theme }) => ({
 }));
 
 
-export default function CC() {
+export default function CC(props) {
   const theme = useTheme();
 
   const [comments, setComments] = useState([]);
 
-  useEffect(() => {
-    handleFetch(15);
-  }, []);
+  const selectedCC = useContext(UserContext);
 
-  function handleFetch(param) {
-    let url = `https://bamanchange.com/exchange/api/currencies?active=true&flow=standard&buy=true&sell=true&_limit=${param}`;
+  const [currencies, setCurrencies] = useState(selectedCC.currency[props.id]);
+  const [network, setNetwork] = useState(selectedCC.network[props.id]);
+
+
+
+  // useEffect(() => {
+  //   handleFetch({ _limit: 10 });
+  // }, []);
+
+  function handleFetch(params) {
+        const strParams = qs.stringify(params);
+    let url = `https://bamanchange.com/exchange/api/currencies?active=true&flow=standard&buy=true&sell=true&`;
+
+        if (strParams) {
+      url = url  + strParams;
+    }
+
 
 
     fetch(url)
@@ -53,16 +68,20 @@ export default function CC() {
       .then(res => {
         setComments(res);
       })
+      // console.log(comments);
 
   }
 
+  
+  console.log(currencies);
+  console.log(network);
 
-  console.log(comments);
+
   return (
     <InfiniteScroll
-        pageStart={10}
-        loadMore={(e) => handleFetch(e+10)}
-        hasMore={true || false}
+        pageStart={0}
+        loadMore={() => handleFetch({ _limit: comments.length + 10 })}
+        hasMore={true}
         useWindow={false}
         loader={
           <Box
@@ -97,13 +116,14 @@ export default function CC() {
             </Typography>
           </MuiAccordionSummary>
           <AccordionDetails sx={{ padding: "1em 3em !important" }}>
-            {x.network.map((x) => (
+            {x.network.map((y) => (
               <Button
+              onClick={()=> {setCurrencies(x.ticker) ; setNetwork(y) ; selectedCC.putCC( props.id, currencies ,network )}}
               variant="outlined"
-              sx={{ borderRadius: 1000, margin: 0.5 ,border:2, "&:hover" : { border:2,}}}
+              sx={{ borderRadius: '1000px !important', margin: 0.5 ,border:2, "&:hover" : { border:2,}}}
                 color="common"
               >
-                {x}
+                {y}
               </Button>
             ))}
           </AccordionDetails>
@@ -112,3 +132,5 @@ export default function CC() {
     </InfiniteScroll>
   );
 }
+
+// console.log(props, "UU");

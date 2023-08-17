@@ -41,10 +41,12 @@ export default function InputTrade(props) {
 
   return (
     <TextField
+    // error
+    id="outlined-error"
       sx={input}
       disabled={props.disabled}
       type={props.type}
-      id="outlined-basic"
+      color="common"
       label={props.label}
       InputProps={{
         endAdornment: <>{props.endAdornment}</>,

@@ -34,6 +34,9 @@ const darkTheme = createTheme({
       main: "#f7931a",
       contrastText: "#7896cf",
     },
+    error: {
+      main: "#f7931a",
+    },
     mode: "dark",
     divider: "rgba(0,0,0,0)",
     background: {
