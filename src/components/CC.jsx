@@ -121,9 +121,9 @@ export default function CC(props) {
             {x.network.map((y ,j) => (
               <Button
               key={j}
-              onClick={()=> {   selectedCC.putCC( props.id, x.ticker ,y ) }}
+              onClick={()=> {   selectedCC.putCC( props.id, x.ticker ,y , x.image ) }}
               variant="outlined"
-              sx={{ borderRadius: '1000px !important', margin: 0.5 ,border:2, "&:hover" : { border:2,}}}
+              sx={{ borderRadius: '1000px !important', margin: 0.5 ,border:0, padding : 1, backgroundColor : theme.palette.background.paper, "&:hover" : { border:0,}}}
                 color="common"
               >
                 {y}

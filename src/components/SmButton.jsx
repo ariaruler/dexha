@@ -5,7 +5,7 @@ import { ArrowDropDown } from "@mui/icons-material";
 import AvatarCC from "./AvatarCC";
 
 import { useTheme } from "@emotion/react";
-import { useState, useEffect, useContext } from "react";
+import {  useContext } from "react";
 import { UserContext } from './TradeCard'
 
 
@@ -14,14 +14,6 @@ export default function SmButton(props) {
   const theme = useTheme()
 
   const selectedCC = useContext(UserContext);
-
-  // const [currencies, setCurrencies] = useState(selectedCC.currency[props.id]);
-
-  // const [currenciesImg, setCurrenciesImg] = useState(selectedCC.currency[props.id]);
-
-  // const [network, setNetwork] = useState(selectedCC.network[props.id]);
-
-  // console.log(selectedCC.currencies[0]);
 
   const SmButton = styled(Button)({
     color: theme.palette.secondary.contrastText ,
