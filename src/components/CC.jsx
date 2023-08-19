@@ -61,8 +61,6 @@ export default function CC(props) {
       url = url  + strParams;
     }
 
-
-
     fetch(url)
       .then(res => res.json())
       .then(res => {

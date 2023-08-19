@@ -41,7 +41,9 @@ export default function InputTrade(props) {
 
   return (
     <TextField
-    // error
+    error={props.error}
+    onChange={props.onChange}
+    value={props.value}
     id="outlined-error"
       sx={input}
       disabled={props.disabled}

@@ -75,7 +75,36 @@ export default function Tradecard(props) {
     },
   });
 
-  // useEffect(() => console.log("########", selectedCC), [selectedCC]);
+  const [minData, setMinData] = useState([]);
+
+  const url = `https://bamanchange.com/exchange/api/min-amount?fromCurrency=${selectedCC.currencies[0]}&toCurrency=${selectedCC.currencies[1]}&fromNetwork=${selectedCC.network[0]}&toNetwork=${selectedCC.network[1]}&flow=fixed-rate&=`;
+
+  useEffect(() => {
+    // console.log("########", selectedCC)}
+    fetch(url)
+      .then((res) => res.json())
+      .then((res) => {
+        setMinData(res);
+      });
+  }, [selectedCC]);
+
+  const [min, setMin] = useState("");
+  
+  const [isError ,  setIsError] = useState("");
+
+    useEffect(() => {
+      // console.log(minData.minAmount);
+      // console.log(min+ '9');
+        if((min+ '9')  < minData.minAmount ){
+          setIsError(true)
+        }
+        if((min+ '9')  > minData.minAmount ){
+          setIsError(false)
+        }
+    }
+  , [min]);
+
+  // console.log(min);
 
   const emails = ["username@gmail.com", "user02@gmail.com"];
   const [open, setOpen] = useState(-1);
@@ -90,13 +119,13 @@ export default function Tradecard(props) {
     setSelectedValue(value);
   };
 
-  const CardBox = styled(Box)({
+  const cardBox = {
     display: "flex",
-    padding: 20,
+    padding: "20px",
     backgroundColor: "rgba(256,256,256,0.1)",
     borderRadius: props.borderRadius,
     justifyContent: "center",
-  });
+  }
 
   const iconCircle = {
     transition: "transform .3s ease-in-out",
@@ -114,7 +143,7 @@ export default function Tradecard(props) {
 
   return (
     <UserContext.Provider value={selectedCC}>
-      <CardBox>
+      <Box sx={cardBox}>
         <Grid container spacing={2}>
           <Grid
             item
@@ -141,7 +170,7 @@ export default function Tradecard(props) {
                 handleClickOpen(3);
               }}
               color="common"
-              sx={{minWidth : 0}}
+              sx={{ minWidth: 0 }}
             >
               <SettingsIcon />
             </Button>
@@ -149,7 +178,12 @@ export default function Tradecard(props) {
 
           <Grid item xs={12}>
             <InputTrade
-              label="پرداخت"
+              value={min}
+              onChange={(e) => {
+                setMin(e.target.value);
+              }}
+              error={isError}
+              label={  isError? `حداقل میزان معامله ${minData.minAmount} است` : "پرداخت"   }
               type="number"
               height={inputHieght}
               borderRadius={theme.shape.borderRadius["1"]}
@@ -164,7 +198,6 @@ export default function Tradecard(props) {
               }
             />
           </Grid>
-
           <Grid item xs={12} sx={{ display: "flex", justifyContent: "center" }}>
             <KeyboardArrowDownIcon sx={iconCircle} />
           </Grid>
@@ -216,7 +249,7 @@ export default function Tradecard(props) {
               width="100%"
               fontSize="1.2em"
               height={50}
-              disabled={false}
+              disabled={true}
             />
           </Grid>
 
@@ -232,7 +265,7 @@ export default function Tradecard(props) {
             <Buttonfee inputHieght={inputHieght} />
           </Grid>
         </Grid>
-      </CardBox>
+      </Box>
     </UserContext.Provider>
   );
 }
