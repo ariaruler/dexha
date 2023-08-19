@@ -52,12 +52,12 @@ export default function Tradecard(props) {
       // console.log(id, "YYYYYYYYYYYYYYYYYY", currency)
       if(id === 0){
         setselecctedCC((prev)=> {
-         return { ...prev , currency : { '0' :currency }  , network: { '0'  : network  } }
+         return { ...prev , currency : [currency, ""]  , network: [network, ""]  }
         })
       }
       if(id === 1){
         setselecctedCC((prev)=> {
-         return { ...prev , currency : { '1' :currency }  , network: { '1'  : network  }}
+         return { ...prev , currency : [ "" ,currency,]  , network: [ "" ,network,] }
         })
       }
       
