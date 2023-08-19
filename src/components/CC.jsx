@@ -44,8 +44,8 @@ export default function CC(props) {
 
   const selectedCC = useContext(UserContext);
 
-  const [currencies, setCurrencies] = useState(selectedCC.currency[props.id]);
-  const [network, setNetwork] = useState(selectedCC.network[props.id]);
+  const [currencies, setCurrencies] = useState('');
+  const [network, setNetwork] = useState('');
 
 
 
@@ -72,9 +72,11 @@ export default function CC(props) {
 
   }
 
-  
-  console.log(currencies);
-  console.log(network);
+    useEffect(() => {
+      console.log(currencies);
+      console.log(network);
+
+  }, []);
 
 
   return (
@@ -116,9 +118,10 @@ export default function CC(props) {
             </Typography>
           </MuiAccordionSummary>
           <AccordionDetails sx={{ padding: "1em 3em !important" }}>
-            {x.network.map((y) => (
+            {x.network.map((y ,j) => (
               <Button
-              onClick={()=> {setCurrencies(x.ticker) ; setNetwork(y) ; selectedCC.putCC( props.id, currencies ,network )}}
+              key={j}
+              onClick={()=> {   selectedCC.putCC( props.id, x.ticker ,y ) }}
               variant="outlined"
               sx={{ borderRadius: '1000px !important', margin: 0.5 ,border:2, "&:hover" : { border:2,}}}
                 color="common"
@@ -134,3 +137,5 @@ export default function CC(props) {
 }
 
 // console.log(props, "UU");
+// ; selectedCC.putCC( props.id, currencies ,network )
+// setCurrencies(x.ticker) ; setNetwork(y);   

@@ -46,31 +46,32 @@ export default function Tradecard(props) {
 
   
   const [selectedCC , setselecctedCC] = useState({
-    currency : [ "","",],
-    currencyImg : [ "","",],
-    network :[ "","",],
-    networkImg :[ "","",],
+    currencies : [ "btc","eth",],
+    currencyImg : [ "https://content-api.bamanchange.com/uploads/btc_1_527dc9ec3c.svg","https://content-api.bamanchange.com/uploads/eth_f4ebb54ec0.svg",],
+    network :[ "btc","eth",],
     putCC : (id ,currency ,network)=> {
       // console.log(id, "YYYYYYYYYYYYYYYYYY", currency)
       if(id === 0){
         setselecctedCC((prev)=> {
-         return { ...prev , currency : [currency, ""]  , network: [network, ""]  }
+         return { ...prev , currencies : [currency, "" ]  , network: [network, "" ]  }
         })
+        // console.log(selectedCC);
       }
       if(id === 1){
         setselecctedCC((prev)=> {
-         return { ...prev , currency : [ "" ,currency,]  , network: [ "" ,network,] }
+         return { ...prev , currencies : [ "" ,currency,]  , network: [ "" ,network,] }
         })
       }
       
       // console.log("*************************");
       // console.log(selectedCC.currency[0]);
       // console.log(selectedCC.network[0]);
+
     
     },
   })
 
-  useEffect(() => console.log("########", selectedCC.currency[0]), [selectedCC]);
+  // useEffect(() => console.log("########", selectedCC.currencies[0]), [selectedCC]);
 
 
   
@@ -159,7 +160,7 @@ export default function Tradecard(props) {
 
         open={open}
         onClose={handleClose}
-        selectedCC={{currency :selectedCC.fromCurrency ,network : selectedCC.fromNetwork}}
+
         />
         <PopUp
         id={1}
@@ -167,7 +168,7 @@ export default function Tradecard(props) {
 
         open={open}
         onClose={handleClose}
-        selectedCC={{currency :selectedCC.toCurrency ,network : selectedCC.toNetwork}}
+
         />
 
         <Grid item xs={12}>
