@@ -47,7 +47,9 @@ export default function Tradecard(props) {
   
   const [selectedCC , setselecctedCC] = useState({
     currency : [ "","",],
+    currencyImg : [ "","",],
     network :[ "","",],
+    networkImg :[ "","",],
     putCC : (id ,currency ,network)=> {
       // console.log(id, "YYYYYYYYYYYYYYYYYY", currency)
       if(id === 0){
