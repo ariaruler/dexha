@@ -4,6 +4,7 @@ import Dialog from "@mui/material/Dialog";
 
 import {
   Avatar,
+  Box,
   Checkbox,
   CircularProgress,
   DialogActions,
@@ -53,6 +54,30 @@ const marks = [
     label: "ارسال ارز",
   },
 ];
+
+
+const box = {
+  width: '100%',
+  height: '100%',            
+  position: 'absolute',
+  top: '0',
+  left: '0',
+  opacity:' 0.8',  /* for demo purpose  */
+  background: 'red',
+}
+
+
+const stack = {
+  width: '100%',
+  height: '100%',            
+  position: 'absolute',
+  top: '0',
+  left: '0',
+  opacity:' 0.8',  /* for demo purpose  */
+  background: 'red',
+  zIndex: '9',
+  margin: '20px', /* for demo purpose  */
+}
 
 function AirbnbThumbComponent(props) {
   const { children, ...other } = props;
@@ -288,13 +313,20 @@ export default function PopUpTrade(props) {
                       alignItems: "center",
                     }}
                   >
+<Box>
+
                     <QRcode
-                      style={{ borderRadius: bigbuttonBorderRadius }}
+                      style={{ borderRadius: bigbuttonBorderRadius , '&#myqr' : { backgroundColor : '#000'} }}
+                      className="alert"
                       id="myqr"
                       value={qr}
                       size={200}
                       includeMargin={true}
-                    />
+                      >
+                        <div style={box} ></div>
+                        <div  style={stack} ></div>
+                      </QRcode>
+                        </Box>
                   </Grid>
                   <Grid
                     item

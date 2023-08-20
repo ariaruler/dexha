@@ -77,15 +77,26 @@ export default function Tradecard(props) {
 
   const [minData, setMinData] = useState([]);
 
-  const url = `https://bamanchange.com/exchange/api/min-amount?fromCurrency=${selectedCC.currencies[0]}&toCurrency=${selectedCC.currencies[1]}&fromNetwork=${selectedCC.network[0]}&toNetwork=${selectedCC.network[1]}&flow=fixed-rate&=`;
+  const minUrl = `https://bamanchange.com/exchange/api/min-amount?fromCurrency=${selectedCC.currencies[0]}&toCurrency=${selectedCC.currencies[1]}&fromNetwork=${selectedCC.network[0]}&toNetwork=${selectedCC.network[1]}&flow=fixed-rate&=`;
+ 
+  const checkUrl = `https://api.bamanchange.com/v2/exchange/available-pairs?fromCurrency=${selectedCC.currencies[0]}&toCurrency=${selectedCC.currencies[1]}&fromNetwork=${selectedCC.network[0]}&toNetwork=${selectedCC.network[1]}&flow=standard`;
 
   useEffect(() => {
-    // console.log("########", selectedCC)}
-    fetch(url)
+
+    fetch(minUrl)
       .then((res) => res.json())
       .then((res) => {
         setMinData(res);
       });
+
+
+    fetch(checkUrl)
+      .then((res) => res.json())
+      .then((res) => {
+        setMinData(res);
+      });
+
+
   }, [selectedCC]);
 
   const [min, setMin] = useState("");
@@ -94,13 +105,15 @@ export default function Tradecard(props) {
 
     useEffect(() => {
       // console.log(minData.minAmount);
-      // console.log(min+ '9');
-        if((min+ '9')  < minData.minAmount ){
+      console.log(min);
+        if((min)  < minData.minAmount && min.length > 0) {
           setIsError(true)
         }
-        if((min+ '9')  > minData.minAmount ){
+        if((min)  > minData.minAmount || (min.length  < 1 )  ){
           setIsError(false)
         }
+        // 
+        // 
     }
   , [min]);
 
@@ -183,7 +196,7 @@ export default function Tradecard(props) {
                 setMin(e.target.value);
               }}
               error={isError}
-              label={  isError? `حداقل میزان معامله ${minData.minAmount} است` : "پرداخت"   }
+              label={  isError? `حداقل میزان معامله ${minData.minAmount} می باشد` : "پرداخت"   }
               type="number"
               height={inputHieght}
               borderRadius={theme.shape.borderRadius["1"]}
@@ -249,7 +262,7 @@ export default function Tradecard(props) {
               width="100%"
               fontSize="1.2em"
               height={50}
-              disabled={true}
+              disabled={0}
             />
           </Grid>
 
