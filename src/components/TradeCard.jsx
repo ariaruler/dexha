@@ -19,7 +19,7 @@ import PopUpTrade from "./PopUpTrade";
 
 import SettingsIcon from "@mui/icons-material/Settings";
 import PopUpSetting from "./PopUpSetting.";
-import { Button } from "@mui/material";
+import { Button, CircularProgress } from "@mui/material";
 
 const inputHieght = 54;
 
@@ -77,47 +77,67 @@ export default function Tradecard(props) {
 
   const [minData, setMinData] = useState([]);
 
+
+  const [checkData, setCheckData] = useState([]);
+  
+  const [pay, setPay] = useState("");
+
+  const [toAmount , setToAmount] = useState()
+
   const minUrl = `https://bamanchange.com/exchange/api/min-amount?fromCurrency=${selectedCC.currencies[0]}&toCurrency=${selectedCC.currencies[1]}&fromNetwork=${selectedCC.network[0]}&toNetwork=${selectedCC.network[1]}&flow=fixed-rate&=`;
  
-  const checkUrl = `https://api.bamanchange.com/v2/exchange/available-pairs?fromCurrency=${selectedCC.currencies[0]}&toCurrency=${selectedCC.currencies[1]}&fromNetwork=${selectedCC.network[0]}&toNetwork=${selectedCC.network[1]}&flow=standard`;
+  const checkUrl = `https://bamanchange.com/exchange/api/available-pairs?fromCurrency=${selectedCC.currencies[0]}&toCurrency=${selectedCC.currencies[1]}&fromNetwork=${selectedCC.network[0]}&toNetwork=${selectedCC.network[1]}&flow=`;
+  
+  const amountUrl = `https://bamanchange.com/exchange/api/estimated-amount?fromCurrency=${selectedCC.currencies[0]}&toCurrency=${selectedCC.currencies[1]}&fromAmount=${pay}&toAmount=&fromNetwork=${selectedCC.network[0]}&toNetwork=${selectedCC.network[1]}&flow=fixed-rate&type=&useRateId=`;
 
+  
   useEffect(() => {
-
+    
     fetch(minUrl)
-      .then((res) => res.json())
-      .then((res) => {
-        setMinData(res);
-      });
-
-
+    .then((res) => res.json())
+    .then((res) => {
+      setMinData(res);
+    });
+    
+    
     fetch(checkUrl)
+    .then((res) => res.json())
+    .then((res) => {
+      setCheckData(res);
+    });
+    
+
+    fetch(amountUrl)
       .then((res) => res.json())
       .then((res) => {
-        setMinData(res);
+        setToAmount(res);
       });
 
+      if(pay  < minData.minAmount && pay.length > 0) {
+        setIsError(true)
+      }
+      if(pay  > minData.minAmount || pay.length  < 1   ){
+        setIsError(false)
+      }
+      
+      // console.log(toAmount);
+      // console.log(pay);
+      
+    }, [selectedCC , pay]);
+    
 
-  }, [selectedCC]);
-
-  const [min, setMin] = useState("");
   
   const [isError ,  setIsError] = useState("");
 
-    useEffect(() => {
-      // console.log(minData.minAmount);
-      console.log(min);
-        if((min)  < minData.minAmount && min.length > 0) {
-          setIsError(true)
-        }
-        if((min)  > minData.minAmount || (min.length  < 1 )  ){
-          setIsError(false)
-        }
-        // 
-        // 
-    }
-  , [min]);
+  //   useEffect(() => {
+  //     // console.log(minData.minAmount);
+  //     // console.log(min);
 
-  // console.log(min);
+  //       // 
+  //       // 
+  //   }
+  // , []);
+
 
   const emails = ["username@gmail.com", "user02@gmail.com"];
   const [open, setOpen] = useState(-1);
@@ -191,9 +211,9 @@ export default function Tradecard(props) {
 
           <Grid item xs={12}>
             <InputTrade
-              value={min}
+              value={pay}
               onChange={(e) => {
-                setMin(e.target.value);
+                setPay(e.target.value);
               }}
               error={isError}
               label={  isError? `حداقل میزان معامله ${minData.minAmount} می باشد` : "پرداخت"   }
@@ -217,8 +237,11 @@ export default function Tradecard(props) {
 
           <Grid item xs={12}>
             <InputTrade
-              label="دریافت"
-              type="number"
+            lable={true}
+            disabled
+              value={toAmount?.toAmount ? toAmount?.toAmount : '...' }
+              // label="دریافت"
+              type="text"
               height={inputHieght}
               borderRadius={theme.shape.borderRadius["1"]}
               endAdornment={
@@ -258,11 +281,11 @@ export default function Tradecard(props) {
               }}
               id={2}
               borderRadius={theme.shape.borderRadius["1"]}
-              content="تبادل"
+              content={ checkData[0]?.flow.standard ? "تبادل" : 'جفت ارز مورد نظر موجود نیست' } 
               width="100%"
               fontSize="1.2em"
               height={50}
-              disabled={0}
+              disabled={!checkData[0]?.flow.standard }
             />
           </Grid>
 
