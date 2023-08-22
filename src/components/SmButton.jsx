@@ -13,7 +13,7 @@ export default function SmButton(props) {
 
   const theme = useTheme()
 
-  const selectedCC = useContext(UserContext);
+  const {selectedCC} = useContext(UserContext);
 
   const SmButton = styled(Button)({
     color: theme.palette.secondary.contrastText ,

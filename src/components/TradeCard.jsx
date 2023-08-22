@@ -103,7 +103,7 @@ export default function Tradecard(props) {
     fetch(amountUrl)
     .then((res) => res.json())
     .then((res) => {
-      setToAmount(res);
+      setToAmount(res?.toAmount);
     });
 
 
@@ -195,7 +195,7 @@ export default function Tradecard(props) {
 
 
   return (
-    <UserContext.Provider value={selectedCC}>
+    <UserContext.Provider value={ { selectedCC , setselecctedCC ,  toAmount , setToAmount}  }>
       <Box sx={cardBox}>
         <Grid container spacing={2}>
           <Grid
@@ -262,7 +262,7 @@ export default function Tradecard(props) {
           <Grid item xs={12}>
             <InputTrade
               lable={true}
-              value={ toAmount?.toAmount }
+              value={ toAmount }
               label="دریافت"
               type="number"
               height={inputHieght}

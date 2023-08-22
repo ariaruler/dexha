@@ -151,8 +151,8 @@ export default function PopUpTrade(props) {
                   displayNone={true}
                 />
 
-                <TradeBoared toAmount={props.toAmount} />
-
+                <TradeBoared  />
+                {/* toAmount={props.toAmount} */}
                 <DialogContent sx={{ padding: "2px 2em" }}>
                   <Grid item xs={12}>
                     <InputTrade
@@ -217,8 +217,8 @@ export default function PopUpTrade(props) {
                   previosStep={previosStep}
                   handleClose={handleClose}
                 />
-                <TradeBoared toAmount={props.toAmount} />
-
+                <TradeBoared />
+{/* toAmount={props.toAmount} */}
                 <DialogContent sx={{ padding: "2px 2em" }}>
                   <Grid item xs={12}>
                     <TableContainer>
