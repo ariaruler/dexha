@@ -130,6 +130,8 @@ export default function PopUpTrade(props) {
     margin: 2,
   };
 
+  console.log(props.toAmount);
+
   return (
     <>
       {(() => {
@@ -149,7 +151,7 @@ export default function PopUpTrade(props) {
                   displayNone={true}
                 />
 
-                <TradeBoared />
+                <TradeBoared toAmount={props.toAmount} />
 
                 <DialogContent sx={{ padding: "2px 2em" }}>
                   <Grid item xs={12}>
@@ -215,7 +217,7 @@ export default function PopUpTrade(props) {
                   previosStep={previosStep}
                   handleClose={handleClose}
                 />
-                <TradeBoared />
+                <TradeBoared toAmount={props.toAmount} />
 
                 <DialogContent sx={{ padding: "2px 2em" }}>
                   <Grid item xs={12}>

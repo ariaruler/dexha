@@ -21,6 +21,8 @@ import SettingsIcon from "@mui/icons-material/Settings";
 import PopUpSetting from "./PopUpSetting.";
 import { Button, CircularProgress } from "@mui/material";
 
+
+
 const inputHieght = 54;
 
 const pages = [
@@ -34,12 +36,12 @@ const pages = [
     content: "نرخ ثابت",
   },
 ];
-
 export const UserContext = createContext();
 
 export default function Tradecard(props) {
   const theme = useTheme();
-
+  console.log( "YYYYYYYYYYYYYYYYYY")
+  
   const [fromAmount, setFromAmount] = useState(1);
 
   const [toAmount, setToAmount] = useState({});
@@ -52,7 +54,7 @@ export default function Tradecard(props) {
     ],
     network: ["btc", "eth"],
     putCC: (id, currency, network, currencyImg) => {
-      // console.log(id, "YYYYYYYYYYYYYYYYYY", currency)
+
       console.log(id);
       if (id === 0) {
         setselecctedCC((prev) => {
@@ -85,7 +87,7 @@ export default function Tradecard(props) {
 
   const [checkData, setCheckData] = useState([]);
 
-  // const [isError, setIsError] = useState("");
+  const [isError, setIsError] = useState("");
 
   const minUrl = `https://bamanchange.com/exchange/api/min-amount?fromCurrency=${selectedCC.currencies[0]}&toCurrency=${selectedCC.currencies[1]}&fromNetwork=${selectedCC.network[0]}&toNetwork=${selectedCC.network[1]}&flow=fixed-rate&=`;
 
@@ -93,11 +95,17 @@ export default function Tradecard(props) {
 
   const amountUrl = `https://bamanchange.com/exchange/api/estimated-amount?fromCurrency=${selectedCC.currencies[0]}&toCurrency=${selectedCC.currencies[1]}&fromAmount=${fromAmount}&toAmount=&fromNetwork=${selectedCC.network[0]}&toNetwork=${selectedCC.network[1]}&flow=fixed-rate&type=&useRateId=`;
 
-  // useEffect(() => {
 
-      
-  //     // console.log(pay);
-  //   }, [ ]);
+  useEffect(() => {
+
+
+
+    fetch(amountUrl)
+    .then((res) => res.json())
+    .then((res) => {
+      setToAmount(res);
+    });
+
 
 
     fetch(minUrl)
@@ -112,24 +120,32 @@ export default function Tradecard(props) {
       setCheckData(res);
     });
 
-  fetch(amountUrl)
-    .then((res) => res.json())
-    .then((res) => {
-      setToAmount(res);
-    });
+
+    if (fromAmount < minData.minAmount && fromAmount.length > 0) {
+      setIsError(true);
+    }
+    if (fromAmount > minData.minAmount || fromAmount.length < 1) {
+      setIsError(false);
+    }
+
+
+
+      // console.log(pay);
+    }, [fromAmount ]);
+
+  // useEffect(() => {
+
+
     
-    
-    
-    // if (fromAmount < minData.minAmount && fromAmount.length > 0) {
-    //   setIsError(true);
-    // }
-    // if (fromAmount > minData.minAmount || fromAmount.length < 1) {
-    //   setIsError(false);
-    // }
+  
+  //     // console.log(pay);
+  //   }, [ fromAmount ]);
+
     
     
     console.log(toAmount?.toAmount);
 
+    // console.log(selectedCC.toAmount);
 
 
   //   useEffect(() => {
@@ -176,6 +192,8 @@ export default function Tradecard(props) {
     setActive(id);
   };
 
+
+
   return (
     <UserContext.Provider value={selectedCC}>
       <Box sx={cardBox}>
@@ -215,14 +233,14 @@ export default function Tradecard(props) {
             <InputTrade
               value={fromAmount}
               onChange={(e) => {
-                setFromAmount(e.target.value);
+                setFromAmount(e.target.value);   
               }}
-              // error={isError}
-              // label={
-              //   isError
-              //     ? `حداقل میزان معامله ${minData.minAmount} می باشد`
-              //     : "پرداخت"
-              // }
+              error={isError}
+              label={
+                isError
+                  ? `حداقل میزان معامله ${minData.minAmount} می باشد`
+                  : "پرداخت"
+              }
               type="number"
               height={inputHieght}
               borderRadius={theme.shape.borderRadius["1"]}
@@ -246,7 +264,7 @@ export default function Tradecard(props) {
               lable={true}
               value={ toAmount?.toAmount }
               label="دریافت"
-              type="text"
+              type="number"
               height={inputHieght}
               borderRadius={theme.shape.borderRadius["1"]}
               endAdornment={
@@ -299,6 +317,7 @@ export default function Tradecard(props) {
           </Grid>
 
           <PopUpTrade
+          toAmount={toAmount?.toAmount}
             id={2}
             borderRadius={props.borderRadius}
             selectedValue={selectedValue}

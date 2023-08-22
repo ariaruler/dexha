@@ -8,18 +8,18 @@ import {  useContext ,useEffect } from "react";
 import { UserContext } from './TradeCard'
 
 
-export default function TradeBoared() {
+export default function TradeBoared(props) {
 
   const selectedCC = useContext(UserContext);
 
 
+  console.log(props.toAmount)
 
-  useEffect(() => {
+  // useEffect(() => {
 
-    console.log(selectedCC.toAmount)
 
-    // console.log(pay);
-  }, [selectedCC]);
+  //   // console.log(pay);
+  // }, [selectedCC]);
 
 
 
@@ -122,7 +122,7 @@ export default function TradeBoared() {
               xs={12}
             >
               <Typography variant="h5" component="h2">
-                {selectedCC.currencies[1] + " " + selectedCC.toAmount  }
+                {selectedCC.currencies[1] + " " + props.toAmount  }
               </Typography>
             </Grid>
             <Grid
