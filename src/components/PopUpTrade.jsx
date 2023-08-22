@@ -4,6 +4,7 @@ import Dialog from "@mui/material/Dialog";
 
 import {
   Avatar,
+  Box,
   Checkbox,
   CircularProgress,
   DialogActions,
@@ -42,24 +43,53 @@ const bigbuttonBorderRadius = "8px";
 const marks = [
   {
     value: 10,
-    label: "در حال واریز",
+    label: "در حال دریافت ارز شبا",
   },
   {
     value: 20,
     label: "تائید واریز ",
   },
   {
-    value: 30,
-    label: "ارسال ارز",
+    value: 40,
+    label: "در حال تبادل",
+  },
+  {
+    value: 50,
+    label: "پایان تبادل",
   },
 ];
+
+const box = {
+  width: "100%",
+  height: "100%",
+  position: "absolute",
+  top: "0",
+  left: "0",
+  opacity: " 0.8" /* for demo purpose  */,
+  background: "red",
+};
+
+const stack = {
+  width: "100%",
+  height: "100%",
+  position: "absolute",
+  top: "0",
+  left: "0",
+  opacity: " 0.8" /* for demo purpose  */,
+  background: "red",
+  zIndex: "9",
+  margin: "20px" /* for demo purpose  */,
+};
 
 function AirbnbThumbComponent(props) {
   const { children, ...other } = props;
   return (
-    <SliderThumb sx={{width: 30 , height : 30}} {...other}>
+    <SliderThumb sx={{ width: 30, height: 30 }} {...other}>
       {children}
-      <CircularProgress sx={{height: "auto !important", padding:.4 , }} color='common' />
+      <CircularProgress
+        sx={{ height: "auto !important", padding: 0.4 }}
+        color="common"
+      />
     </SliderThumb>
   );
 }
@@ -100,6 +130,8 @@ export default function PopUpTrade(props) {
     margin: 2,
   };
 
+  console.log(props.toAmount);
+
   return (
     <>
       {(() => {
@@ -119,7 +151,7 @@ export default function PopUpTrade(props) {
                   displayNone={true}
                 />
 
-                <TradeBoared />
+                <TradeBoared toAmount={props.toAmount} />
 
                 <DialogContent sx={{ padding: "2px 2em" }}>
                   <Grid item xs={12}>
@@ -185,7 +217,7 @@ export default function PopUpTrade(props) {
                   previosStep={previosStep}
                   handleClose={handleClose}
                 />
-                <TradeBoared />
+                <TradeBoared toAmount={props.toAmount} />
 
                 <DialogContent sx={{ padding: "2px 2em" }}>
                   <Grid item xs={12}>
@@ -288,13 +320,22 @@ export default function PopUpTrade(props) {
                       alignItems: "center",
                     }}
                   >
-                    <QRcode
-                      style={{ borderRadius: bigbuttonBorderRadius }}
-                      id="myqr"
-                      value={qr}
-                      size={200}
-                      includeMargin={true}
-                    />
+                    <Box>
+                      <QRcode
+                        style={{
+                          borderRadius: bigbuttonBorderRadius,
+                          "&#myqr": { backgroundColor: "#000" },
+                        }}
+                        className="alert"
+                        id="myqr"
+                        value={qr}
+                        size={200}
+                        includeMargin={true}
+                      >
+                        <div style={box}></div>
+                        <div style={stack}></div>
+                      </QRcode>
+                    </Box>
                   </Grid>
                   <Grid
                     item
@@ -324,9 +365,9 @@ export default function PopUpTrade(props) {
                       alignItems: "center",
                     }}
                   >
-                    <SmButton />
+                    <SmButton  id={0}/>
                     <ArrowBackIosNewIcon sx={arowIcon} />
-                    <SmButton />
+                    <SmButton id={1}/>
                   </Grid>
 
                   <Grid
@@ -351,7 +392,8 @@ export default function PopUpTrade(props) {
                     item
                     xs={12}
                     sx={{
-                      padding: "1em 0 0 0",
+                      // padding: "1em 0 0 0",
+                      padding : 5,
                       display: "flex",
                       justifyContent: "center",
                       alignItems: "center",
@@ -359,8 +401,10 @@ export default function PopUpTrade(props) {
                   >
                     <Slider
                       slots={{ thumb: AirbnbThumbComponent }}
-                      disabled 
-                      sx={{color : `${theme.palette.secondary.main} !important`}}
+                      disabled
+                      sx={{
+                        color: `${theme.palette.secondary.main} !important`,
+                      }}
                       color="secondary"
                       valueLabelDisplay="off"
                       step={10}

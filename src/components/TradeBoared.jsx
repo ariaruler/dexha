@@ -4,8 +4,25 @@ import { Avatar, DialogContent, Grid } from "@mui/material";
 
 import ArrowCircleLeftIcon from "@mui/icons-material/ArrowCircleLeft";
 
+import {  useContext ,useEffect } from "react";
+import { UserContext } from './TradeCard'
 
-export default function TradeBoared() {
+
+export default function TradeBoared(props) {
+
+  const selectedCC = useContext(UserContext);
+
+
+  console.log(props.toAmount)
+
+  // useEffect(() => {
+
+
+  //   // console.log(pay);
+  // }, [selectedCC]);
+
+
+
   return (
     <DialogContent
       sx={{
@@ -39,7 +56,7 @@ export default function TradeBoared() {
               xs={12}
             >
               <Avatar
-                src="/static/images/avatar/1.jpg"
+                src={selectedCC.currencyImg[0]}
                 sx={{ width: 56, height: 56 }}
               />
             </Grid>
@@ -49,7 +66,7 @@ export default function TradeBoared() {
               xs={12}
             >
               <Typography variant="h5" component="h2">
-                Heading
+              {selectedCC.currencies[0] + " " +  selectedCC.fromAmount }
               </Typography>
             </Grid>
             <Grid
@@ -95,7 +112,7 @@ export default function TradeBoared() {
               xs={12}
             >
               <Avatar
-                src="/static/images/avatar/1.jpg"
+                src={selectedCC.currencyImg[1]}
                 sx={{ width: 56, height: 56 }}
               />
             </Grid>
@@ -105,7 +122,7 @@ export default function TradeBoared() {
               xs={12}
             >
               <Typography variant="h5" component="h2">
-                Heading
+                {selectedCC.currencies[1] + " " + props.toAmount  }
               </Typography>
             </Grid>
             <Grid

@@ -19,7 +19,9 @@ import PopUpTrade from "./PopUpTrade";
 
 import SettingsIcon from "@mui/icons-material/Settings";
 import PopUpSetting from "./PopUpSetting.";
-import { Button } from "@mui/material";
+import { Button, CircularProgress } from "@mui/material";
+
+
 
 const inputHieght = 54;
 
@@ -34,11 +36,15 @@ const pages = [
     content: "نرخ ثابت",
   },
 ];
-
 export const UserContext = createContext();
 
 export default function Tradecard(props) {
   const theme = useTheme();
+  console.log( "YYYYYYYYYYYYYYYYYY")
+  
+  const [fromAmount, setFromAmount] = useState(1);
+
+  const [toAmount, setToAmount] = useState({});
 
   const [selectedCC, setselecctedCC] = useState({
     currencies: ["btc", "eth"],
@@ -48,7 +54,7 @@ export default function Tradecard(props) {
     ],
     network: ["btc", "eth"],
     putCC: (id, currency, network, currencyImg) => {
-      // console.log(id, "YYYYYYYYYYYYYYYYYY", currency)
+
       console.log(id);
       if (id === 0) {
         setselecctedCC((prev) => {
@@ -73,38 +79,83 @@ export default function Tradecard(props) {
       }
       handleClose();
     },
+    fromAmount : fromAmount,
+    toAmount : toAmount?.toAmount,
   });
 
   const [minData, setMinData] = useState([]);
 
-  const url = `https://bamanchange.com/exchange/api/min-amount?fromCurrency=${selectedCC.currencies[0]}&toCurrency=${selectedCC.currencies[1]}&fromNetwork=${selectedCC.network[0]}&toNetwork=${selectedCC.network[1]}&flow=fixed-rate&=`;
+  const [checkData, setCheckData] = useState([]);
+
+  const [isError, setIsError] = useState("");
+
+  const minUrl = `https://bamanchange.com/exchange/api/min-amount?fromCurrency=${selectedCC.currencies[0]}&toCurrency=${selectedCC.currencies[1]}&fromNetwork=${selectedCC.network[0]}&toNetwork=${selectedCC.network[1]}&flow=fixed-rate&=`;
+
+  const checkUrl = `https://bamanchange.com/exchange/api/available-pairs?fromCurrency=${selectedCC.currencies[0]}&toCurrency=${selectedCC.currencies[1]}&fromNetwork=${selectedCC.network[0]}&toNetwork=${selectedCC.network[1]}&flow=`;
+
+  const amountUrl = `https://bamanchange.com/exchange/api/estimated-amount?fromCurrency=${selectedCC.currencies[0]}&toCurrency=${selectedCC.currencies[1]}&fromAmount=${fromAmount}&toAmount=&fromNetwork=${selectedCC.network[0]}&toNetwork=${selectedCC.network[1]}&flow=fixed-rate&type=&useRateId=`;
+
 
   useEffect(() => {
-    // console.log("########", selectedCC)}
-    fetch(url)
-      .then((res) => res.json())
-      .then((res) => {
-        setMinData(res);
-      });
-  }, [selectedCC]);
 
-  const [min, setMin] = useState("");
-  
-  const [isError ,  setIsError] = useState("");
 
-    useEffect(() => {
-      // console.log(minData.minAmount);
-      // console.log(min+ '9');
-        if((min+ '9')  < minData.minAmount ){
-          setIsError(true)
-        }
-        if((min+ '9')  > minData.minAmount ){
-          setIsError(false)
-        }
+
+    fetch(amountUrl)
+    .then((res) => res.json())
+    .then((res) => {
+      setToAmount(res);
+    });
+
+
+
+    fetch(minUrl)
+    .then((res) => res.json())
+    .then((res) => {
+      setMinData(res);
+    });
+
+  fetch(checkUrl)
+    .then((res) => res.json())
+    .then((res) => {
+      setCheckData(res);
+    });
+
+
+    if (fromAmount < minData.minAmount && fromAmount.length > 0) {
+      setIsError(true);
     }
-  , [min]);
+    if (fromAmount > minData.minAmount || fromAmount.length < 1) {
+      setIsError(false);
+    }
 
-  // console.log(min);
+
+
+      // console.log(pay);
+    }, [fromAmount ]);
+
+  // useEffect(() => {
+
+
+    
+  
+  //     // console.log(pay);
+  //   }, [ fromAmount ]);
+
+    
+    
+    console.log(toAmount?.toAmount);
+
+    // console.log(selectedCC.toAmount);
+
+
+  //   useEffect(() => {
+  //     // console.log(minData.minAmount);
+  //     // console.log(min);
+
+  //       //
+  //       //
+  //   }
+  // , []);
 
   const emails = ["username@gmail.com", "user02@gmail.com"];
   const [open, setOpen] = useState(-1);
@@ -125,10 +176,10 @@ export default function Tradecard(props) {
     backgroundColor: "rgba(256,256,256,0.1)",
     borderRadius: props.borderRadius,
     justifyContent: "center",
-  }
+  };
 
   const iconCircle = {
-    transition: "transform .3s ease-in-out",
+    transition: "transform .2s ease-in-out",
     backgroundColor: theme.palette.background.paper,
     borderRadius: "50%",
     "&:hover": {
@@ -140,6 +191,8 @@ export default function Tradecard(props) {
   const changeColor = (id) => {
     setActive(id);
   };
+
+
 
   return (
     <UserContext.Provider value={selectedCC}>
@@ -178,12 +231,16 @@ export default function Tradecard(props) {
 
           <Grid item xs={12}>
             <InputTrade
-              value={min}
+              value={fromAmount}
               onChange={(e) => {
-                setMin(e.target.value);
+                setFromAmount(e.target.value);   
               }}
               error={isError}
-              label={  isError? `حداقل میزان معامله ${minData.minAmount} است` : "پرداخت"   }
+              label={
+                isError
+                  ? `حداقل میزان معامله ${minData.minAmount} می باشد`
+                  : "پرداخت"
+              }
               type="number"
               height={inputHieght}
               borderRadius={theme.shape.borderRadius["1"]}
@@ -204,6 +261,8 @@ export default function Tradecard(props) {
 
           <Grid item xs={12}>
             <InputTrade
+              lable={true}
+              value={ toAmount?.toAmount }
               label="دریافت"
               type="number"
               height={inputHieght}
@@ -245,15 +304,20 @@ export default function Tradecard(props) {
               }}
               id={2}
               borderRadius={theme.shape.borderRadius["1"]}
-              content="تبادل"
+              content={
+                checkData[0]?.flow.standard === false
+                  ? "جفت ارز مورد نظر موجود نیست"
+                  : "تبادل"
+              }
               width="100%"
               fontSize="1.2em"
               height={50}
-              disabled={true}
+              disabled={!checkData[0]?.flow.standard}
             />
           </Grid>
 
           <PopUpTrade
+          toAmount={toAmount?.toAmount}
             id={2}
             borderRadius={props.borderRadius}
             selectedValue={selectedValue}

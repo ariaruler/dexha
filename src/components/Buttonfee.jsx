@@ -43,9 +43,9 @@ export default function Buttonfee({ inputHieght, bigbuttonBorderRadius }) {
   }
 
   return (
-    <MuiAccordion sx={feeButtonMother}>
+    <MuiAccordion expanded sx={feeButtonMother}>
       <MuiAccordionSummary
-        expandIcon={<ExpandMoreIcon />}
+        // expandIcon={<ExpandMoreIcon />}
         sx={feeButton}
       >
         <div>1DAI = 0.0005333497 ETH</div>
