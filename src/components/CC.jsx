@@ -65,10 +65,8 @@ export default function CC(props) {
       // console.log(comments);
 
       fetch().then((res) => {
-        setComments(res);
+        setComments(res.slice(0 , params));
       });
-    
-     return comments.slice(0 , params)
 
   }
 
@@ -82,7 +80,7 @@ export default function CC(props) {
   return (
     <InfiniteScroll
       pageStart={0}
-      loadMore={() => handleFetch(comments.length + 10)}
+      loadMore={() => handleFetch(comments.length + 20)}
       hasMore={true}
       useWindow={false}
       loader={

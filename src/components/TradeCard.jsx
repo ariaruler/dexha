@@ -301,6 +301,11 @@ export default function Tradecard(props) {
             <ButtonTrade
               handleClickOpen={() => {
                 handleClickOpen(2);
+                fetch(amountUrl)
+                .then((res) => res.json())
+                .then((res) => {
+                  setToAmount(res?.toAmount);
+                });
               }}
               id={2}
               borderRadius={theme.shape.borderRadius["1"]}
