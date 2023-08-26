@@ -31,7 +31,7 @@ const marginOfAccordion = "1px 2em";
 
 
 export default function PopUpCC(props) {
-  const [openSetting, setOpenSetting] = useState(0);
+
 
   const theme = useTheme();
   const Dialogstyle = {
@@ -45,10 +45,11 @@ export default function PopUpCC(props) {
     },
     "& .MuiPaper-root": { backgroundColor: theme.palette.background.default },
   };
-  const { onClose, selectedValue, open, id } = props;
+
+
 
   const handleClose = () => {
-    onClose(selectedValue);
+    props.onClose(props.selectedValue);
   };
 
   const [expanded, setExpanded] = useState(-1);
@@ -72,7 +73,7 @@ export default function PopUpCC(props) {
           maxWidth="xs"
           fullWidth={true}
           onClose={handleClose}
-          open={open === id}
+          open={props.open === props.id}
         >
 
             <>

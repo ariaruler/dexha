@@ -5,6 +5,7 @@ import Dialog from "@mui/material/Dialog";
 import {
   Avatar,
   Box,
+  Button,
   Checkbox,
   CircularProgress,
   DialogActions,
@@ -36,6 +37,7 @@ import QRcode from "qrcode.react";
 import ContentCopyIcon from "@mui/icons-material/ContentCopy";
 import ArrowBackIosNewIcon from "@mui/icons-material/ArrowBackIosNew";
 import PropTypes from "prop-types";
+import PopUpQrScan from "./PopUpQrScan";
 
 const inputHieght = 54;
 const bigbuttonBorderRadius = "8px";
@@ -99,6 +101,18 @@ AirbnbThumbComponent.propTypes = {
 };
 
 export default function PopUpTrade(props) {
+  const [open2, setOpen2] = useState(-1);
+
+  const handleClickOpen = (id) => {
+    setOpen2(id);
+  };
+
+  console.log(open2)
+
+  const handleClose2 = (value) => {
+    setOpen2(-1);
+  };
+
   const [step, setStep] = useState(0);
   const theme = useTheme();
   const Dialogstyle = {
@@ -130,7 +144,7 @@ export default function PopUpTrade(props) {
     margin: 2,
   };
 
-  console.log(props.toAmount);
+  // console.log(props.toAmount);
 
   return (
     <>
@@ -151,7 +165,7 @@ export default function PopUpTrade(props) {
                   displayNone={true}
                 />
 
-                <TradeBoared  />
+                <TradeBoared />
                 {/* toAmount={props.toAmount} */}
                 <DialogContent sx={{ padding: "2px 2em" }}>
                   <Grid item xs={12}>
@@ -160,7 +174,20 @@ export default function PopUpTrade(props) {
                       label="آدرس کیف پول خول را وارد کنید"
                       height={inputHieght}
                       borderRadius={bigbuttonBorderRadius}
-                      endAdornment={<QrCodeScannerIcon />}
+                      endAdornment={
+                        <Button
+                        onClick={() => {
+                          handleClickOpen(1);
+                        }}>
+
+                        <QrCodeScannerIcon
+
+                          sx={{
+                            "&:hover": { color: theme.palette.secondary.main },
+                          }}
+                          />
+                          </Button>
+                      }
                     />
                   </Grid>
 
@@ -177,10 +204,36 @@ export default function PopUpTrade(props) {
                       label="آدرس کیف پول بازپرداخت را وارد کنید"
                       height={inputHieght}
                       borderRadius={bigbuttonBorderRadius}
-                      endAdornment={<QrCodeScannerIcon />}
+                      endAdornment={
+                        <Button
+                        onClick={() => {
+                          handleClickOpen(1);
+                        }}>
+
+                        <QrCodeScannerIcon
+                         
+                          sx={{
+                            "&:hover": { color: theme.palette.secondary.main },
+                          }}
+                          />
+                          </Button>
+                      }
                     />
                   </Grid>
                 </DialogContent>
+
+                <PopUpQrScan
+                  id={0}
+                  borderRadius={props.borderRadius}
+                  open={open2}
+                  onClose={handleClose2}
+                />
+                <PopUpQrScan
+                  id={1}
+                  borderRadius={props.borderRadius}
+                  open={open2}
+                  onClose={handleClose2}
+                />
 
                 <DialogActions
                   onClick={() => {
@@ -218,7 +271,7 @@ export default function PopUpTrade(props) {
                   handleClose={handleClose}
                 />
                 <TradeBoared />
-{/* toAmount={props.toAmount} */}
+                {/* toAmount={props.toAmount} */}
                 <DialogContent sx={{ padding: "2px 2em" }}>
                   <Grid item xs={12}>
                     <TableContainer>
@@ -365,9 +418,9 @@ export default function PopUpTrade(props) {
                       alignItems: "center",
                     }}
                   >
-                    <SmButton  id={0}/>
+                    <SmButton id={0} />
                     <ArrowBackIosNewIcon sx={arowIcon} />
-                    <SmButton id={1}/>
+                    <SmButton id={1} />
                   </Grid>
 
                   <Grid
@@ -393,7 +446,7 @@ export default function PopUpTrade(props) {
                     xs={12}
                     sx={{
                       // padding: "1em 0 0 0",
-                      padding : 5,
+                      padding: 5,
                       display: "flex",
                       justifyContent: "center",
                       alignItems: "center",

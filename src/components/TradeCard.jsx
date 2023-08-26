@@ -6,7 +6,7 @@ import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import ButtonTrade from "./ButtonTrade";
 
 import ButtonChooze from "./ButtonChooze";
-import { useEffect, useState, createContext } from "react";
+import { useEffect, useState, createContext, useRef } from "react";
 
 import PopUpCC from "./PopUpCC";
 
@@ -20,7 +20,6 @@ import PopUpTrade from "./PopUpTrade";
 import SettingsIcon from "@mui/icons-material/Settings";
 import PopUpSetting from "./PopUpSetting.";
 import { Button, CircularProgress } from "@mui/material";
-
 
 
 const inputHieght = 54;
@@ -41,10 +40,15 @@ export const UserContext = createContext();
 export default function Tradecard(props) {
   const theme = useTheme();
   console.log( "YYYYYYYYYYYYYYYYYY")
+
+  const amountRef = useRef(1)
   
   const [fromAmount, setFromAmount] = useState(1);
 
-  const [toAmount, setToAmount] = useState({});
+
+  useEffect(()=>{console.log("tt ",fromAmount);amountRef.current = fromAmount}, [fromAmount])
+
+  const [toAmount, setToAmount] = useState();
 
   const [selectedCC, setselecctedCC] = useState({
     currencies: ["btc", "eth"],
@@ -79,8 +83,6 @@ export default function Tradecard(props) {
       }
       handleClose();
     },
-    fromAmount : fromAmount,
-    toAmount : toAmount?.toAmount,
   });
 
   const [minData, setMinData] = useState([]);
@@ -89,22 +91,35 @@ export default function Tradecard(props) {
 
   const [isError, setIsError] = useState("");
 
-  const minUrl = `https://bamanchange.com/exchange/api/min-amount?fromCurrency=${selectedCC.currencies[0]}&toCurrency=${selectedCC.currencies[1]}&fromNetwork=${selectedCC.network[0]}&toNetwork=${selectedCC.network[1]}&flow=fixed-rate&=`;
+  const minUrl = `https://bamanchange.com/exchange/api/min-amount?fromCurrency=${selectedCC.currencies[0]}&toCurrency=${selectedCC.currencies[1]}&fromNetwork=${selectedCC.network[0]}&toNetwork=${selectedCC.network[1]}&flow=standard`;
 
-  const checkUrl = `https://bamanchange.com/exchange/api/available-pairs?fromCurrency=${selectedCC.currencies[0]}&toCurrency=${selectedCC.currencies[1]}&fromNetwork=${selectedCC.network[0]}&toNetwork=${selectedCC.network[1]}&flow=`;
+  const checkUrl = `https://bamanchange.com/exchange/api/available-pairs?fromCurrency=${selectedCC.currencies[0]}&toCurrency=${selectedCC.currencies[1]}&fromNetwork=${selectedCC.network[0]}&toNetwork=${selectedCC.network[1]}&flow=standard`;
 
-  const amountUrl = `https://bamanchange.com/exchange/api/estimated-amount?fromCurrency=${selectedCC.currencies[0]}&toCurrency=${selectedCC.currencies[1]}&fromAmount=${fromAmount}&toAmount=&fromNetwork=${selectedCC.network[0]}&toNetwork=${selectedCC.network[1]}&flow=fixed-rate&type=&useRateId=`;
+  const amountUrl = `https://bamanchange.com/exchange/api/estimated-amount?fromCurrency=${selectedCC.currencies[0]}&toCurrency=${selectedCC.currencies[1]}&fromAmount=${fromAmount}&fromNetwork=${selectedCC.network[0]}&toNetwork=${selectedCC.network[1]}&flow=standard`;
 
 
   useEffect(() => {
 
 
 
-    fetch(amountUrl)
-    .then((res) => res.json())
-    .then((res) => {
-      setToAmount(res?.toAmount);
-    });
+    // setInterval(() => {
+
+    //   setProgress((prevProgress) => (prevProgress >= 100 ? 0 : prevProgress + 10)); 
+
+    // }, 1000)
+    
+    
+    // setInterval(() => {
+      
+      console.log(fromAmount);
+      fetch(amountUrl)
+      .then((res) => res.json())
+      .then((res) => {
+        setToAmount(res?.toAmount);
+        
+        // console.log('ma' ,res);
+      });
+    // }, 10000)
 
 
 
@@ -115,10 +130,10 @@ export default function Tradecard(props) {
     });
 
   fetch(checkUrl)
-    .then((res) => res.json())
-    .then((res) => {
-      setCheckData(res);
-    });
+  .then((res) => res.json())
+  .then((res) => {
+    setCheckData(res);
+  });
 
 
     if (fromAmount < minData.minAmount && fromAmount.length > 0) {
@@ -133,29 +148,45 @@ export default function Tradecard(props) {
       // console.log(pay);
     }, [fromAmount ]);
 
-  // useEffect(() => {
+  useEffect(() => {
+
+        setInterval(() => {
+
+      setProgress((prevProgress) => (prevProgress >= 100 ? 0 : prevProgress + 10)); 
+
+    }, 500)
 
 
+    setInterval(() => {
+
+      // console.log("sdfsf "+amountRef.current); 
+    fetch(`https://bamanchange.com/exchange/api/estimated-amount?fromCurrency=${selectedCC.currencies[0]}&toCurrency=${selectedCC.currencies[1]}&fromAmount=${amountRef.current}&fromNetwork=${selectedCC.network[0]}&toNetwork=${selectedCC.network[1]}&flow=standard`)
+    .then((res) => res.json())
+    .then((res) => {
+      setToAmount(res?.toAmount);
+      // console.log('interval' , res);
+
+    });
+  }, 5000)
     
+  }, [  ]);
   
-  //     // console.log(pay);
-  //   }, [ fromAmount ]);
-
+  
     
     
-    console.log(toAmount?.toAmount);
+    // console.log(toAmount?.toAmount);
 
     // console.log(selectedCC.toAmount);
 
+    const [progress, setProgress] = useState(0);
+
 
   //   useEffect(() => {
-  //     // console.log(minData.minAmount);
-  //     // console.log(min);
 
-  //       //
-  //       //
   //   }
   // , []);
+
+
 
   const emails = ["username@gmail.com", "user02@gmail.com"];
   const [open, setOpen] = useState(-1);
@@ -195,7 +226,7 @@ export default function Tradecard(props) {
 
 
   return (
-    <UserContext.Provider value={ { selectedCC , setselecctedCC ,  toAmount , setToAmount}  }>
+    <UserContext.Provider value={ { selectedCC ,  toAmount , fromAmount}  }>
       <Box sx={cardBox}>
         <Grid container spacing={2}>
           <Grid
@@ -226,6 +257,7 @@ export default function Tradecard(props) {
               sx={{ minWidth: 0 }}
             >
               <SettingsIcon />
+              <CircularProgress variant="determinate" value={progress} />
             </Button>
           </Grid>
 
@@ -262,7 +294,7 @@ export default function Tradecard(props) {
           <Grid item xs={12}>
             <InputTrade
               lable={true}
-              value={ toAmount }
+              value={ toAmount ? toAmount : '' }
               label="دریافت"
               type="number"
               height={inputHieght}
@@ -275,6 +307,9 @@ export default function Tradecard(props) {
                     handleClickOpen(1);
                   }}
                 />
+              }
+              startAdornment={
+                <CircularProgress />
               }
             />
           </Grid>
