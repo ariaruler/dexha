@@ -45,28 +45,14 @@ export default function CC(props) {
   const [currencies, setCurrencies] = useState("");
   const [network, setNetwork] = useState("");
 
-  // useEffect(() => {
-  //   handleFetch({ _limit: 10 });
-  // }, []);
-
   function handleFetch(params) {
-        // const strParams = qs.stringify(params);
-    // let url = `https://bamanchange.com/exchange/api/currencies?active=true&flow=standard&buy=true&sell=true&_limit=${params}`;
 
-    //     if (strParams) {
-    //   url = url  + strParams;
-    // }
-
-    // fetch(url)
-    //   .then(res => res.json())
-    //   .then(res => {
-    //     setComments(res);
-    //   })
-      // console.log(comments);
 
       fetch().then((res) => {
         setComments(res.slice(0 , params));
       });
+    
+
 
   }
 
