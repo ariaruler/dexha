@@ -215,6 +215,23 @@ const fetchAmount = ()=>{
   };
 
 
+  const [status , setStatus ] = useState()
+
+
+// console.log("fjsldfjskdfjlskfjskfjlsdfjlsfjlsfjlsfj")
+// payIdRef.current = payId
+// setInterval(() => {
+  // console.log(payIdRef.current)
+  axios.get(`https://bamanchange.com/exchange/api/by-id?id=${payId}`).then((res)=>{ 
+    if(res?.data.status){
+
+      setStatus(res?.data.status);
+    }
+  })
+  // }, 5000);
+  
+
+
 
   // console.log(toAmount?.toAmount);
 
@@ -263,7 +280,7 @@ const fetchAmount = ()=>{
   };
 
   return (
-    <UserContext.Provider value={{ selectedCC,  fromAmount ,fetchAmount ,data1  , data2 ,setData1 ,setData2 , post , payIn , payId}}>
+    <UserContext.Provider value={{ selectedCC,  fromAmount ,fetchAmount ,data1  , data2 ,setData1 ,setData2 , post , payIn , payId ,status}}>
       <Box sx={cardBox}>
         <Grid container spacing={2}>
           <Grid

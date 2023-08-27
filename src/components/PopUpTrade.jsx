@@ -17,7 +17,7 @@ import {
   Typography,
 } from "@mui/material";
 import { useTheme } from "@mui/material/styles";
-import { useState } from "react";
+import { useState , useRef } from "react";
 import InputTrade from "./InputTrade";
 
 import PopUpTitle from "./PopUpTitle";
@@ -162,7 +162,7 @@ export default function PopUpTrade(props) {
     margin: 2,
   };
 
-  const { selectedCC,data1  , data2 ,setData1 ,setData2, post,payIn , payId }  = useContext(UserContext);
+  const { selectedCC,data1  , data2 ,setData1 ,setData2, post,payIn , payId , status}  = useContext(UserContext);
 
 useEffect(()=>{
   const checkData = async (data , amount)=> {
@@ -177,34 +177,24 @@ useEffect(()=>{
 },[data1, data2])
 
 
-useEffect(() => {
+// useEffect(() => {
 
-  payIdRef.current = payId
-}, [ payId] );
+//   payIdRef.current = payId
+// }, [ payId] );
 
-const payIdRef = React.useRef()
+// const payIdRef = useRef()
 
-const [status , setStatus ] = useState({data:{status:''}})
 
-useEffect(() => {
-  // console.log("fjsldfjskdfjlskfjskfjlsdfjlsfjlsfjlsfj")
-  // payIdRef.current = payId
-  setInterval(() => {
-    // console.log(payIdRef.current)
-    axios.get(`https://bamanchange.com/exchange/api/by-id?id=${payIdRef.current}`).then((res)=>{ 
-      
-      setStatus(res);
-    })
-    }, 5000);
-    
-    
-  }, [payIdRef.current]);
 
-  console.log(status.data.status)
+
+
+
+
+  console.log(status)
   
 const [sliderValue , setsliderValue] = useState(0)
 
-switch(status.data.status){
+switch(status){
   case 'waiting' :
     setsliderValue(0)
   case 'confirming' :
