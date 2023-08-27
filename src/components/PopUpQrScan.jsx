@@ -45,7 +45,7 @@ export default function PopUpQrScan(props) {
     props.onClose(props.selectedValue);
   };
 
-  const [data, setData] = useState('No result');
+
 // console.error(props.id);
 // console.error(props.open);
 
@@ -70,16 +70,16 @@ export default function PopUpQrScan(props) {
       <QrReader
         onResult={(result, error) => {
           if (!!result) {
-            setData(result?.text);
+            props.setData((prev)=>   result?.text);
           }
 
           if (!!error) {
-            console.info(error);
+            // console.info(error);
           }
         }}
         style={{ width: '100%' }}
       />
-      <p>{data}</p>
+      <p>{props.data}</p>
         </DialogContent>
     </Dialog>
   );

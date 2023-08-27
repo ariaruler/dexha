@@ -16,6 +16,9 @@ import fetch from "./fetch";
 
 import { Box, Button } from "@mui/material";
 
+
+
+
 const marginOfAccordion = "1px 2em";
 
 const Accordion = styled((props) => (
@@ -40,7 +43,7 @@ export default function CC(props) {
 
   const [comments, setComments] = useState([]);
 
-  const { selectedCC } = useContext(UserContext);
+  const { selectedCC ,fetchAmount } = useContext(UserContext);
 
   const [currencies, setCurrencies] = useState("");
   const [network, setNetwork] = useState("");
@@ -55,6 +58,8 @@ export default function CC(props) {
 
 
   }
+
+
 
 
 
@@ -106,6 +111,7 @@ export default function CC(props) {
                 key={j}
                 onClick={() => {
                   selectedCC.putCC(props.id, x.ticker, y, x.image[0]);
+                  fetchAmount();
                 }}
                 variant="outlined"
                 sx={{

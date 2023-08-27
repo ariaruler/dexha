@@ -39,26 +39,36 @@ import ArrowBackIosNewIcon from "@mui/icons-material/ArrowBackIosNew";
 import PropTypes from "prop-types";
 import PopUpQrScan from "./PopUpQrScan";
 
+
+import {  useContext ,useEffect } from "react";
+import { UserContext } from './TradeCard'
+import axios from "axios";
+
 const inputHieght = 54;
 const bigbuttonBorderRadius = "8px";
 
 const marks = [
   {
-    value: 10,
+    value: 0,
     label: "در حال دریافت ارز شبا",
   },
   {
-    value: 20,
+    value: 10,
     label: "تائید واریز ",
   },
   {
-    value: 40,
+    value: 20,
     label: "در حال تبادل",
   },
   {
-    value: 50,
+    value: 30,
+    label: "در حال ارسال",
+  },
+  {
+    value: 40,
     label: "پایان تبادل",
   },
+
 ];
 
 const box = {
@@ -101,13 +111,15 @@ AirbnbThumbComponent.propTypes = {
 };
 
 export default function PopUpTrade(props) {
+
+  console.log('kkkkkkkkkkkk');
   const [open2, setOpen2] = useState(-1);
 
   const handleClickOpen = (id) => {
     setOpen2(id);
   };
 
-  console.log(open2)
+  // console.log(open2)
 
   const handleClose2 = (value) => {
     setOpen2(-1);
@@ -125,26 +137,85 @@ export default function PopUpTrade(props) {
       borderRadius: props.borderRadius,
     },
   };
-  const { onClose, selectedValue, open, id } = props;
+
 
   const handleClose = () => {
-    onClose(selectedValue);
+    props.onClose(props.selectedValue);
     setStep(0);
   };
 
   const previosStep = () => setStep(step - 1);
 
-  const [qr, setQr] = useState(
-    "vjhvjcgysvjcsjvcxiyvsyivcyvsjcvsjcvjucsvcvscvusuvcxuyscvcxuyvsuycxuysxuyucyuycsuycxuycsiy"
-  );
+  // const [qr, setQr] = useState(
+  //   "vjhvjcgysvjcsjvcxiyvsyivcyvsjcvsjcvjucsvcvscvusuvcxuyscvcxuyvsuycxuysxuyucyuycsuycxuycsiy"
+  // );
 
+
+
+  const [check1, setCheck1] = useState();
+  
+  const [check2, setCheck2] = useState();
+  
   const arowIcon = {
     fontSize: 1.3 * theme.typography.fontSize,
     width: "22px",
     margin: 2,
   };
 
-  // console.log(props.toAmount);
+  const { selectedCC,data1  , data2 ,setData1 ,setData2, post,payIn , payId }  = useContext(UserContext);
+
+useEffect(()=>{
+  const checkData = async (data , amount)=> {
+    const res = await fetch(`https://bamanchange.com/exchange/api/validate-address?currency=${amount}&address=${data}`);
+     const res_1 = await res.json();
+     return res_1;
+   }
+
+   checkData(data2 , selectedCC.currencies[0]).then((res) =>  setCheck2(res?.result));
+   checkData(data1 , selectedCC.currencies[1]).then((res) => setCheck1(res?.result))
+   
+},[data1, data2])
+
+
+useEffect(() => {
+
+  payIdRef.current = payId
+}, [ payId] );
+
+const payIdRef = React.useRef()
+
+const [status , setStatus ] = useState({data:{status:''}})
+
+useEffect(() => {
+  // console.log("fjsldfjskdfjlskfjskfjlsdfjlsfjlsfjlsfj")
+  // payIdRef.current = payId
+  setInterval(() => {
+    // console.log(payIdRef.current)
+    axios.get(`https://bamanchange.com/exchange/api/by-id?id=${payIdRef.current}`).then((res)=>{ 
+      
+      setStatus(res);
+    })
+    }, 5000);
+    
+    
+  }, [payIdRef.current]);
+
+  console.log(status.data.status)
+  
+const [sliderValue , setsliderValue] = useState(0)
+
+switch(status.data.status){
+  case 'waiting' :
+    setsliderValue(0)
+  case 'confirming' :
+    setsliderValue(10)
+  case 'exchanging' :
+    setsliderValue(20)
+  case 'sending' :
+    setsliderValue(30)
+  case 'finished' :
+    setsliderValue(40)
+}
 
   return (
     <>
@@ -157,7 +228,7 @@ export default function PopUpTrade(props) {
                 maxWidth="xs"
                 fullWidth={true}
                 onClose={handleClose}
-                open={open === id}
+                open={props.open === props.id}
               >
                 <PopUpTitle
                   header="شروع تبادل"
@@ -170,23 +241,23 @@ export default function PopUpTrade(props) {
                 <DialogContent sx={{ padding: "2px 2em" }}>
                   <Grid item xs={12}>
                     <InputTrade
+                      value={data1}
+                      onChange={(e)=> {setData1(e.target.value)}}
+                      error={!check1}
                       margin="1em auto"
                       label="آدرس کیف پول خول را وارد کنید"
                       height={inputHieght}
                       borderRadius={bigbuttonBorderRadius}
                       endAdornment={
-                        <Button
-                        onClick={() => {
-                          handleClickOpen(1);
-                        }}>
-
                         <QrCodeScannerIcon
-
+                        onClick={() => {
+                          handleClickOpen(0);
+                        }}
                           sx={{
                             "&:hover": { color: theme.palette.secondary.main },
                           }}
                           />
-                          </Button>
+
                       }
                     />
                   </Grid>
@@ -200,23 +271,23 @@ export default function PopUpTrade(props) {
 
                   <Grid item xs={12}>
                     <InputTrade
+                      value={data2}  
+                      onChange={(e)=> {setData2(e.target.value)}}
+                      error={ !check2}                  
                       margin="1em auto"
                       label="آدرس کیف پول بازپرداخت را وارد کنید"
                       height={inputHieght}
                       borderRadius={bigbuttonBorderRadius}
                       endAdornment={
-                        <Button
+                        <QrCodeScannerIcon
                         onClick={() => {
                           handleClickOpen(1);
-                        }}>
-
-                        <QrCodeScannerIcon
-                         
+                        }}
                           sx={{
                             "&:hover": { color: theme.palette.secondary.main },
                           }}
                           />
-                          </Button>
+
                       }
                     />
                   </Grid>
@@ -227,17 +298,25 @@ export default function PopUpTrade(props) {
                   borderRadius={props.borderRadius}
                   open={open2}
                   onClose={handleClose2}
-                />
+                  data={data1}
+                  setData={setData1}
+                  />
                 <PopUpQrScan
                   id={1}
                   borderRadius={props.borderRadius}
                   open={open2}
                   onClose={handleClose2}
-                />
+                  data={data2}
+                  setData={setData2}
+                  />
 
                 <DialogActions
                   onClick={() => {
-                    setStep(step + 1);
+                    // console.log(check1)
+                    // console.log(check2)
+                    if (check1 && 1){
+                      setStep(step + 1);
+                    }
                   }}
                   sx={{ backgroundColor: theme.palette.primary.main }}
                 >
@@ -263,7 +342,7 @@ export default function PopUpTrade(props) {
                 maxWidth="xs"
                 fullWidth={true}
                 onClose={handleClose}
-                open={open === id}
+                open={props.open === props.id}
               >
                 <PopUpTitle
                   header="تائید"
@@ -330,6 +409,7 @@ export default function PopUpTrade(props) {
                 <DialogActions
                   onClick={() => {
                     setStep(step + 1);
+                    post();
                   }}
                   sx={{ backgroundColor: theme.palette.primary.main }}
                 >
@@ -355,7 +435,7 @@ export default function PopUpTrade(props) {
                 maxWidth="xs"
                 fullWidth={true}
                 onClose={handleClose}
-                open={open === id}
+                open={props.open === props.id}
               >
                 <PopUpTitle
                   header="تائید"
@@ -381,7 +461,7 @@ export default function PopUpTrade(props) {
                         }}
                         className="alert"
                         id="myqr"
-                        value={qr}
+                        value={payIn}
                         size={200}
                         includeMargin={true}
                       >
@@ -460,17 +540,18 @@ export default function PopUpTrade(props) {
                       }}
                       color="secondary"
                       valueLabelDisplay="off"
+                      defaultValue={sliderValue}
                       step={10}
                       marks={marks}
-                      min={10}
-                      max={30}
+                      min={0}
+                      max={40}
                     />
                   </Grid>
                 </DialogContent>
 
                 <DialogActions
                   onClick={() => {
-                    setStep(step + 1);
+                    // setStep(step + 1);
                   }}
                   sx={{ backgroundColor: theme.palette.primary.main }}
                 >

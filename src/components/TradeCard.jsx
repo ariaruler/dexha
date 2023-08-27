@@ -20,7 +20,7 @@ import PopUpTrade from "./PopUpTrade";
 import SettingsIcon from "@mui/icons-material/Settings";
 import PopUpSetting from "./PopUpSetting.";
 import { Button, CircularProgress } from "@mui/material";
-
+import axios from "axios";
 
 const inputHieght = 54;
 
@@ -39,16 +39,21 @@ export const UserContext = createContext();
 
 export default function Tradecard(props) {
   const theme = useTheme();
-  console.log( "YYYYYYYYYYYYYYYYYY")
+  // console.log( "YYYYYYYYYYYYYYYYYY")
 
-  const amountRef = useRef(1)
-  
+  const amountRef = useRef(1);
+
+  const cc1 = useRef("btc");
+
+  const cc2 = useRef("eth");
+
+  const net1 = useRef("btc");
+
+  const net2 = useRef("eth");
+
+
+
   const [fromAmount, setFromAmount] = useState(1);
-
-
-  useEffect(()=>{console.log("tt ",fromAmount);amountRef.current = fromAmount}, [fromAmount])
-
-  const [toAmount, setToAmount] = useState();
 
   const [selectedCC, setselecctedCC] = useState({
     currencies: ["btc", "eth"],
@@ -58,7 +63,6 @@ export default function Tradecard(props) {
     ],
     network: ["btc", "eth"],
     putCC: (id, currency, network, currencyImg) => {
-
       console.log(id);
       if (id === 0) {
         setselecctedCC((prev) => {
@@ -85,108 +89,143 @@ export default function Tradecard(props) {
     },
   });
 
+  useEffect(() => {
+    amountRef.current = fromAmount;
+    cc1.current = selectedCC.currencies[0];
+    cc2.current = selectedCC.currencies[1];
+    net1.current = selectedCC.network[0];
+    net2.current = selectedCC.network[1];
+
+  }, [fromAmount ,selectedCC.currencies[0] ,selectedCC.currencies[1]] );
+
+  const [toAmount, setToAmount] = useState();
+
   const [minData, setMinData] = useState([]);
 
   const [checkData, setCheckData] = useState([]);
 
   const [isError, setIsError] = useState("");
 
-  const minUrl = `https://bamanchange.com/exchange/api/min-amount?fromCurrency=${selectedCC.currencies[0]}&toCurrency=${selectedCC.currencies[1]}&fromNetwork=${selectedCC.network[0]}&toNetwork=${selectedCC.network[1]}&flow=standard`;
+  const minUrl = `https://bamanchange.com/exchange/api/range?fromCurrency=${selectedCC.currencies[0]}&toCurrency=${selectedCC.currencies[1]}&fromNetwork=${selectedCC.network[0]}&toNetwork=${selectedCC.network[1]}&flow=standard`;
 
   const checkUrl = `https://bamanchange.com/exchange/api/available-pairs?fromCurrency=${selectedCC.currencies[0]}&toCurrency=${selectedCC.currencies[1]}&fromNetwork=${selectedCC.network[0]}&toNetwork=${selectedCC.network[1]}&flow=standard`;
 
   const amountUrl = `https://bamanchange.com/exchange/api/estimated-amount?fromCurrency=${selectedCC.currencies[0]}&toCurrency=${selectedCC.currencies[1]}&fromAmount=${fromAmount}&fromNetwork=${selectedCC.network[0]}&toNetwork=${selectedCC.network[1]}&flow=standard`;
 
 
-  useEffect(() => {
-
-
-
-    // setInterval(() => {
-
-    //   setProgress((prevProgress) => (prevProgress >= 100 ? 0 : prevProgress + 10)); 
-
-    // }, 1000)
-    
-    
-    // setInterval(() => {
-      
-      console.log(fromAmount);
-      fetch(amountUrl)
-      .then((res) => res.json())
-      .then((res) => {
-        setToAmount(res?.toAmount);
-        
-        // console.log('ma' ,res);
-      });
-    // }, 10000)
-
-
-
-    fetch(minUrl)
-    .then((res) => res.json())
-    .then((res) => {
-      setMinData(res);
-    });
-
-  fetch(checkUrl)
-  .then((res) => res.json())
-  .then((res) => {
-    setCheckData(res);
-  });
-
-
-    if (fromAmount < minData.minAmount && fromAmount.length > 0) {
-      setIsError(true);
-    }
-    if (fromAmount > minData.minAmount || fromAmount.length < 1) {
-      setIsError(false);
-    }
-
-
-
-      // console.log(pay);
-    }, [fromAmount ]);
-
-  useEffect(() => {
-
-        setInterval(() => {
-
-      setProgress((prevProgress) => (prevProgress >= 100 ? 0 : prevProgress + 10)); 
-
-    }, 500)
-
-
-    setInterval(() => {
-
-      // console.log("sdfsf "+amountRef.current); 
-    fetch(`https://bamanchange.com/exchange/api/estimated-amount?fromCurrency=${selectedCC.currencies[0]}&toCurrency=${selectedCC.currencies[1]}&fromAmount=${amountRef.current}&fromNetwork=${selectedCC.network[0]}&toNetwork=${selectedCC.network[1]}&flow=standard`)
+const fetchAmount = ()=>{
+  fetch(
+    `https://bamanchange.com/exchange/api/estimated-amount?fromCurrency=${cc1.current}&toCurrency=${cc2.current}&fromAmount=${amountRef.current}&fromNetwork=${net1.current}&toNetwork=${net2.current}&flow=standard`
+  )
     .then((res) => res.json())
     .then((res) => {
       setToAmount(res?.toAmount);
-      // console.log('interval' , res);
-
+      // console.log(cc1.current);
     });
-  }, 5000)
-    
-  }, [  ]);
-  
-  
-    
-    
-    // console.log(toAmount?.toAmount);
+ 
 
-    // console.log(selectedCC.toAmount);
+}
 
-    const [progress, setProgress] = useState(0);
+  useEffect(() => {
+    fetchAmount()
 
+    fetch(minUrl)
+      .then((res) => res.json())
+      .then((res) => {
+        setMinData(res);
+      });
+
+    fetch(checkUrl)
+      .then((res) => res.json())
+      .then((res) => {
+        setCheckData(res);
+      });
+
+    // console.log(minData.maxAmount)
+
+    if (minData.maxAmount) {
+      if (fromAmount < minData.minAmount && fromAmount.length > 0) {
+        setIsError(true);
+      }
+      if (fromAmount > minData.minAmount || fromAmount.length < 1) {
+        setIsError(false);
+      }
+    }
+    if (!minData.maxAmount) {
+      if (
+        fromAmount < minData.minAmount &&
+        fromAmount.length > 0 &&
+        fromAmount > minData.maxAmount
+      ) {
+        setIsError(true);
+      } else if (
+        fromAmount > minData.minAmount ||
+        fromAmount.length < 1 ||
+        fromAmount < minData.maxAmount
+      ) {
+        setIsError(false);
+      }
+    }
+
+    // console.log(pay);
+  }, [fromAmount ,selectedCC.currencies[0] ,selectedCC.currencies[1]]);
+
+  useEffect(() => {
+    
+    setInterval(() => {
+      
+      fetchAmount()
+    }, 5000);
+
+
+    // setInterval(() => {
+    //   setProgress((prevProgress) =>
+    //     prevProgress >= 100 ? 0 : prevProgress + 10
+    //   );
+    // }, 500);
+  }, []);
+
+  const [data1, setData1] = useState();
+
+  const [data2, setData2] = useState();
+
+  const [payIn, setPayIn] = useState();
+
+  const [payId , setPayId] = useState();
+
+  const post =  async ()=> {
+
+    const userToPost ={
+      fromCurrency : cc1.current, 
+      toCurrency : cc2.current, 
+      fromNetwork : net1.current, 
+      toNetwork : net2.current, 
+      fromAmount : amountRef.current, 
+      address : data1, 
+      flow : "standard"
+  }
+  const res = await axios
+  .post('https://bamanchange.com/exchange/api/create', userToPost)
+  .catch((error) => console.log('Error: ', error));
+  // console.log(res.data)
+  // console.log(res.data.id)
+  setPayIn(res.data.payinAddress)
+  setPayId(res.data.id)
+
+  };
+
+
+
+  // console.log(toAmount?.toAmount);
+
+  // console.log(selectedCC.toAmount);
+
+  const [progress, setProgress] = useState(0);
 
   //   useEffect(() => {
 
   //   }
   // , []);
-
-
 
   const emails = ["username@gmail.com", "user02@gmail.com"];
   const [open, setOpen] = useState(-1);
@@ -223,10 +262,8 @@ export default function Tradecard(props) {
     setActive(id);
   };
 
-
-
   return (
-    <UserContext.Provider value={ { selectedCC ,  toAmount , fromAmount}  }>
+    <UserContext.Provider value={{ selectedCC,  fromAmount ,fetchAmount ,data1  , data2 ,setData1 ,setData2 , post , payIn , payId}}>
       <Box sx={cardBox}>
         <Grid container spacing={2}>
           <Grid
@@ -265,7 +302,7 @@ export default function Tradecard(props) {
             <InputTrade
               value={fromAmount}
               onChange={(e) => {
-                setFromAmount(e.target.value);   
+                setFromAmount(e.target.value);
               }}
               error={isError}
               label={
@@ -294,7 +331,7 @@ export default function Tradecard(props) {
           <Grid item xs={12}>
             <InputTrade
               lable={true}
-              value={ toAmount ? toAmount : '' }
+              value={toAmount ? toAmount : ""}
               label="دریافت"
               type="number"
               height={inputHieght}
@@ -308,9 +345,7 @@ export default function Tradecard(props) {
                   }}
                 />
               }
-              startAdornment={
-                <CircularProgress />
-              }
+              startAdornment={<CircularProgress />}
             />
           </Grid>
           <PopUpCC
@@ -337,10 +372,10 @@ export default function Tradecard(props) {
               handleClickOpen={() => {
                 handleClickOpen(2);
                 fetch(amountUrl)
-                .then((res) => res.json())
-                .then((res) => {
-                  setToAmount(res?.toAmount);
-                });
+                  .then((res) => res.json())
+                  .then((res) => {
+                    setToAmount(res?.toAmount);
+                  });
               }}
               id={2}
               borderRadius={theme.shape.borderRadius["1"]}
@@ -357,7 +392,7 @@ export default function Tradecard(props) {
           </Grid>
 
           <PopUpTrade
-          toAmount={toAmount?.toAmount}
+            toAmount={toAmount?.toAmount}
             id={2}
             borderRadius={props.borderRadius}
             selectedValue={selectedValue}
