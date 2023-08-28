@@ -17,7 +17,7 @@ import {
   Typography,
 } from "@mui/material";
 import { useTheme } from "@mui/material/styles";
-import { useState , useRef } from "react";
+import { useState, useRef } from "react";
 import InputTrade from "./InputTrade";
 
 import PopUpTitle from "./PopUpTitle";
@@ -39,9 +39,8 @@ import ArrowBackIosNewIcon from "@mui/icons-material/ArrowBackIosNew";
 import PropTypes from "prop-types";
 import PopUpQrScan from "./PopUpQrScan";
 
-
-import {  useContext ,useEffect } from "react";
-import { UserContext } from './TradeCard'
+import { useContext, useEffect } from "react";
+import { UserContext } from "./TradeCard";
 import axios from "axios";
 
 const inputHieght = 54;
@@ -68,7 +67,6 @@ const marks = [
     value: 40,
     label: "پایان تبادل",
   },
-
 ];
 
 const box = {
@@ -111,8 +109,7 @@ AirbnbThumbComponent.propTypes = {
 };
 
 export default function PopUpTrade(props) {
-
-  console.log('kkkkkkkkkkkk');
+  console.log("kkkkkkkkkkkk");
   const [open2, setOpen2] = useState(-1);
 
   const handleClickOpen = (id) => {
@@ -138,7 +135,6 @@ export default function PopUpTrade(props) {
     },
   };
 
-
   const handleClose = () => {
     props.onClose(props.selectedValue);
     setStep(0);
@@ -146,66 +142,142 @@ export default function PopUpTrade(props) {
 
   const previosStep = () => setStep(step - 1);
 
-  // const [qr, setQr] = useState(
-  //   "vjhvjcgysvjcsjvcxiyvsyivcyvsjcvsjcvjucsvcvscvusuvcxuyscvcxuyvsuycxuysxuyucyuycsuycxuycsiy"
-  // );
-
 
 
   const [check1, setCheck1] = useState();
-  
+
   const [check2, setCheck2] = useState();
-  
+
   const arowIcon = {
     fontSize: 1.3 * theme.typography.fontSize,
     width: "22px",
     margin: 2,
   };
 
-  const { selectedCC,data1  , data2 ,setData1 ,setData2, post,payIn , payId , status}  = useContext(UserContext);
+  const {
+    selectedCC,
+    data1,
+    data2,
+    setData1,
+    setData2,
+    payIn,
+    setPayIn,
+    payId,
+    setPayId,
+    fromAmount,
+  } = useContext(UserContext);
 
-useEffect(()=>{
-  const checkData = async (data , amount)=> {
-    const res = await fetch(`https://bamanchange.com/exchange/api/validate-address?currency=${amount}&address=${data}`);
-     const res_1 = await res.json();
-     return res_1;
-   }
+  useEffect(() => {
+    const checkData = async (data, amount) => {
+      const res = await fetch(
+        `https://bamanchange.com/exchange/api/validate-address?currency=${amount}&address=${data}`
+      );
+      const res_1 = await res.json();
+      return res_1;
+    };
 
-   checkData(data2 , selectedCC.currencies[0]).then((res) =>  setCheck2(res?.result));
-   checkData(data1 , selectedCC.currencies[1]).then((res) => setCheck1(res?.result))
-   
-},[data1, data2])
+    checkData(data2, selectedCC.currencies[0]).then((res) =>
+      setCheck2(res?.result)
+    );
+    checkData(data1, selectedCC.currencies[1]).then((res) =>
+      setCheck1(res?.result)
+    );
+  }, [data1, data2]);
 
+  // useEffect(() => {
 
-// useEffect(() => {
+  //   payIdRef.current = payId
+  // }, [ payId] );
 
-//   payIdRef.current = payId
-// }, [ payId] );
+  // const payIdRef = useRef()
 
-// const payIdRef = useRef()
+  // const amountRef = useRef(1);
 
+  // const cc1 = useRef("btc");
 
+  // const cc2 = useRef("eth");
 
+  // const net1 = useRef("btc");
 
+  // const net2 = useRef("eth");
 
+  const [status, setStatus] = useState();
 
+  const post = async () => {
+    const userToPost = {
+      fromCurrency: selectedCC.currencies[0],
+      toCurrency: selectedCC.currencies[1],
+      fromNetwork: selectedCC.network[0],
+      toNetwork: selectedCC.network[1],
+      fromAmount: fromAmount,
+      address: data1,
+      flow: "standard",
+    };
+    console.log(userToPost);
 
-  console.log(status)
-  
-const [sliderValue , setsliderValue] = useState(0)
+    const res = await axios
+      .post("https://bamanchange.com/exchange/api/create", userToPost)
+      .catch((error) => console.log("Error: ", error));
+    // console.log(res.data)
+    // console.log(res.data.id)
+    setPayIn(res.data.payinAddress);
+    setPayId(res.data.id);
+  };
 
-switch(status){
-  case 'waiting' :
-    setsliderValue(0)
-  case 'confirming' :
-    setsliderValue(10)
-  case 'exchanging' :
-    setsliderValue(20)
-  case 'sending' :
-    setsliderValue(30)
-  case 'finished' :
-    setsliderValue(40)
-}
+  useEffect(() => {
+    post();
+    console.log(payId);
+  }, [data1]);
+
+  // useEffect(()=>{
+  const getStatus = (x) => {
+    setInterval(() => {
+      axios
+        .get(`https://bamanchange.com/exchange/api/by-id?id=${x}`)
+        .then((res) => {
+          if (res?.data.status) {
+            // console.log(res?.data.status);
+            setStatus(res);
+          }
+        });
+    }, 5000);
+  };
+  // }, [payId])
+  const [sliderValue, setSliderValue] = useState(0);
+
+  useEffect(() => {
+    switch (status?.data.status) {
+      case "waiting":
+        setSliderValue(20);
+        break;
+      case "confirming":
+        setSliderValue(10);
+        break;
+      case "exchanging":
+        setSliderValue(20);
+        break;
+      case "sending":
+        setSliderValue(30);
+        break;
+      case "finished":
+        setSliderValue(40);
+        break;
+    }
+  }, [status?.data.status]);
+
+  console.log(status?.data.status);
+  console.log(payIn);
+  // axios.get(`https://bamanchange.com/exchange/api/by-id?id=${payId}`)
+  // .then((res) => {
+  //   if (res?.data.status) {
+  //     setStatus(res?.data.status)
+  //     console.log(status)
+  //   }
+  // });
+
+  // console.log(payIn)
+
+  // console.log(data1)
 
   return (
     <>
@@ -232,7 +304,9 @@ switch(status){
                   <Grid item xs={12}>
                     <InputTrade
                       value={data1}
-                      onChange={(e)=> {setData1(e.target.value)}}
+                      onChange={(e) => {
+                        setData1(e.target.value);
+                      }}
                       error={!check1}
                       margin="1em auto"
                       label="آدرس کیف پول خول را وارد کنید"
@@ -240,14 +314,13 @@ switch(status){
                       borderRadius={bigbuttonBorderRadius}
                       endAdornment={
                         <QrCodeScannerIcon
-                        onClick={() => {
-                          handleClickOpen(0);
-                        }}
+                          onClick={() => {
+                            handleClickOpen(0);
+                          }}
                           sx={{
                             "&:hover": { color: theme.palette.secondary.main },
                           }}
-                          />
-
+                        />
                       }
                     />
                   </Grid>
@@ -261,23 +334,24 @@ switch(status){
 
                   <Grid item xs={12}>
                     <InputTrade
-                      value={data2}  
-                      onChange={(e)=> {setData2(e.target.value)}}
-                      error={ !check2}                  
+                      value={data2}
+                      onChange={(e) => {
+                        setData2(e.target.value);
+                      }}
+                      error={!check2}
                       margin="1em auto"
                       label="آدرس کیف پول بازپرداخت را وارد کنید"
                       height={inputHieght}
                       borderRadius={bigbuttonBorderRadius}
                       endAdornment={
                         <QrCodeScannerIcon
-                        onClick={() => {
-                          handleClickOpen(1);
-                        }}
+                          onClick={() => {
+                            handleClickOpen(1);
+                          }}
                           sx={{
                             "&:hover": { color: theme.palette.secondary.main },
                           }}
-                          />
-
+                        />
                       }
                     />
                   </Grid>
@@ -290,7 +364,7 @@ switch(status){
                   onClose={handleClose2}
                   data={data1}
                   setData={setData1}
-                  />
+                />
                 <PopUpQrScan
                   id={1}
                   borderRadius={props.borderRadius}
@@ -298,13 +372,13 @@ switch(status){
                   onClose={handleClose2}
                   data={data2}
                   setData={setData2}
-                  />
+                />
 
                 <DialogActions
                   onClick={() => {
                     // console.log(check1)
                     // console.log(check2)
-                    if (check1 && 1){
+                    if (check1 && 1) {
                       setStep(step + 1);
                     }
                   }}
@@ -399,7 +473,10 @@ switch(status){
                 <DialogActions
                   onClick={() => {
                     setStep(step + 1);
-                    post();
+                    console.log(payId);
+                    getStatus(payId);
+                    console.log(status);
+                    // .then((res => {return res}))
                   }}
                   sx={{ backgroundColor: theme.palette.primary.main }}
                 >
@@ -524,7 +601,6 @@ switch(status){
                   >
                     <Slider
                       slots={{ thumb: AirbnbThumbComponent }}
-                      disabled
                       sx={{
                         color: `${theme.palette.secondary.main} !important`,
                       }}

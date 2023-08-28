@@ -51,8 +51,6 @@ export default function Tradecard(props) {
 
   const net2 = useRef("eth");
 
-
-
   const [fromAmount, setFromAmount] = useState(1);
 
   const [selectedCC, setselecctedCC] = useState({
@@ -95,8 +93,7 @@ export default function Tradecard(props) {
     cc2.current = selectedCC.currencies[1];
     net1.current = selectedCC.network[0];
     net2.current = selectedCC.network[1];
-
-  }, [fromAmount ,selectedCC.currencies[0] ,selectedCC.currencies[1]] );
+  }, [fromAmount, selectedCC.currencies[0], selectedCC.currencies[1]]);
 
   const [toAmount, setToAmount] = useState();
 
@@ -108,26 +105,23 @@ export default function Tradecard(props) {
 
   const minUrl = `https://bamanchange.com/exchange/api/range?fromCurrency=${selectedCC.currencies[0]}&toCurrency=${selectedCC.currencies[1]}&fromNetwork=${selectedCC.network[0]}&toNetwork=${selectedCC.network[1]}&flow=standard`;
 
-  const checkUrl = `https://bamanchange.com/exchange/api/available-pairs?fromCurrency=${selectedCC.currencies[0]}&toCurrency=${selectedCC.currencies[1]}&fromNetwork=${selectedCC.network[0]}&toNetwork=${selectedCC.network[1]}&flow=standard`;
+  const checkUrl = `https://bamanchange.com/exchange/api/available-pairs?fromCurrency=${selectedCC.currencies[0]}&toCurrency=${selectedCC.currencies[1]}&fromNetwork=${selectedCC.network[0]}&toNetwork=${selectedCC.network[1]}&flow=`;
 
   const amountUrl = `https://bamanchange.com/exchange/api/estimated-amount?fromCurrency=${selectedCC.currencies[0]}&toCurrency=${selectedCC.currencies[1]}&fromAmount=${fromAmount}&fromNetwork=${selectedCC.network[0]}&toNetwork=${selectedCC.network[1]}&flow=standard`;
 
-
-const fetchAmount = ()=>{
-  fetch(
-    `https://bamanchange.com/exchange/api/estimated-amount?fromCurrency=${cc1.current}&toCurrency=${cc2.current}&fromAmount=${amountRef.current}&fromNetwork=${net1.current}&toNetwork=${net2.current}&flow=standard`
-  )
-    .then((res) => res.json())
-    .then((res) => {
-      setToAmount(res?.toAmount);
-      // console.log(cc1.current);
-    });
- 
-
-}
+  const fetchAmount = () => {
+    fetch(
+      `https://bamanchange.com/exchange/api/estimated-amount?fromCurrency=${cc1.current}&toCurrency=${cc2.current}&fromAmount=${amountRef.current}&fromNetwork=${net1.current}&toNetwork=${net2.current}&flow=standard`
+    )
+      .then((res) => res.json())
+      .then((res) => {
+        setToAmount(res?.toAmount);
+        // console.log(cc1.current);
+      });
+  };
 
   useEffect(() => {
-    fetchAmount()
+    fetchAmount();
 
     fetch(minUrl)
       .then((res) => res.json())
@@ -168,15 +162,12 @@ const fetchAmount = ()=>{
     }
 
     // console.log(pay);
-  }, [fromAmount ,selectedCC.currencies[0] ,selectedCC.currencies[1]]);
+  }, [fromAmount, selectedCC.currencies[0], selectedCC.currencies[1]]);
 
   useEffect(() => {
-    
     setInterval(() => {
-      
-      fetchAmount()
+      fetchAmount();
     }, 5000);
-
 
     // setInterval(() => {
     //   setProgress((prevProgress) =>
@@ -191,47 +182,19 @@ const fetchAmount = ()=>{
 
   const [payIn, setPayIn] = useState();
 
-  const [payId , setPayId] = useState();
-
-  const post =  async ()=> {
-
-    const userToPost ={
-      fromCurrency : cc1.current, 
-      toCurrency : cc2.current, 
-      fromNetwork : net1.current, 
-      toNetwork : net2.current, 
-      fromAmount : amountRef.current, 
-      address : data1, 
-      flow : "standard"
-  }
-  const res = await axios
-  .post('https://bamanchange.com/exchange/api/create', userToPost)
-  .catch((error) => console.log('Error: ', error));
-  // console.log(res.data)
-  // console.log(res.data.id)
-  setPayIn(res.data.payinAddress)
-  setPayId(res.data.id)
-
-  };
+  const [payId, setPayId] = useState();
 
 
-  const [status , setStatus ] = useState()
 
 
-// console.log("fjsldfjskdfjlskfjskfjlsdfjlsfjlsfjlsfj")
-// payIdRef.current = payId
-// setInterval(() => {
+
+  // console.log("fjsldfjskdfjlskfjskfjlsdfjlsfjlsfjlsfj")
+  // payIdRef.current = payId
+  // setInterval(() => {
   // console.log(payIdRef.current)
-  axios.get(`https://bamanchange.com/exchange/api/by-id?id=${payId}`).then((res)=>{ 
-    if(res?.data.status){
 
-      setStatus(res?.data.status);
-    }
-  })
+
   // }, 5000);
-  
-
-
 
   // console.log(toAmount?.toAmount);
 
@@ -280,7 +243,23 @@ const fetchAmount = ()=>{
   };
 
   return (
-    <UserContext.Provider value={{ selectedCC,  fromAmount ,fetchAmount ,data1  , data2 ,setData1 ,setData2 , post , payIn , payId ,status}}>
+    <UserContext.Provider
+      value={{
+        selectedCC,
+        fromAmount,
+        fetchAmount,
+        data1,
+        data2,
+        setData1,
+        setData2,
+        // post,
+        payId, 
+        setPayId, 
+        payIn,
+        setPayIn,
+        fromAmount,
+      }}
+    >
       <Box sx={cardBox}>
         <Grid container spacing={2}>
           <Grid
