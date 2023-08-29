@@ -177,10 +177,10 @@ export default function PopUpTrade(props) {
       return res_1;
     };
 
-    checkData(data2, selectedCC.currencies[0]).then((res) =>
+    checkData(data2, selectedCC.network[0]).then((res) =>
       setCheck2(res?.result)
     );
-    checkData(data1, selectedCC.currencies[1]).then((res) =>
+    checkData(data1, selectedCC.network[1]).then((res) =>
       setCheck1(res?.result)
     );
   }, [data1, data2]);
