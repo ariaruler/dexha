@@ -249,16 +249,16 @@ export default function PopUpTrade(props) {
   useEffect(() => {
     switch (status?.data.status) {
       case "waiting":
-        setSliderValue(5);
+        setSliderValue(20);
         break;
       case "confirming":
-        setSliderValue(25);
+        setSliderValue(40);
         break;
       case "exchanging":
-        setSliderValue(50);
+        setSliderValue(60);
         break;
       case "sending":
-        setSliderValue(75);
+        setSliderValue(80);
         break;
       case "finished":
         setSliderValue(100);
@@ -594,15 +594,16 @@ export default function PopUpTrade(props) {
                   <Grid
                     item
                     xs={12}
-                    // sx={{
-                    //   // padding: "1em 0 0 0",
-                    //   padding: 5,
-                    //   display: "flex",
-                    //   justifyContent: "center",
-                    //   alignItems: "center",
-                    // }}
+                    sx={{
+                      // padding: "1em 0 0 0",
+                      padding: 3,
+                      // display: "flex",
+                      // justifyContent: "center",
+                      // alignItems: "center",
+                    }}
                   >
         <LinearProgress variant="determinate" value={sliderValue} />
+        {status?.data.status}
                   </Grid>
                 </DialogContent>
 

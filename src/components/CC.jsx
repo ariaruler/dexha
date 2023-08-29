@@ -12,7 +12,7 @@ import { useTheme } from "@mui/material/styles";
 import Typography from "@mui/material/Typography";
 
 import InfiniteScroll from "react-infinite-scroller";
-import fetch from "./fetch";
+import manage from "./manage";
 
 import { Box, Button } from "@mui/material";
 import { useQuery } from "@tanstack/react-query";
@@ -51,21 +51,27 @@ export default function CC(props) {
 
   const [network, setNetwork] = useState("");
 
+  const [x , setX] = useState(10)
+
   
   useEffect(() => {  
     setTimeout(()=>{
-      
       console.log(data);
+      setComments(data.slice(0 , x) );
       
-      setComments(fetch(data));
-      
-    },200
+      setX(prev => prev+10)
+    },20
     
     )
     
-  }, []);
+  }, [x]);
   
-    console.log(comments);
+
+  const handleFetch = (x)=>{
+
+  }
+  
+    // console.log(comments);s
   // if (isLoading) {
   //   return <div>Loading...</div>;
   // }
@@ -76,21 +82,32 @@ export default function CC(props) {
 
 
   return (
-    <>
+  //   <InfiniteScroll
+  //   pageStart={0}
+  //   loadMore={() => handleFetch( comments.length + 1000 )}
+  //   hasMore={true || false}
+  //   useWindow={false}
+  //   loader={
+  //     <div key="loading" className="loader">
+  //       لطفا منتظر بمانید
+  //     </div>
+  //   }
+  // >
+  <>
       {comments.map((x, i) => (
         <Accordion key={i}>
           <MuiAccordionSummary
             sx={{
               height: "56px",
               alignItem: "center",
-
+              
               "& .MuiAccordionSummary-expandIconWrapper": {
                 transform: "none",
               },
               margin: marginOfAccordion,
               borderBottom: `1px  solid ${theme.palette.grey["50"]}`,
             }}
-          >
+            >
             <AvatarCC image={x.image[0]} />
             <Typography sx={{ textTransform: "uppercase" }}>
               {x.ticker}
@@ -114,7 +131,7 @@ export default function CC(props) {
                   "&:hover": { border: 0 },
                 }}
                 color="common"
-              >
+                >
                 <AvatarCC image={x.image[j]} />
                 {y}
               </Button>
@@ -122,7 +139,8 @@ export default function CC(props) {
           </AccordionDetails>
         </Accordion>
       ))}
-    </>
+      </>
+      // </InfiniteScroll>
   );
 }
 

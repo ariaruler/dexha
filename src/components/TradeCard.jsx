@@ -23,6 +23,7 @@ import { Button, CircularProgress } from "@mui/material";
 import axios from "axios";
 
 import { useQuery } from "@tanstack/react-query";
+import manage from "./manage";
 
 const inputHieght = 54;
 
@@ -41,21 +42,27 @@ export const UserContext = createContext();
 
 export default function Tradecard(props) {
 
-  // const { data, isLoading, error } = useQuery(['myData'], () =>
+  // const { data, isLoading, error } = useQuery(['myData'], () =>{
 
-const [data , setData] = useState([])
+    
+    const [data , setData] = useState([])
+    
+    useEffect(()=>{
+      axios.get(`https://api.bamanchange.com/v2/exchange/currencies?active=true&flow=standard&buy=true&sell=true`).then((res) => {
+        // return res.data
+        setData(manage(res.data))
+      } );
+      
+      },[])
 
-useEffect(()=>{
-  axios.get(`https://bamanchange.com/exchange/api/currencies?raw=true&active=true&flow=standard&buy=true&sell=true`).then((res) => {setData(res.data)} )
+// setData(fetch(data))
 
-},[])
-
-
+// }
 
 // );
 
 
-
+console.log(data);
 
   const theme = useTheme();
   // console.log( "YYYYYYYYYYYYYYYYYY")

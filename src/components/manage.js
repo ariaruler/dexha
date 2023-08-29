@@ -1,5 +1,5 @@
 
-module.exports = function (initData) {
+export default function (initData) {
     let final = [];
     let finalData =[];
     let checker = "";
