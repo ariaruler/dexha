@@ -1,7 +1,7 @@
 
 module.exports = async function (flow = "standard") {
     const response = await fetch(
-      `https://bamanchange.com/exchange/api/currencies?raw=true&active=true&flow=${flow}&buy=true&sell=true`
+      `https://api.bamanchange.com/v2/exchange/currencies?raw=true&active=true&flow=${flow}&buy=true&sell=true`
     );
     let initData = await response.json();
     let final = [];
