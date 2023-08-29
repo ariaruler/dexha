@@ -1,11 +1,7 @@
 
-module.exports = async function (flow = "standard") {
-    const response = await fetch(
-      `https://api.bamanchange.com/v2/exchange/currencies?raw=true&active=true&flow=${flow}&buy=true&sell=true`
-    );
-    let initData = await response.json();
+module.exports = function (initData) {
     let final = [];
-    let finalData;
+    let finalData =[];
     let checker = "";
     for (let i = 0; i < initData.length; i++) {
       if (checker === initData[i].ticker) {
@@ -23,7 +19,5 @@ module.exports = async function (flow = "standard") {
       x.name = rr[0];
       return x;
     });
-    return finalData;
+    return finalData ;
   };
-
-  

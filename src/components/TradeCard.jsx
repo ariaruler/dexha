@@ -22,6 +22,8 @@ import PopUpSetting from "./PopUpSetting.";
 import { Button, CircularProgress } from "@mui/material";
 import axios from "axios";
 
+import { useQuery } from "@tanstack/react-query";
+
 const inputHieght = 54;
 
 const pages = [
@@ -38,6 +40,23 @@ const pages = [
 export const UserContext = createContext();
 
 export default function Tradecard(props) {
+
+  // const { data, isLoading, error } = useQuery(['myData'], () =>
+
+const [data , setData] = useState([])
+
+useEffect(()=>{
+  axios.get(`https://bamanchange.com/exchange/api/currencies?raw=true&active=true&flow=standard&buy=true&sell=true`).then((res) => {setData(res.data)} )
+
+},[])
+
+
+
+// );
+
+
+
+
   const theme = useTheme();
   // console.log( "YYYYYYYYYYYYYYYYYY")
 
@@ -245,6 +264,9 @@ export default function Tradecard(props) {
   return (
     <UserContext.Provider
       value={{
+        data,
+        // isLoading,
+        // error,
         selectedCC,
         fromAmount,
         fetchAmount,

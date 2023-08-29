@@ -15,8 +15,7 @@ import InfiniteScroll from "react-infinite-scroller";
 import fetch from "./fetch";
 
 import { Box, Button } from "@mui/material";
-
-
+import { useQuery } from "@tanstack/react-query";
 
 
 const marginOfAccordion = "1px 2em";
@@ -39,26 +38,44 @@ const AccordionDetails = styled(MuiAccordionDetails)(({ theme }) => ({
 }));
 
 export default function CC(props) {
+
+  console.log("kkkkkkkkkkkk");
+  const { data , isLoading , error } = useContext(UserContext);
   const theme = useTheme();
 
   const [comments, setComments] = useState([]);
 
-  const { selectedCC ,fetchAmount } = useContext(UserContext);
+  const { selectedCC, fetchAmount } = useContext(UserContext);
 
   const [currencies, setCurrencies] = useState("");
-  
+
   const [network, setNetwork] = useState("");
 
-  useEffect(()=>{
-    fetch().then((res) => {
-      setComments(res);
-    });
-  },[])
+  
+  useEffect(() => {  
+    setTimeout(()=>{
+      
+      console.log(data);
+      
+      setComments(fetch(data));
+      
+    },200
+    
+    )
+    
+  }, []);
+  
+    console.log(comments);
+  // if (isLoading) {
+  //   return <div>Loading...</div>;
+  // }
 
+  // if (error) {
+  //   return <div>Error: {error.message}</div>;
+  // }
 
 
   return (
-
     <>
       {comments.map((x, i) => (
         <Accordion key={i}>
@@ -66,14 +83,14 @@ export default function CC(props) {
             sx={{
               height: "56px",
               alignItem: "center",
-              
+
               "& .MuiAccordionSummary-expandIconWrapper": {
                 transform: "none",
               },
               margin: marginOfAccordion,
               borderBottom: `1px  solid ${theme.palette.grey["50"]}`,
             }}
-            >
+          >
             <AvatarCC image={x.image[0]} />
             <Typography sx={{ textTransform: "uppercase" }}>
               {x.ticker}
@@ -82,21 +99,21 @@ export default function CC(props) {
           <AccordionDetails sx={{ padding: "1em 3em !important" }}>
             {x.network.map((y, j) => (
               <Button
-              key={j}
-              onClick={() => {
-                selectedCC.putCC(props.id, x.ticker, y, x.image[0]);
-                fetchAmount();
-              }}
-              variant="outlined"
-              sx={{
-                borderRadius: "1000px !important",
-                margin: 0.5,
-                border: 0,
-                padding: 1,
-                backgroundColor: theme.palette.background.paper,
-                "&:hover": { border: 0 },
-              }}
-              color="common"
+                key={j}
+                onClick={() => {
+                  selectedCC.putCC(props.id, x.ticker, y, x.image[0]);
+                  fetchAmount();
+                }}
+                variant="outlined"
+                sx={{
+                  borderRadius: "1000px !important",
+                  margin: 0.5,
+                  border: 0,
+                  padding: 1,
+                  backgroundColor: theme.palette.background.paper,
+                  "&:hover": { border: 0 },
+                }}
+                color="common"
               >
                 <AvatarCC image={x.image[j]} />
                 {y}
@@ -105,8 +122,7 @@ export default function CC(props) {
           </AccordionDetails>
         </Accordion>
       ))}
-      </>
-
+    </>
   );
 }
 

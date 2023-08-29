@@ -110,7 +110,7 @@ AirbnbThumbComponent.propTypes = {
 };
 
 export default function PopUpTrade(props) {
-  console.log("kkkkkkkkkkkk");
+  // console.log("kkkkkkkkkkkk");
   const [open2, setOpen2] = useState(-1);
 
   const handleClickOpen = (id) => {
@@ -266,8 +266,10 @@ export default function PopUpTrade(props) {
     }
   }, [status?.data.status]);
 
-  console.log(status?.data.status);
-  console.log(payIn);
+  // console.log(status?.data.status);
+  // console.log(payIn);
+
+
   // axios.get(`https://bamanchange.com/exchange/api/by-id?id=${payId}`)
   // .then((res) => {
   //   if (res?.data.status) {
