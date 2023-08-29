@@ -12,6 +12,7 @@ import {
   DialogContent,
   FormControlLabel,
   Grid,
+  LinearProgress,
   Slider,
   SliderThumb,
   Typography,
@@ -248,19 +249,19 @@ export default function PopUpTrade(props) {
   useEffect(() => {
     switch (status?.data.status) {
       case "waiting":
-        setSliderValue(20);
+        setSliderValue(5);
         break;
       case "confirming":
-        setSliderValue(10);
+        setSliderValue(25);
         break;
       case "exchanging":
-        setSliderValue(20);
+        setSliderValue(50);
         break;
       case "sending":
-        setSliderValue(30);
+        setSliderValue(75);
         break;
       case "finished":
-        setSliderValue(40);
+        setSliderValue(100);
         break;
     }
   }, [status?.data.status]);
@@ -591,27 +592,15 @@ export default function PopUpTrade(props) {
                   <Grid
                     item
                     xs={12}
-                    sx={{
-                      // padding: "1em 0 0 0",
-                      padding: 5,
-                      display: "flex",
-                      justifyContent: "center",
-                      alignItems: "center",
-                    }}
+                    // sx={{
+                    //   // padding: "1em 0 0 0",
+                    //   padding: 5,
+                    //   display: "flex",
+                    //   justifyContent: "center",
+                    //   alignItems: "center",
+                    // }}
                   >
-                    <Slider
-                      slots={{ thumb: AirbnbThumbComponent }}
-                      sx={{
-                        color: `${theme.palette.secondary.main} !important`,
-                      }}
-                      color="secondary"
-                      valueLabelDisplay="off"
-                      defaultValue={sliderValue}
-                      step={10}
-                      marks={marks}
-                      min={0}
-                      max={40}
-                    />
+        <LinearProgress variant="determinate" value={sliderValue} />
                   </Grid>
                 </DialogContent>
 
