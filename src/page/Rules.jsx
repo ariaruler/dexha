@@ -3,6 +3,12 @@ import Typography from '@mui/material/Typography';
 import {motion } from 'framer-motion'
 
 export default function Rules() {
+
+    
+  React.useEffect(() => {
+    // post();
+    console.log('pppppppppppppppppppp');
+  }, []);
     return (
         <motion.div
         initial={{opacity : 0 , width : 0}}

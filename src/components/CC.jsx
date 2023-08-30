@@ -55,16 +55,20 @@ export default function CC(props) {
 
   
   useEffect(() => {  
-    setTimeout(()=>{
-      console.log(data);
-      setComments(data.slice(0 , x) );
+    if( (x-70) < comments.length){
+
+      setTimeout(()=>{
+        // console.log(data);
+        setComments(data.slice(0 , x) );
+        
+        setX(prev => prev+10)
+        // console.log(x);
+      },10
+      )
+    }
       
-      setX(prev => prev+10)
-    },20
-    
-    )
-    
   }, [x]);
+  
   
 
   const handleFetch = (x)=>{
@@ -118,7 +122,7 @@ export default function CC(props) {
               <Button
                 key={j}
                 onClick={() => {
-                  selectedCC.putCC(props.id, x.ticker, y, x.image[0]);
+                  selectedCC.putCC(props.id, x.ticker, y, x.image[j]);
                   fetchAmount();
                 }}
                 variant="outlined"

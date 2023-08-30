@@ -41,28 +41,28 @@ const pages = [
 export const UserContext = createContext();
 
 export default function Tradecard(props) {
-
   // const { data, isLoading, error } = useQuery(['myData'], () =>{
 
-    
-    const [data , setData] = useState([])
-    
-    useEffect(()=>{
-      axios.get(`https://api.bamanchange.com/v2/exchange/currencies?active=true&flow=standard&buy=true&sell=true`).then((res) => {
+  const [data, setData] = useState([]);
+
+  useEffect(() => {
+    axios
+      .get(
+        `https://api.bamanchange.com/v2/exchange/currencies?active=true&flow=standard&buy=true&sell=true`
+      )
+      .then((res) => {
         // return res.data
-        setData(manage(res.data))
-      } );
-      
-      },[])
+        setData(manage(res.data));
+      });
+  }, []);
 
-// setData(fetch(data))
+  // setData(fetch(data))
 
-// }
+  // }
 
-// );
+  // );
 
-
-console.log(data);
+  // console.log(data);
 
   const theme = useTheme();
   // console.log( "YYYYYYYYYYYYYYYYYY")
@@ -136,12 +136,12 @@ console.log(data);
   const amountUrl = `https://bamanchange.com/exchange/api/estimated-amount?fromCurrency=${selectedCC.currencies[0]}&toCurrency=${selectedCC.currencies[1]}&fromAmount=${fromAmount}&fromNetwork=${selectedCC.network[0]}&toNetwork=${selectedCC.network[1]}&flow=standard`;
 
   const fetchAmount = () => {
-    fetch(
-      `https://bamanchange.com/exchange/api/estimated-amount?fromCurrency=${cc1.current}&toCurrency=${cc2.current}&fromAmount=${amountRef.current}&fromNetwork=${net1.current}&toNetwork=${net2.current}&flow=standard`
-    )
-      .then((res) => res.json())
+    axios
+      .get(
+        `https://bamanchange.com/exchange/api/estimated-amount?fromCurrency=${cc1.current}&toCurrency=${cc2.current}&fromAmount=${amountRef.current}&fromNetwork=${net1.current}&toNetwork=${net2.current}&flow=standard`
+      )
       .then((res) => {
-        setToAmount(res?.toAmount);
+        setToAmount(res?.data.toAmount);
         // console.log(cc1.current);
       });
   };
@@ -149,17 +149,16 @@ console.log(data);
   useEffect(() => {
     fetchAmount();
 
-    fetch(minUrl)
-      .then((res) => res.json())
-      .then((res) => {
-        setMinData(res);
-      });
+    axios.get(minUrl).then((res) => {
+      setMinData(res?.data);
+    });
 
-    fetch(checkUrl)
-      .then((res) => res.json())
+    axios
+      .get(checkUrl)
       .then((res) => {
-        setCheckData(res);
-      });
+        setCheckData(res?.data);
+      })
+      .catch((err) => {});
 
     // console.log(minData.maxAmount)
 
@@ -193,45 +192,26 @@ console.log(data);
   useEffect(() => {
     setInterval(() => {
       fetchAmount();
-    }, 5000);
+    }, 20000);
 
     // setInterval(() => {
     //   setProgress((prevProgress) =>
     //     prevProgress >= 100 ? 0 : prevProgress + 10
     //   );
     // }, 500);
-  }, []);
-
-  const [data1, setData1] = useState();
-
-  const [data2, setData2] = useState();
+  }, [fromAmount]);
 
   const [payIn, setPayIn] = useState();
 
   const [payId, setPayId] = useState();
 
-
-
-
-
   // console.log("fjsldfjskdfjlskfjskfjlsdfjlsfjlsfjlsfj")
-  // payIdRef.current = payId
-  // setInterval(() => {
-  // console.log(payIdRef.current)
-
-
-  // }, 5000);
 
   // console.log(toAmount?.toAmount);
 
   // console.log(selectedCC.toAmount);
 
   const [progress, setProgress] = useState(0);
-
-  //   useEffect(() => {
-
-  //   }
-  // , []);
 
   const emails = ["username@gmail.com", "user02@gmail.com"];
   const [open, setOpen] = useState(-1);
@@ -268,6 +248,8 @@ console.log(data);
     setActive(id);
   };
 
+  // console.log(open);
+
   return (
     <UserContext.Provider
       value={{
@@ -277,13 +259,10 @@ console.log(data);
         selectedCC,
         fromAmount,
         fetchAmount,
-        data1,
-        data2,
-        setData1,
-        setData2,
+
         // post,
-        payId, 
-        setPayId, 
+        payId,
+        setPayId,
         payIn,
         setPayIn,
         fromAmount,
@@ -373,25 +352,36 @@ console.log(data);
               startAdornment={<CircularProgress />}
             />
           </Grid>
-          <PopUpCC
-            id={0}
-            borderRadius={props.borderRadius}
-            open={open}
-            onClose={handleClose}
-          />
-          <PopUpCC
-            id={1}
-            borderRadius={props.borderRadius}
-            open={open}
-            onClose={handleClose}
-          />
+          {open === 0 ? (
+            <PopUpCC
+              id={0}
+              borderRadius={props.borderRadius}
+              open={open}
+              onClose={handleClose}
+            />
+          ) : (
+            <></>
+          )}
+          {open === 1 ? (
+            <PopUpCC
+              id={1}
+              borderRadius={props.borderRadius}
+              open={open}
+              onClose={handleClose}
+            />
+          ) : (
+            <></>
+          )}
+                    {open === 3 ? (
           <PopUpSetting
             id={3}
             borderRadius={props.borderRadius}
             open={open}
             onClose={handleClose}
           />
-
+          ) : (
+            <></>
+          )}
           <Grid item xs={12}>
             <ButtonTrade
               handleClickOpen={() => {
@@ -415,7 +405,7 @@ console.log(data);
               disabled={!checkData[0]?.flow.standard}
             />
           </Grid>
-
+          {open === 2 ? (
           <PopUpTrade
             toAmount={toAmount?.toAmount}
             id={2}
@@ -424,7 +414,9 @@ console.log(data);
             open={open}
             onClose={handleClose}
           />
-
+          ) : (
+            <></>
+          )}
           <Grid item xs={12}>
             <Buttonfee inputHieght={inputHieght} />
           </Grid>

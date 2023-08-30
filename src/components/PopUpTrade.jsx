@@ -136,14 +136,15 @@ export default function PopUpTrade(props) {
     },
   };
 
+  const [status, setStatus] = useState();
+
   const handleClose = () => {
     props.onClose(props.selectedValue);
     setStep(0);
+    // clearData();
   };
 
   const previosStep = () => setStep(step - 1);
-
-
 
   const [check1, setCheck1] = useState();
 
@@ -157,10 +158,7 @@ export default function PopUpTrade(props) {
 
   const {
     selectedCC,
-    data1,
-    data2,
-    setData1,
-    setData2,
+
     payIn,
     setPayIn,
     payId,
@@ -168,41 +166,47 @@ export default function PopUpTrade(props) {
     fromAmount,
   } = useContext(UserContext);
 
+  const [data2, setData2] = useState();
+
+  const [data1, setData1] = useState();
+
+  // useEffect(() => {
+  //   setData1('')
+  //   console.log(data1)
+
+  //   return (()=>{
+
+  //     setData1('')
+  //     console.log(data1)
+
+  //   }
+  //     )
+  // }, []);
+
+  console.log(data1);
+
   useEffect(() => {
     const checkData = async (data, amount) => {
+      console.log(data)
+      console.log(amount)
       const res = await fetch(
         `https://bamanchange.com/exchange/api/validate-address?currency=${amount}&address=${data}`
-      );
-      const res_1 = await res.json();
+        );
+        const res_1 = await res.json();
+        console.log(res_1)
       return res_1;
     };
 
-    checkData(data2, selectedCC.network[0]).then((res) =>
-      setCheck2(res?.result)
-    );
-    checkData(data1, selectedCC.network[1]).then((res) =>
+    // checkData(data1, selectedCC.network[0]).then((res) =>
+    //   setCheck2(res?.result)
+    // );
+    checkData(data2, selectedCC.network[1]).then((res) =>
       setCheck1(res?.result)
     );
   }, [data1, data2]);
 
-  // useEffect(() => {
 
-  //   payIdRef.current = payId
-  // }, [ payId] );
 
-  // const payIdRef = useRef()
-
-  // const amountRef = useRef(1);
-
-  // const cc1 = useRef("btc");
-
-  // const cc2 = useRef("eth");
-
-  // const net1 = useRef("btc");
-
-  // const net2 = useRef("eth");
-
-  const [status, setStatus] = useState();
 
   const post = async () => {
     const userToPost = {
@@ -214,7 +218,7 @@ export default function PopUpTrade(props) {
       address: data1,
       flow: "standard",
     };
-    console.log(userToPost);
+    // console.log(userToPost);
 
     const res = await axios
       .post("https://bamanchange.com/exchange/api/create", userToPost)
@@ -225,10 +229,11 @@ export default function PopUpTrade(props) {
     setPayId(res.data.id);
   };
 
+
   useEffect(() => {
     post();
-    console.log(payId);
-  }, [data1]);
+    console.log('pppppppppppppppppppp');
+  }, []);
 
   // useEffect(()=>{
   const getStatus = (x) => {
@@ -266,21 +271,16 @@ export default function PopUpTrade(props) {
     }
   }, [status?.data.status]);
 
-  // console.log(status?.data.status);
-  // console.log(payIn);
-
-
-  // axios.get(`https://bamanchange.com/exchange/api/by-id?id=${payId}`)
-  // .then((res) => {
-  //   if (res?.data.status) {
-  //     setStatus(res?.data.status)
-  //     console.log(status)
-  //   }
-  // });
-
-  // console.log(payIn)
-
-  // console.log(data1)
+  // const clearData = () => {
+  //   setData1("");
+  //   setData2("");
+  //   setPayIn('');
+  //   setPayId('');
+  //   setCheck1('');
+  //   setCheck2('');
+  //   // setStatus('');
+  //   setSliderValue(0);
+  // };
 
   return (
     <>
@@ -306,9 +306,9 @@ export default function PopUpTrade(props) {
                 <DialogContent sx={{ padding: "2px 2em" }}>
                   <Grid item xs={12}>
                     <InputTrade
-                      value={data1}
+                      value={data2}
                       onChange={(e) => {
-                        setData1(e.target.value);
+                        setData2(e.target.value);
                       }}
                       error={!check1}
                       margin="1em auto"
@@ -337,9 +337,9 @@ export default function PopUpTrade(props) {
 
                   <Grid item xs={12}>
                     <InputTrade
-                      value={data2}
+                      value={data1}
                       onChange={(e) => {
-                        setData2(e.target.value);
+                        setData1(e.target.value);
                       }}
                       error={!check2}
                       margin="1em auto"
@@ -602,8 +602,8 @@ export default function PopUpTrade(props) {
                       // alignItems: "center",
                     }}
                   >
-        <LinearProgress variant="determinate" value={sliderValue} />
-        {status?.data.status}
+                    <LinearProgress variant="determinate" value={sliderValue} />
+                    {status?.data.status}
                   </Grid>
                 </DialogContent>
 

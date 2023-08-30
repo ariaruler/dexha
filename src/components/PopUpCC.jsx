@@ -33,6 +33,12 @@ const marginOfAccordion = "1px 2em";
 export default function PopUpCC(props) {
 
 
+
+  useEffect(() => {
+    // post();
+    console.log('pppppppppppppppppppp');
+  }, []);
+
   const theme = useTheme();
   const Dialogstyle = {
     "& .MuiDialog-paper": {
