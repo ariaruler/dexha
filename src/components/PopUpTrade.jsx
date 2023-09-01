@@ -166,47 +166,38 @@ export default function PopUpTrade(props) {
     fromAmount,
   } = useContext(UserContext);
 
+  const [ externalId, setExternalId] = useState();
+
+  const [ externalId2, setExternalId2] = useState();
+
+  // const [ externalId2, setExternalId2] = useState();
+
   const [data2, setData2] = useState();
 
   const [data1, setData1] = useState();
 
-  // useEffect(() => {
-  //   setData1('')
-  //   console.log(data1)
+  // console.log(data1);
 
-  //   return (()=>{
-
-  //     setData1('')
-  //     console.log(data1)
-
-  //   }
-  //     )
-  // }, []);
-
-  console.log(data1);
-
-  useEffect(() => {
-    const checkData = async (data, amount) => {
-      console.log(data)
-      console.log(amount)
-      const res = await fetch(
-        `https://bamanchange.com/exchange/api/validate-address?currency=${amount}&address=${data}`
-        );
-        const res_1 = await res.json();
-        console.log(res_1)
-      return res_1;
-    };
-
-    // checkData(data1, selectedCC.network[0]).then((res) =>
-    //   setCheck2(res?.result)
-    // );
-    checkData(data2, selectedCC.network[1]).then((res) =>
-      setCheck1(res?.result)
+  const checkData = async (data, amount) => {
+    console.log(data);
+    console.log(amount);
+    const res = await fetch(
+      `https://bamanchange.com/exchange/api/validate-address?currency=${amount}&address=${data}`
     );
+    const res_1 = await res.json();
+    console.log(res_1);
+    return res_1;
+  };
+  useEffect(() => {
+    if (data1 || data2) {
+      // checkData(data1, selectedCC.network[0]).then((res) =>
+      //   setCheck2(res?.result)
+      // );
+      checkData(data2, selectedCC.network[1]).then((res) =>
+        setCheck1(res?.result)
+      );
+    }
   }, [data1, data2]);
-
-
-
 
   const post = async () => {
     const userToPost = {
@@ -215,7 +206,7 @@ export default function PopUpTrade(props) {
       fromNetwork: selectedCC.network[0],
       toNetwork: selectedCC.network[1],
       fromAmount: fromAmount,
-      address: data1,
+      address: data2,
       flow: "standard",
     };
     // console.log(userToPost);
@@ -229,13 +220,6 @@ export default function PopUpTrade(props) {
     setPayId(res.data.id);
   };
 
-
-  useEffect(() => {
-    post();
-    console.log('pppppppppppppppppppp');
-  }, []);
-
-  // useEffect(()=>{
   const getStatus = (x) => {
     setInterval(() => {
       axios
@@ -248,7 +232,11 @@ export default function PopUpTrade(props) {
         });
     }, 5000);
   };
-  // }, [payId])
+
+  useEffect(() => {
+    getStatus(payId);
+  }, [payId]);
+
   const [sliderValue, setSliderValue] = useState(0);
 
   useEffect(() => {
@@ -271,16 +259,8 @@ export default function PopUpTrade(props) {
     }
   }, [status?.data.status]);
 
-  // const clearData = () => {
-  //   setData1("");
-  //   setData2("");
-  //   setPayIn('');
-  //   setPayId('');
-  //   setCheck1('');
-  //   setCheck2('');
-  //   // setStatus('');
-  //   setSliderValue(0);
-  // };
+  // console.log(selectedCC.hasExternalId[0]);
+  // console.log(selectedCC.hasExternalId[1]);
 
   return (
     <>
@@ -302,7 +282,7 @@ export default function PopUpTrade(props) {
                 />
 
                 <TradeBoared />
-                {/* toAmount={props.toAmount} */}
+
                 <DialogContent sx={{ padding: "2px 2em" }}>
                   <Grid item xs={12}>
                     <InputTrade
@@ -312,7 +292,7 @@ export default function PopUpTrade(props) {
                       }}
                       error={!check1}
                       margin="1em auto"
-                      label="آدرس کیف پول خول را وارد کنید"
+                      label="آدرس کیف پول خود را وارد کنید"
                       height={inputHieght}
                       borderRadius={bigbuttonBorderRadius}
                       endAdornment={
@@ -328,12 +308,35 @@ export default function PopUpTrade(props) {
                     />
                   </Grid>
 
-                  <Grid item xs={12}>
-                    <FormControlLabel
-                      control={<Checkbox color="secondary" />}
-                      label="باز پرداخت به همین کیف پول باشد"
-                    />
-                  </Grid>
+                  {selectedCC.hasExternalId[0] ? (
+                    <Grid item xs={12}>
+                      <InputTrade
+                        value={externalId}
+                        onChange={(e) => {
+                          setExternalId(e.target.value);
+                        }}
+                        error={!check1}
+                        margin="1em auto"
+                        label="External_Id خود را وارید کنید"
+                        height={inputHieght}
+                        borderRadius={bigbuttonBorderRadius}
+                        endAdornment={
+                          <QrCodeScannerIcon
+                            onClick={() => {
+                              handleClickOpen(0);
+                            }}
+                            sx={{
+                              "&:hover": {
+                                color: theme.palette.secondary.main,
+                              },
+                            }}
+                          />
+                        }
+                      />
+                    </Grid>
+                  ) : (
+                    <></>
+                  )}
 
                   <Grid item xs={12}>
                     <InputTrade
@@ -358,6 +361,36 @@ export default function PopUpTrade(props) {
                       }
                     />
                   </Grid>
+
+                  {selectedCC.hasExternalId[1] ? (
+                    <Grid item xs={12}>
+                      <InputTrade
+                        value={externalId2}
+                        onChange={(e) => {
+                          setExternalId2(e.target.value);
+                        }}
+                        error={!check1}
+                        margin="1em auto"
+                        label="External_Id خود را وارید کنید"
+                        height={inputHieght}
+                        borderRadius={bigbuttonBorderRadius}
+                        endAdornment={
+                          <QrCodeScannerIcon
+                            onClick={() => {
+                              handleClickOpen(0);
+                            }}
+                            sx={{
+                              "&:hover": {
+                                color: theme.palette.secondary.main,
+                              },
+                            }}
+                          />
+                        }
+                      />
+                    </Grid>
+                  ) : (
+                    <></>
+                  )}
                 </DialogContent>
 
                 <PopUpQrScan
@@ -383,6 +416,7 @@ export default function PopUpTrade(props) {
                     // console.log(check2)
                     if (check1 && 1) {
                       setStep(step + 1);
+                      post();
                     }
                   }}
                   sx={{ backgroundColor: theme.palette.primary.main }}
@@ -476,6 +510,7 @@ export default function PopUpTrade(props) {
                 <DialogActions
                   onClick={() => {
                     setStep(step + 1);
+
                     console.log(payId);
                     getStatus(payId);
                     console.log(status);
@@ -550,7 +585,8 @@ export default function PopUpTrade(props) {
                       alignItems: "center",
                     }}
                   >
-                    لطفا مقدار 20btc را واریز نمائید
+                    لطفا مقدار {selectedCC.currencies[0] + " " + fromAmount} را
+                    واریز نمائید
                     <ContentCopyIcon
                       sx={{
                         "&:hover": { color: theme.palette.secondary.main },

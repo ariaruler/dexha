@@ -86,8 +86,9 @@ export default function Tradecard(props) {
       "https://content-api.bamanchange.com/uploads/eth_f4ebb54ec0.svg",
     ],
     network: ["btc", "eth"],
-    putCC: (id, currency, network, currencyImg) => {
-      console.log(id);
+    hasExternalId: [false, false],
+    putCC: (id, currency, network, currencyImg, hasExternalId) => {
+      // console.log(id);
       if (id === 0) {
         setselecctedCC((prev) => {
           return {
@@ -95,6 +96,7 @@ export default function Tradecard(props) {
             currencies: { ...prev.currencies, 0: currency },
             network: { ...prev.network, 0: network },
             currencyImg: { ...prev.currencyImg, 0: currencyImg },
+            hasExternalId: { ...prev.hasExternalId, 0: hasExternalId },
           };
         });
         // console.log(selectedCC);
@@ -106,6 +108,7 @@ export default function Tradecard(props) {
             currencies: { ...prev.currencies, 1: currency },
             network: { ...prev.network, 1: network },
             currencyImg: { ...prev.currencyImg, 1: currencyImg },
+            hasExternalId: { ...prev.hasExternalId, 1: hasExternalId },
           };
         });
       }
@@ -113,13 +116,9 @@ export default function Tradecard(props) {
     },
   });
 
-  useEffect(() => {
-    amountRef.current = fromAmount;
-    cc1.current = selectedCC.currencies[0];
-    cc2.current = selectedCC.currencies[1];
-    net1.current = selectedCC.network[0];
-    net2.current = selectedCC.network[1];
-  }, [fromAmount, selectedCC.currencies[0], selectedCC.currencies[1]]);
+  // useEffect(() => {
+
+  // }, [fromAmount, selectedCC.currencies[0], selectedCC.currencies[1]]);
 
   const [toAmount, setToAmount] = useState();
 
@@ -135,24 +134,51 @@ export default function Tradecard(props) {
 
   const amountUrl = `https://bamanchange.com/exchange/api/estimated-amount?fromCurrency=${selectedCC.currencies[0]}&toCurrency=${selectedCC.currencies[1]}&fromAmount=${fromAmount}&fromNetwork=${selectedCC.network[0]}&toNetwork=${selectedCC.network[1]}&flow=standard`;
 
-  const fetchAmount = () => {
+  const fetchAmount = (amountRef ,cc1 ,cc2 ,net1,net2) => {
     axios
       .get(
-        `https://bamanchange.com/exchange/api/estimated-amount?fromCurrency=${cc1.current}&toCurrency=${cc2.current}&fromAmount=${amountRef.current}&fromNetwork=${net1.current}&toNetwork=${net2.current}&flow=standard`
+        `https://bamanchange.com/exchange/api/estimated-amount?fromCurrency=${cc1}&toCurrency=${cc2}&fromAmount=${amountRef}&fromNetwork=${net1}&toNetwork=${net2}&flow=standard`
       )
       .then((res) => {
         setToAmount(res?.data.toAmount);
         // console.log(cc1.current);
       });
+
+
   };
 
-  useEffect(() => {
-    fetchAmount();
-
+  const getMinAmount = ()=>{
     axios.get(minUrl).then((res) => {
       setMinData(res?.data);
     });
 
+  }
+
+  useEffect(() => {
+
+    amountRef.current = fromAmount;
+    cc1.current = selectedCC.currencies[0];
+    cc2.current = selectedCC.currencies[1];
+    net1.current = selectedCC.network[0];
+    net2.current = selectedCC.network[1];
+
+      fetchAmount( amountRef.current ,cc1.current ,cc2.current ,net1.current ,net2.current);
+
+      setInterval(() => {
+        axios
+        .get(
+          `https://bamanchange.com/exchange/api/estimated-amount?fromCurrency=${cc1.current}&toCurrency=${cc2.current}&fromAmount=${amountRef.current}&fromNetwork=${net1.current}&toNetwork=${net2.current}&flow=standard`
+        )
+        .then((res) => {
+          setToAmount(res?.data.toAmount);
+          // console.log(cc1.current);
+        });
+      }, 20000);
+
+
+    getMinAmount();
+    
+    
     axios
       .get(checkUrl)
       .then((res) => {
@@ -162,7 +188,7 @@ export default function Tradecard(props) {
 
     // console.log(minData.maxAmount)
 
-    if (minData.maxAmount) {
+    if (!minData.maxAmount) {
       if (fromAmount < minData.minAmount && fromAmount.length > 0) {
         setIsError(true);
       }
@@ -170,7 +196,7 @@ export default function Tradecard(props) {
         setIsError(false);
       }
     }
-    if (!minData.maxAmount) {
+    if (minData.maxAmount) {
       if (
         fromAmount < minData.minAmount &&
         fromAmount.length > 0 &&
@@ -186,20 +212,17 @@ export default function Tradecard(props) {
       }
     }
 
-    // console.log(pay);
   }, [fromAmount, selectedCC.currencies[0], selectedCC.currencies[1]]);
+  
+  // console.log(data);
+  // useEffect(() => {
 
-  useEffect(() => {
-    setInterval(() => {
-      fetchAmount();
-    }, 20000);
-
-    // setInterval(() => {
-    //   setProgress((prevProgress) =>
-    //     prevProgress >= 100 ? 0 : prevProgress + 10
-    //   );
-    // }, 500);
-  }, [fromAmount]);
+  //   // setInterval(() => {
+  //   //   setProgress((prevProgress) =>
+  //   //     prevProgress >= 100 ? 0 : prevProgress + 10
+  //   //   );
+  //   // }, 500);
+  // }, [fromAmount]);
 
   const [payIn, setPayIn] = useState();
 
@@ -207,7 +230,7 @@ export default function Tradecard(props) {
 
   // console.log("fjsldfjskdfjlskfjskfjlsdfjlsfjlsfjlsfj")
 
-  // console.log(toAmount?.toAmount);
+  // console.log(toAmount);
 
   // console.log(selectedCC.toAmount);
 
@@ -257,7 +280,7 @@ export default function Tradecard(props) {
         // isLoading,
         // error,
         selectedCC,
-        fromAmount,
+        toAmount,
         fetchAmount,
 
         // post,
@@ -266,6 +289,7 @@ export default function Tradecard(props) {
         payIn,
         setPayIn,
         fromAmount,
+        getMinAmount,
       }}
     >
       <Box sx={cardBox}>
@@ -402,7 +426,7 @@ export default function Tradecard(props) {
               width="100%"
               fontSize="1.2em"
               height={50}
-              disabled={!checkData[0]?.flow.standard}
+              disabled={!checkData[0]?.flow.standard || !toAmount}
             />
           </Grid>
           {open === 2 ? (

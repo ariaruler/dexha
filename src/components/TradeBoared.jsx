@@ -13,15 +13,6 @@ export default function TradeBoared(props) {
   const { selectedCC , toAmount ,fromAmount}  = useContext(UserContext);
 
 
-  // console.log(toAmount)
-
-  // useEffect(() => {
-
-
-  //   // console.log(pay);
-  // }, [selectedCC]);
-
-
 
   return (
     <DialogContent
@@ -67,6 +58,15 @@ export default function TradeBoared(props) {
             >
               <Typography variant="h5" component="h2">
               {selectedCC.currencies[0] + " " +  fromAmount }
+              </Typography>
+            </Grid>
+            <Grid
+              sx={{ display: "flex", justifyContent: "center" ,padding: 1 ,}}
+              item
+              xs={12}
+            >
+              <Typography  component="h2">
+              {" بر روی شبکه " + selectedCC.network[0]  }
               </Typography>
             </Grid>
             <Grid
@@ -123,6 +123,15 @@ export default function TradeBoared(props) {
             >
               <Typography variant="h5" component="h2">
                 {selectedCC.currencies[1] + " " + toAmount  }
+              </Typography>
+              </Grid>
+            <Grid
+              sx={{ display: "flex", justifyContent: "center" }}
+              item
+              xs={12}
+            >
+              <Typography  component="h2">
+                {" بر روی شبکه " +  selectedCC.network[1]}
               </Typography>
             </Grid>
             <Grid

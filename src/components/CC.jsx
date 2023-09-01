@@ -39,13 +39,13 @@ const AccordionDetails = styled(MuiAccordionDetails)(({ theme }) => ({
 
 export default function CC(props) {
 
-  console.log("kkkkkkkkkkkk");
+  // console.log("kkkkkkkkkkkk");
   const { data , isLoading , error } = useContext(UserContext);
   const theme = useTheme();
 
   const [comments, setComments] = useState([]);
 
-  const { selectedCC, fetchAmount } = useContext(UserContext);
+  const { selectedCC, fetchAmount , getMinAmount} = useContext(UserContext);
 
   const [currencies, setCurrencies] = useState("");
 
@@ -66,8 +66,20 @@ export default function CC(props) {
       },10
       )
     }
+
+    // console.log(x);
+
       
   }, [x]);
+
+
+  useEffect(() => {
+    return ( ()=>{
+      // fetchAmount();
+      // console.log("qqqqqqqqqqqqqqqqqqqq");
+      getMinAmount();
+    } )
+  }, []);
   
   
 
@@ -122,7 +134,7 @@ export default function CC(props) {
               <Button
                 key={j}
                 onClick={() => {
-                  selectedCC.putCC(props.id, x.ticker, y, x.image[j]);
+                  selectedCC.putCC(props.id, x.ticker, y, x.image[j] , x.hasExternalId[j]);
                   fetchAmount();
                 }}
                 variant="outlined"
