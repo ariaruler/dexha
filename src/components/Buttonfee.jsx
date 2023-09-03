@@ -14,13 +14,16 @@ import TableRow from "@mui/material/TableRow";
 
 import { useContext, useEffect } from "react";
 import { UserContext } from "./TradeCard";
+import { Typography } from "@mui/material";
 
 export default function Buttonfee({ inputHieght, bigbuttonBorderRadius }) {
 
   const {
+    selectedCC,
     speed,
     depositFee,
     withdrawalFee,
+    ratio,
   } = useContext(UserContext);
 
   const theme = useTheme();
@@ -58,7 +61,7 @@ export default function Buttonfee({ inputHieght, bigbuttonBorderRadius }) {
         // expandIcon={<ExpandMoreIcon />}
         sx={feeButton}
       >
-        <div>1DAI = 0.0005333497 ETH</div>
+         <Typography sx={{ textTransform: "uppercase" }}> {'1' +  selectedCC.currencies[0]  + '='  + ratio +  selectedCC.currencies[1]}</Typography>
         <div>0.17%</div>
       </MuiAccordionSummary>
       <MuiAccordionDetails

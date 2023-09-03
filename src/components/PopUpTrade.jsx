@@ -110,7 +110,6 @@ AirbnbThumbComponent.propTypes = {
 };
 
 export default function PopUpTrade(props) {
-  // console.log("kkkkkkkkkkkk");
   const [open2, setOpen2] = useState(-1);
 
   const handleClickOpen = (id) => {
@@ -123,7 +122,6 @@ export default function PopUpTrade(props) {
     setOpen2(-1);
   };
 
-  const [step, setStep] = useState(0);
   const theme = useTheme();
   const Dialogstyle = {
     "& .MuiPaper-root": {
@@ -139,6 +137,7 @@ export default function PopUpTrade(props) {
   const [status, setStatus] = useState();
 
   const handleClose = () => {
+    getStatus();
     props.onClose(props.selectedValue);
     setStep(0);
     // clearData();
@@ -158,12 +157,14 @@ export default function PopUpTrade(props) {
 
   const {
     selectedCC,
-
+    fetchAmount,
     payIn,
     setPayIn,
     payId,
     setPayId,
     fromAmount,
+    step,
+    setStep,
   } = useContext(UserContext);
 
   const [exteraId, setExteraId] = useState();
@@ -176,16 +177,16 @@ export default function PopUpTrade(props) {
 
   const [data1, setData1] = useState();
 
-  // console.log(data1);
+  const payIdRef = useRef();
 
   const checkData = async (data, amount) => {
-    console.log(data);
-    console.log(amount);
+    // console.log(data);
+    // console.log(amount);
     const res = await fetch(
       `https://bamanchange.com/exchange/api/validate-address?currency=${amount}&address=${data}`
     );
     const res_1 = await res.json();
-    console.log(res_1);
+    // console.log(res_1);
     return res_1;
   };
   useEffect(() => {
@@ -211,7 +212,7 @@ export default function PopUpTrade(props) {
       payoutExtraId: exteraId,
       refundExtraId: exteraId2,
     };
-    console.log(userToPost);
+    // console.log(userToPost);
 
     const res = await axios
       .post("https://bamanchange.com/exchange/api/create", userToPost)
@@ -224,23 +225,39 @@ export default function PopUpTrade(props) {
   };
 
   const getStatus = (x) => {
-    setInterval(() => {
-      axios
-        .get(`https://bamanchange.com/exchange/api/by-id?id=${x}`)
-        .then((res) => {
-          if (res?.data.status) {
-            // console.log(res?.data.status);
-            setStatus(res);
-          }
-        });
-    }, 5000);
+    // payIdRef.current = x;
+    // console.log(x);
+
+    const getStatusInterval = setInterval(() => {
+      // console.log(payIdRef.current);
+      if (x) {
+        axios
+          .get(`https://bamanchange.com/exchange/api/by-id?id=${x}`)
+          .then((res) => {
+            if (res?.data.status) {
+              // console.log(res?.data.status);
+              setStatus(res);
+            }
+          });
+      }
+    }, 2000);
+
+    if (!x) {
+      console.log('kkkkkkkkkkkkkkkkk');
+      clearInterval(getStatusInterval);
+    }
   };
 
   useEffect(() => {
-    getStatus(payId);
+    // console.log(payId);
+    if (payId) {
+      getStatus(payId);
+    }
+
+    // return ()=>{setPayId()}
   }, [payId]);
 
-  console.log(payIn);
+  // console.log(payIn);
 
   const [sliderValue, setSliderValue] = useState(0);
 
@@ -395,7 +412,6 @@ export default function PopUpTrade(props) {
                     // console.log(check2)
                     if (check1 && 1) {
                       setStep(step + 1);
-                      post();
                     }
                   }}
                   sx={{ backgroundColor: theme.palette.primary.main }}
@@ -489,9 +505,9 @@ export default function PopUpTrade(props) {
                 <DialogActions
                   onClick={() => {
                     setStep(step + 1);
-
+                    post();
                     // console.log(payId);
-                    getStatus(payId);
+
                     // console.log(status);
                   }}
                   sx={{ backgroundColor: theme.palette.primary.main }}
@@ -524,6 +540,7 @@ export default function PopUpTrade(props) {
                   header="تائید"
                   previosStep={previosStep}
                   handleClose={handleClose}
+                  displayNone={true}
                 />
                 <DialogContent sx={{ padding: "2px 2em" }}>
                   <Grid

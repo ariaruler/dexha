@@ -54,16 +54,16 @@ export default function Tradecard(props) {
         // return res.data
         setData(manage(res.data));
       })
-      .catch(error => {
-        axios
-        .get(
-          `https://api.bamanchange.com/v2/exchange/currencies?active=true&flow=standard&buy=true&sell=true`
-        )
-        .then((res) => {
-          // return res.data
-          setData(manage(res.data));
-        })
-      });
+      // .catch((error) => {
+      //   axios
+      //     .get(
+      //       `https://api.bamanchange.com/v2/exchange/currencies?active=true&flow=standard&buy=true&sell=true`
+      //     )
+      //     .then((res) => {
+      //       // return res.data
+      //       setData(manage(res.data));
+      //     });
+      // });
   }, []);
 
   // setData(fetch(data))
@@ -88,6 +88,8 @@ export default function Tradecard(props) {
   const net2 = useRef("eth");
 
   const flowRef = useRef();
+
+  const payIdRef = useRef();
 
   const [fromAmount, setFromAmount] = useState(1);
 
@@ -128,36 +130,39 @@ export default function Tradecard(props) {
     },
   });
 
-  // useEffect(() => {
-
-  // }, [fromAmount, selectedCC.currencies[0], selectedCC.currencies[1]]);
-
-  const [flow, setFlow] = useState('standard');
+  const [flow, setFlow] = useState("standard");
 
   const [toAmount, setToAmount] = useState();
 
   const [speed, setSpeed] = useState();
-  
+
   const [depositFee, setDepositFee] = useState();
-  
+
   const [withdrawalFee, setWithdrawalFee] = useState();
 
-  const [minData, setMinData] = useState([]);
+  const [minData, setMinData] = useState();
 
-  const [maxData, setMaxData] = useState([]);
+  const [maxData, setMaxData] = useState();
 
   const [checkData, setCheckData] = useState([]);
 
   const [isError, setIsError] = useState("");
 
+  const [payIn, setPayIn] = useState();
+
+  const [payId, setPayId] = useState();
+
+  const [step, setStep] = useState(0);
+
+  const [ratio, setRatio] = useState();
+
   // console.log(flow);
 
-  
   const checkUrl = `https://bamanchange.com/exchange/api/available-pairs?fromCurrency=${selectedCC.currencies[0]}&toCurrency=${selectedCC.currencies[1]}&fromNetwork=${selectedCC.network[0]}&toNetwork=${selectedCC.network[1]}&flow=`;
 
   const amountUrl = `https://bamanchange.com/exchange/api/estimated-amount?fromCurrency=${selectedCC.currencies[0]}&toCurrency=${selectedCC.currencies[1]}&fromAmount=${fromAmount}&fromNetwork=${selectedCC.network[0]}&toNetwork=${selectedCC.network[1]}&flow=${flow}`;
 
-  const fetchAmount = (amountRef ,cc1 ,cc2 ,net1,net2 ,flow) => {
+  const fetchAmount = (amountRef, cc1, cc2, net1, net2, flow) => {
     axios
       .get(
         `https://bamanchange.com/exchange/api/estimated-amount?fromCurrency=${cc1}&toCurrency=${cc2}&fromAmount=${amountRef}&fromNetwork=${net1}&toNetwork=${net2}&flow=${flow}`
@@ -169,110 +174,138 @@ export default function Tradecard(props) {
         setWithdrawalFee(res?.data.withdrawalFee);
         // console.log(cc1.current);
       })
-      .catch(error => {
-        axios
-        .get(
-          `https://bamanchange.com/exchange/api/estimated-amount?fromCurrency=${cc1}&toCurrency=${cc2}&fromAmount=${amountRef}&fromNetwork=${net1}&toNetwork=${net2}&flow=${flow}`
-        )
-        .then((res) => {
-          setToAmount(res?.data.toAmount);
-          setSpeed(res?.data.transactionSpeedForecast);
-          setDepositFee(res?.data.depositFee);
-          setWithdrawalFee(res?.data.withdrawalFee);
-          // console.log(cc1.current);
-        })
-      });
-
+      // .catch((error) => {
+      //   axios
+      //     .get(
+      //       `https://bamanchange.com/exchange/api/estimated-amount?fromCurrency=${cc1}&toCurrency=${cc2}&fromAmount=${amountRef}&fromNetwork=${net1}&toNetwork=${net2}&flow=${flow}`
+      //     )
+      //     .then((res) => {
+      //       setToAmount(res?.data.toAmount);
+      //       setSpeed(res?.data.transactionSpeedForecast);
+      //       setDepositFee(res?.data.depositFee);
+      //       setWithdrawalFee(res?.data.withdrawalFee);
+      //       // console.log(cc1.current);
+      //     });
+      // });
   };
 
-  const getMinAmount = (cc1 ,cc2 ,net1,net2)=>{
-
-    const minUrl = `https://bamanchange.com/exchange/api/range?fromCurrency=${cc1}&toCurrency=${cc2}&fromNetwork=${net1}&toNetwork=${net2}&flow=${flow}`;
-
-    axios.get(minUrl).then((res) => {
-      setMinData(res?.data.minAmount);
-      setMaxData(res?.data.maxAmount);
-    })
-    .catch(error => {
-      axios.get(minUrl).then((res) => {
+  const getMinAmount = (cc1, cc2, net1, net2, flow) => {
+    let minUrl = `https://bamanchange.com/exchange/api/range?fromCurrency=${cc1}&toCurrency=${cc2}&fromNetwork=${net1}&toNetwork=${net2}&flow=${flow}`;
+    // if (flow === "standard") {
+    //   minUrl = 
+    // }
+  
+    // if (flow === "fixed-rate") {
+    //   minUrl = `https://bamanchange.com/exchange/api/min-amount?fromCurrency=${cc1}&toCurrency=${cc2}&fromNetwork=${net1}&toNetwork=${net2}&flow=${flow}`;
+    // }
+    axios
+      .get(minUrl)
+      .then((res) => {
         setMinData(res?.data.minAmount);
+        console.log(res?.data.minAmount);
         setMaxData(res?.data.maxAmount);
       })
-    });
-
-  }
+      // .catch((error) => {
+      //   axios.get(minUrl).then((res) => {
+      //     setMinData(res?.data.minAmount);
+      //     setMaxData(res?.data.maxAmount);
+      //   });
+      // });
+  };
+  // console.log(step);
 
   useEffect(() => {
-
-
     amountRef.current = fromAmount;
     cc1.current = selectedCC.currencies[0];
     cc2.current = selectedCC.currencies[1];
     net1.current = selectedCC.network[0];
     net2.current = selectedCC.network[1];
     flowRef.current = flow;
+    payIdRef.current = payId;
 
+    fetchAmount(
+      fromAmount,
+      selectedCC.currencies[0],
+      selectedCC.currencies[1],
+      selectedCC.network[0],
+      selectedCC.network[1],
+      flow
+    );
 
-      fetchAmount( fromAmount ,selectedCC.currencies[0] ,selectedCC.currencies[1] ,selectedCC.network[0] ,selectedCC.network[1] ,flow);
-
-      setInterval(() => {
+    const fetchAmountInterval = setInterval(() => {
+      // console.log(payIdRef.current);
+      if (!payIdRef.current) {
         axios
-        .get(
-          `https://bamanchange.com/exchange/api/estimated-amount?fromCurrency=${cc1.current}&toCurrency=${cc2.current}&fromAmount=${amountRef.current}&fromNetwork=${net1.current}&toNetwork=${net2.current}&flow=${flowRef.current}`
-        )
-        .then((res) => {
-          setToAmount(res?.data.toAmount);
-        })
-        .catch(error => {
-          axios
           .get(
             `https://bamanchange.com/exchange/api/estimated-amount?fromCurrency=${cc1.current}&toCurrency=${cc2.current}&fromAmount=${amountRef.current}&fromNetwork=${net1.current}&toNetwork=${net2.current}&flow=${flowRef.current}`
           )
           .then((res) => {
             setToAmount(res?.data.toAmount);
           })
-        });
-        setProgress((prevProgress) => (prevProgress >= 100 ? 0 : prevProgress + 100));
-      }, 20000);
+          // .catch((error) => {
+          //   axios
+          //     .get(
+          //       `https://bamanchange.com/exchange/api/estimated-amount?fromCurrency=${cc1.current}&toCurrency=${cc2.current}&fromAmount=${amountRef.current}&fromNetwork=${net1.current}&toNetwork=${net2.current}&flow=${flowRef.current}`
+          //     )
+          //     .then((res) => {
+          //       setToAmount(res?.data.toAmount);
+          //     });
+          // });
+        setProgress((prevProgress) =>
+          prevProgress >= 100 ? 0 : prevProgress + 100
+        );
+      }
+    }, 5000);
 
-      // setInterval(() => {
-      //   setProgress((prevProgress) => (prevProgress >= 100 ? 0 : prevProgress + 10));
-      // }, 2000);
 
+    getMinAmount(cc1.current, cc2.current, net1.current, net2.current, flow);
 
-    getMinAmount(cc1.current ,cc2.current ,net1.current ,net2.current);
-
-    
     axios
       .get(checkUrl)
       .then((res) => {
         setCheckData(res?.data);
       })
-      .catch((err) => {});
+      // .catch((error) => {
+      //   axios.get(checkUrl).then((res) => {
+      //     setCheckData(res?.data);
+      //   });
+      // });
 
-      
-      
-    }, [fromAmount, selectedCC ,flow]);
-    
-    useEffect(() => {
+    return () => {
+      clearInterval(fetchAmountInterval);
+    };
+  }, [fromAmount, selectedCC, flow, payId]);
 
-      // console.log(minData)
-      // console.log(fromAmount)
-      
-      if (!maxData) {
-        if (fromAmount < minData) {
-          setIsError(true);
-        }
-        if (fromAmount > minData || fromAmount.length < 1) {
-          setIsError(false);
-        }
+
+  // useEffect(() => {
+
+  //   axios
+  //   .get(
+  //     `https://bamanchange.com/exchange/api/estimated-amount?fromCurrency=${selectedCC.currencies[0]}&toCurrency=${selectedCC.currencies[1]}&fromAmount=1&fromNetwork=${selectedCC.network[0]}&toNetwork=${selectedCC.network[1]}&flow=${flow}`
+  //   )
+  //   .then((res) => {
+  //     setRatio(res?.data.toAmount);
+  //   })
+
+
+
+  // }, [ selectedCC, flow]);
+
+  useEffect(() => {
+    // console.log(minData)
+    // console.log(fromAmount)
+
+    if (!maxData) {
+      if (fromAmount < minData) {
+        setIsError(true);
       }
+      if (fromAmount > minData || fromAmount.length < 1) {
+        setIsError(false);
+      }
+    }
 
     if (maxData) {
-      if (
-        fromAmount < minData &&
-        fromAmount > minData
-      ) {
+      if (fromAmount < minData && fromAmount > minData) {
         setIsError(true);
       } else if (
         fromAmount > minData ||
@@ -282,12 +315,7 @@ export default function Tradecard(props) {
         setIsError(false);
       }
     }
-
-  }, [ minData ,fromAmount, selectedCC , flow]);
-
-  const [payIn, setPayIn] = useState();
-
-  const [payId, setPayId] = useState();
+  }, [minData, fromAmount, selectedCC, flow]);
 
   // console.log("fjsldfjskdfjlskfjskfjlsdfjlsfjlsfjlsfj")
 
@@ -328,17 +356,17 @@ export default function Tradecard(props) {
   };
 
   const [active, setActive] = useState(0);
-  const changeColor = (id , index) => {
+  const changeColor = (id, index) => {
     setActive(id);
-    if(index === 0){
-      setFlow('standard')
-    };
-    if(index === 1){
-      setFlow('fixed-rate')
-    };
+    if (index === 0) {
+      setFlow("standard");
+    }
+    if (index === 1) {
+      setFlow("fixed-rate");
+    }
   };
 
-  console.log(flow);
+  // console.log(minData);
 
   return (
     <UserContext.Provider
@@ -360,6 +388,9 @@ export default function Tradecard(props) {
         speed,
         depositFee,
         withdrawalFee,
+        step,
+        setStep,
+        ratio,
       }}
     >
       <Box sx={cardBox}>
@@ -404,9 +435,7 @@ export default function Tradecard(props) {
               }}
               error={isError}
               label={
-                isError  
-                  ? `حداقل میزان معامله ${minData} می باشد`
-                  : "پرداخت"
+                isError ? `حداقل میزان معامله ${minData} می باشد` : "پرداخت"
               }
               type="number"
               height={inputHieght}
@@ -466,13 +495,13 @@ export default function Tradecard(props) {
           ) : (
             <></>
           )}
-                    {open === 3 ? (
-          <PopUpSetting
-            id={3}
-            borderRadius={props.borderRadius}
-            open={open}
-            onClose={handleClose}
-          />
+          {open === 3 ? (
+            <PopUpSetting
+              id={3}
+              borderRadius={props.borderRadius}
+              open={open}
+              onClose={handleClose}
+            />
           ) : (
             <></>
           )}
@@ -500,19 +529,19 @@ export default function Tradecard(props) {
             />
           </Grid>
           {open === 2 ? (
-          <PopUpTrade
-            toAmount={toAmount?.toAmount}
-            id={2}
-            borderRadius={props.borderRadius}
-            selectedValue={selectedValue}
-            open={open}
-            onClose={handleClose}
-          />
+            <PopUpTrade
+              toAmount={toAmount?.toAmount}
+              id={2}
+              borderRadius={props.borderRadius}
+              selectedValue={selectedValue}
+              open={open}
+              onClose={handleClose}
+            />
           ) : (
             <></>
           )}
           <Grid item xs={12}>
-            <Buttonfee inputHieght={inputHieght} />
+            <Buttonfee inputHieght={inputHieght}  />
           </Grid>
         </Grid>
       </Box>
