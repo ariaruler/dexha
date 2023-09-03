@@ -25,15 +25,15 @@ export default function AppTrade() {
     animate={{opacity : 1 , width : '100%'}}
     exit={{opacity : 0, width : 0}}
     >
-    <Container maxWidth="lg">
-      <Grid container spacing={2}  sx={{ justifyContent : 'center'}}>
-        <Grid item xs={4}>
+    <Container maxWidth="xs">
+      {/* <Grid container spacing={2}  sx={{ justifyContent : 'center'}}>
+        <Grid item xs={4}> */}
         <Tradecard borderRadius={theme.shape.borderRadius['2']} />
-        </Grid>
+        {/* </Grid> */}
         {/* <Grid item xs={8}>
           <Item>xs=8</Item>
         </Grid> */}
-      </Grid>
+      {/* </Grid> */}
     </Container>
     </motion.div>
   );

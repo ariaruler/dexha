@@ -12,7 +12,17 @@ import TableCell from "@mui/material/TableCell";
 import TableContainer from "@mui/material/TableContainer";
 import TableRow from "@mui/material/TableRow";
 
+import { useContext, useEffect } from "react";
+import { UserContext } from "./TradeCard";
+
 export default function Buttonfee({ inputHieght, bigbuttonBorderRadius }) {
+
+  const {
+    speed,
+    depositFee,
+    withdrawalFee,
+  } = useContext(UserContext);
+
   const theme = useTheme();
 
   const feeButton = {
@@ -59,34 +69,34 @@ export default function Buttonfee({ inputHieght, bigbuttonBorderRadius }) {
             <TableBody>
               <TableRow>
                 <TableCell sx={{ padding: 0.5, border: "none" }}>
-                  منبع تبادل
+                  سرعت انتقال
                 </TableCell>
                 <TableCell sx={{ padding: 0.5, border: "none" }} align="right">
-                  100%
+                 {speed}
                 </TableCell>
               </TableRow>
               <TableRow>
                 <TableCell sx={{ padding: 0.5, border: "none" }}>
-                  کارمزد تبادل
+                  کارمزد واریز
                 </TableCell>
                 <TableCell sx={{ padding: 0.5, border: "none" }} align="right">
-                  0.09%
+                {depositFee}
                 </TableCell>
               </TableRow>
               <TableRow>
                 <TableCell sx={{ padding: 0.5, border: "none" }}>
-                  کمترین میزان تبادل
+                  کارمزد برداشت
                 </TableCell>
                 <TableCell sx={{ padding: 0.5, border: "none" }} align="right">
-                  1865.3961 DAI
+                {withdrawalFee}
                 </TableCell>
               </TableRow>
               <TableRow>
                 <TableCell sx={{ padding: 0.5, border: "none" }}>
-                  فی شبکه
+                  کارمزد صرافی
                 </TableCell>
                 <TableCell sx={{ padding: 0.5, border: "none" }} align="right">
-                  $4.94
+                  0.5%
                 </TableCell>
               </TableRow>
             </TableBody>

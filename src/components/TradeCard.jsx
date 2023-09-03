@@ -23,7 +23,7 @@ import { Button, CircularProgress } from "@mui/material";
 import axios from "axios";
 
 import { useQuery } from "@tanstack/react-query";
-import manage from "./manage";
+import manage from "../functions/manage";
 
 const inputHieght = 54;
 
@@ -32,10 +32,10 @@ const pages = [
     content: "نرخ استاندارد",
   },
   {
-    content: "بهترین قیمت",
+    content: "نرخ ثابت",
   },
   {
-    content: "نرخ ثابت",
+    content: "بهترین قیمت",
   },
 ];
 export const UserContext = createContext();
@@ -53,6 +53,16 @@ export default function Tradecard(props) {
       .then((res) => {
         // return res.data
         setData(manage(res.data));
+      })
+      .catch(error => {
+        axios
+        .get(
+          `https://api.bamanchange.com/v2/exchange/currencies?active=true&flow=standard&buy=true&sell=true`
+        )
+        .then((res) => {
+          // return res.data
+          setData(manage(res.data));
+        })
       });
   }, []);
 
@@ -76,6 +86,8 @@ export default function Tradecard(props) {
   const net1 = useRef("btc");
 
   const net2 = useRef("eth");
+
+  const flowRef = useRef();
 
   const [fromAmount, setFromAmount] = useState(1);
 
@@ -120,64 +132,116 @@ export default function Tradecard(props) {
 
   // }, [fromAmount, selectedCC.currencies[0], selectedCC.currencies[1]]);
 
+  const [flow, setFlow] = useState('standard');
+
   const [toAmount, setToAmount] = useState();
 
+  const [speed, setSpeed] = useState();
+  
+  const [depositFee, setDepositFee] = useState();
+  
+  const [withdrawalFee, setWithdrawalFee] = useState();
+
   const [minData, setMinData] = useState([]);
+
+  const [maxData, setMaxData] = useState([]);
 
   const [checkData, setCheckData] = useState([]);
 
   const [isError, setIsError] = useState("");
 
-  const minUrl = `https://bamanchange.com/exchange/api/range?fromCurrency=${selectedCC.currencies[0]}&toCurrency=${selectedCC.currencies[1]}&fromNetwork=${selectedCC.network[0]}&toNetwork=${selectedCC.network[1]}&flow=standard`;
+  // console.log(flow);
 
+  
   const checkUrl = `https://bamanchange.com/exchange/api/available-pairs?fromCurrency=${selectedCC.currencies[0]}&toCurrency=${selectedCC.currencies[1]}&fromNetwork=${selectedCC.network[0]}&toNetwork=${selectedCC.network[1]}&flow=`;
 
-  const amountUrl = `https://bamanchange.com/exchange/api/estimated-amount?fromCurrency=${selectedCC.currencies[0]}&toCurrency=${selectedCC.currencies[1]}&fromAmount=${fromAmount}&fromNetwork=${selectedCC.network[0]}&toNetwork=${selectedCC.network[1]}&flow=standard`;
+  const amountUrl = `https://bamanchange.com/exchange/api/estimated-amount?fromCurrency=${selectedCC.currencies[0]}&toCurrency=${selectedCC.currencies[1]}&fromAmount=${fromAmount}&fromNetwork=${selectedCC.network[0]}&toNetwork=${selectedCC.network[1]}&flow=${flow}`;
 
-  const fetchAmount = (amountRef ,cc1 ,cc2 ,net1,net2) => {
+  const fetchAmount = (amountRef ,cc1 ,cc2 ,net1,net2 ,flow) => {
     axios
       .get(
-        `https://bamanchange.com/exchange/api/estimated-amount?fromCurrency=${cc1}&toCurrency=${cc2}&fromAmount=${amountRef}&fromNetwork=${net1}&toNetwork=${net2}&flow=standard`
+        `https://bamanchange.com/exchange/api/estimated-amount?fromCurrency=${cc1}&toCurrency=${cc2}&fromAmount=${amountRef}&fromNetwork=${net1}&toNetwork=${net2}&flow=${flow}`
       )
       .then((res) => {
         setToAmount(res?.data.toAmount);
+        setSpeed(res?.data.transactionSpeedForecast);
+        setDepositFee(res?.data.depositFee);
+        setWithdrawalFee(res?.data.withdrawalFee);
         // console.log(cc1.current);
+      })
+      .catch(error => {
+        axios
+        .get(
+          `https://bamanchange.com/exchange/api/estimated-amount?fromCurrency=${cc1}&toCurrency=${cc2}&fromAmount=${amountRef}&fromNetwork=${net1}&toNetwork=${net2}&flow=${flow}`
+        )
+        .then((res) => {
+          setToAmount(res?.data.toAmount);
+          setSpeed(res?.data.transactionSpeedForecast);
+          setDepositFee(res?.data.depositFee);
+          setWithdrawalFee(res?.data.withdrawalFee);
+          // console.log(cc1.current);
+        })
       });
-
 
   };
 
-  const getMinAmount = ()=>{
+  const getMinAmount = (cc1 ,cc2 ,net1,net2)=>{
+
+    const minUrl = `https://bamanchange.com/exchange/api/range?fromCurrency=${cc1}&toCurrency=${cc2}&fromNetwork=${net1}&toNetwork=${net2}&flow=${flow}`;
+
     axios.get(minUrl).then((res) => {
-      setMinData(res?.data);
+      setMinData(res?.data.minAmount);
+      setMaxData(res?.data.maxAmount);
+    })
+    .catch(error => {
+      axios.get(minUrl).then((res) => {
+        setMinData(res?.data.minAmount);
+        setMaxData(res?.data.maxAmount);
+      })
     });
 
   }
 
   useEffect(() => {
 
+
     amountRef.current = fromAmount;
     cc1.current = selectedCC.currencies[0];
     cc2.current = selectedCC.currencies[1];
     net1.current = selectedCC.network[0];
     net2.current = selectedCC.network[1];
+    flowRef.current = flow;
 
-      fetchAmount( amountRef.current ,cc1.current ,cc2.current ,net1.current ,net2.current);
+
+      fetchAmount( fromAmount ,selectedCC.currencies[0] ,selectedCC.currencies[1] ,selectedCC.network[0] ,selectedCC.network[1] ,flow);
 
       setInterval(() => {
         axios
         .get(
-          `https://bamanchange.com/exchange/api/estimated-amount?fromCurrency=${cc1.current}&toCurrency=${cc2.current}&fromAmount=${amountRef.current}&fromNetwork=${net1.current}&toNetwork=${net2.current}&flow=standard`
+          `https://bamanchange.com/exchange/api/estimated-amount?fromCurrency=${cc1.current}&toCurrency=${cc2.current}&fromAmount=${amountRef.current}&fromNetwork=${net1.current}&toNetwork=${net2.current}&flow=${flowRef.current}`
         )
         .then((res) => {
           setToAmount(res?.data.toAmount);
-          // console.log(cc1.current);
+        })
+        .catch(error => {
+          axios
+          .get(
+            `https://bamanchange.com/exchange/api/estimated-amount?fromCurrency=${cc1.current}&toCurrency=${cc2.current}&fromAmount=${amountRef.current}&fromNetwork=${net1.current}&toNetwork=${net2.current}&flow=${flowRef.current}`
+          )
+          .then((res) => {
+            setToAmount(res?.data.toAmount);
+          })
         });
+        setProgress((prevProgress) => (prevProgress >= 100 ? 0 : prevProgress + 100));
       }, 20000);
 
+      // setInterval(() => {
+      //   setProgress((prevProgress) => (prevProgress >= 100 ? 0 : prevProgress + 10));
+      // }, 2000);
 
-    getMinAmount();
-    
+
+    getMinAmount(cc1.current ,cc2.current ,net1.current ,net2.current);
+
     
     axios
       .get(checkUrl)
@@ -186,43 +250,40 @@ export default function Tradecard(props) {
       })
       .catch((err) => {});
 
-    // console.log(minData.maxAmount)
+      
+      
+    }, [fromAmount, selectedCC ,flow]);
+    
+    useEffect(() => {
 
-    if (!minData.maxAmount) {
-      if (fromAmount < minData.minAmount && fromAmount.length > 0) {
-        setIsError(true);
+      // console.log(minData)
+      // console.log(fromAmount)
+      
+      if (!maxData) {
+        if (fromAmount < minData) {
+          setIsError(true);
+        }
+        if (fromAmount > minData || fromAmount.length < 1) {
+          setIsError(false);
+        }
       }
-      if (fromAmount > minData.minAmount || fromAmount.length < 1) {
-        setIsError(false);
-      }
-    }
-    if (minData.maxAmount) {
+
+    if (maxData) {
       if (
-        fromAmount < minData.minAmount &&
-        fromAmount.length > 0 &&
-        fromAmount > minData.maxAmount
+        fromAmount < minData &&
+        fromAmount > minData
       ) {
         setIsError(true);
       } else if (
-        fromAmount > minData.minAmount ||
+        fromAmount > minData ||
         fromAmount.length < 1 ||
-        fromAmount < minData.maxAmount
+        fromAmount < minData
       ) {
         setIsError(false);
       }
     }
 
-  }, [fromAmount, selectedCC.currencies[0], selectedCC.currencies[1]]);
-  
-  // console.log(data);
-  // useEffect(() => {
-
-  //   // setInterval(() => {
-  //   //   setProgress((prevProgress) =>
-  //   //     prevProgress >= 100 ? 0 : prevProgress + 10
-  //   //   );
-  //   // }, 500);
-  // }, [fromAmount]);
+  }, [ minData ,fromAmount, selectedCC , flow]);
 
   const [payIn, setPayIn] = useState();
 
@@ -267,11 +328,17 @@ export default function Tradecard(props) {
   };
 
   const [active, setActive] = useState(0);
-  const changeColor = (id) => {
+  const changeColor = (id , index) => {
     setActive(id);
+    if(index === 0){
+      setFlow('standard')
+    };
+    if(index === 1){
+      setFlow('fixed-rate')
+    };
   };
 
-  // console.log(open);
+  console.log(flow);
 
   return (
     <UserContext.Provider
@@ -290,6 +357,9 @@ export default function Tradecard(props) {
         setPayIn,
         fromAmount,
         getMinAmount,
+        speed,
+        depositFee,
+        withdrawalFee,
       }}
     >
       <Box sx={cardBox}>
@@ -334,8 +404,8 @@ export default function Tradecard(props) {
               }}
               error={isError}
               label={
-                isError
-                  ? `حداقل میزان معامله ${minData.minAmount} می باشد`
+                isError  
+                  ? `حداقل میزان معامله ${minData} می باشد`
                   : "پرداخت"
               }
               type="number"
@@ -426,7 +496,7 @@ export default function Tradecard(props) {
               width="100%"
               fontSize="1.2em"
               height={50}
-              disabled={!checkData[0]?.flow.standard || !toAmount}
+              disabled={!checkData[0]?.flow.standard || !toAmount || isError}
             />
           </Grid>
           {open === 2 ? (

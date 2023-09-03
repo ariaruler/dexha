@@ -12,7 +12,7 @@ import { useTheme } from "@mui/material/styles";
 import Typography from "@mui/material/Typography";
 
 import InfiniteScroll from "react-infinite-scroller";
-import manage from "./manage";
+import manage from "../functions/manage";
 
 import { Box, Button } from "@mui/material";
 import { useQuery } from "@tanstack/react-query";

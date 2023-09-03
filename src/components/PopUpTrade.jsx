@@ -166,11 +166,11 @@ export default function PopUpTrade(props) {
     fromAmount,
   } = useContext(UserContext);
 
-  const [ externalId, setExternalId] = useState();
+  const [exteraId, setExteraId] = useState();
 
-  const [ externalId2, setExternalId2] = useState();
+  const [exteraId2, setExteraId2] = useState();
 
-  // const [ externalId2, setExternalId2] = useState();
+  const [payInExteraId, setPayInExteraId] = useState();
 
   const [data2, setData2] = useState();
 
@@ -190,9 +190,9 @@ export default function PopUpTrade(props) {
   };
   useEffect(() => {
     if (data1 || data2) {
-      // checkData(data1, selectedCC.network[0]).then((res) =>
-      //   setCheck2(res?.result)
-      // );
+      checkData(data1, selectedCC.network[0]).then((res) =>
+        setCheck2(res?.result)
+      );
       checkData(data2, selectedCC.network[1]).then((res) =>
         setCheck1(res?.result)
       );
@@ -208,8 +208,10 @@ export default function PopUpTrade(props) {
       fromAmount: fromAmount,
       address: data2,
       flow: "standard",
+      payoutExtraId: exteraId,
+      refundExtraId: exteraId2,
     };
-    // console.log(userToPost);
+    console.log(userToPost);
 
     const res = await axios
       .post("https://bamanchange.com/exchange/api/create", userToPost)
@@ -217,6 +219,7 @@ export default function PopUpTrade(props) {
     // console.log(res.data)
     // console.log(res.data.id)
     setPayIn(res.data.payinAddress);
+    setPayInExteraId(res.data.payinExtraId);
     setPayId(res.data.id);
   };
 
@@ -236,6 +239,8 @@ export default function PopUpTrade(props) {
   useEffect(() => {
     getStatus(payId);
   }, [payId]);
+
+  console.log(payIn);
 
   const [sliderValue, setSliderValue] = useState(0);
 
@@ -311,27 +316,14 @@ export default function PopUpTrade(props) {
                   {selectedCC.hasExternalId[0] ? (
                     <Grid item xs={12}>
                       <InputTrade
-                        value={externalId}
+                        value={exteraId}
                         onChange={(e) => {
-                          setExternalId(e.target.value);
+                          setExteraId(e.target.value);
                         }}
-                        error={!check1}
                         margin="1em auto"
-                        label="External_Id خود را وارید کنید"
+                        label="Memo خود را وارد کنید"
                         height={inputHieght}
                         borderRadius={bigbuttonBorderRadius}
-                        endAdornment={
-                          <QrCodeScannerIcon
-                            onClick={() => {
-                              handleClickOpen(0);
-                            }}
-                            sx={{
-                              "&:hover": {
-                                color: theme.palette.secondary.main,
-                              },
-                            }}
-                          />
-                        }
                       />
                     </Grid>
                   ) : (
@@ -365,27 +357,14 @@ export default function PopUpTrade(props) {
                   {selectedCC.hasExternalId[1] ? (
                     <Grid item xs={12}>
                       <InputTrade
-                        value={externalId2}
+                        value={exteraId2}
                         onChange={(e) => {
-                          setExternalId2(e.target.value);
+                          setExteraId2(e.target.value);
                         }}
-                        error={!check1}
                         margin="1em auto"
-                        label="External_Id خود را وارید کنید"
+                        label="Memo بازپرداخت خود را وارد کنید "
                         height={inputHieght}
                         borderRadius={bigbuttonBorderRadius}
-                        endAdornment={
-                          <QrCodeScannerIcon
-                            onClick={() => {
-                              handleClickOpen(0);
-                            }}
-                            sx={{
-                              "&:hover": {
-                                color: theme.palette.secondary.main,
-                              },
-                            }}
-                          />
-                        }
                       />
                     </Grid>
                   ) : (
@@ -398,16 +377,16 @@ export default function PopUpTrade(props) {
                   borderRadius={props.borderRadius}
                   open={open2}
                   onClose={handleClose2}
-                  data={data1}
-                  setData={setData1}
+                  data={data2}
+                  setData={setData2}
                 />
                 <PopUpQrScan
                   id={1}
                   borderRadius={props.borderRadius}
                   open={open2}
                   onClose={handleClose2}
-                  data={data2}
-                  setData={setData2}
+                  data={data1}
+                  setData={setData1}
                 />
 
                 <DialogActions
@@ -511,10 +490,9 @@ export default function PopUpTrade(props) {
                   onClick={() => {
                     setStep(step + 1);
 
-                    console.log(payId);
+                    // console.log(payId);
                     getStatus(payId);
-                    console.log(status);
-                    // .then((res => {return res}))
+                    // console.log(status);
                   }}
                   sx={{ backgroundColor: theme.palette.primary.main }}
                 >
@@ -575,6 +553,37 @@ export default function PopUpTrade(props) {
                       </QRcode>
                     </Box>
                   </Grid>
+
+                  <Grid
+                    item
+                    xs={12}
+                    sx={{
+                      padding: "1em 0 0 0",
+                      display: "flex",
+                      justifyContent: "center",
+                      alignItems: "center",
+                    }}
+                  >
+                    {payIn}
+                  </Grid>
+
+                  {payInExteraId ? (
+                    <Grid
+                      item
+                      xs={12}
+                      sx={{
+                        padding: "1em 0 0 0",
+                        display: "flex",
+                        justifyContent: "center",
+                        alignItems: "center",
+                      }}
+                    >
+                      {payInExteraId + "آدرس Memo"}
+                    </Grid>
+                  ) : (
+                    <></>
+                  )}
+
                   <Grid
                     item
                     xs={12}

@@ -16,7 +16,7 @@ export default function ButtonChooze(props) {
  };
 
   return (
-    <Button id={props.id} key={props.content} sx={ButtonStyle} onClick={() => props.changeColor(props.id)}>
+    <Button id={props.id} key={props.content} sx={ButtonStyle} onClick={() => {props.changeColor(props.id , props.id)}}>
         {props.content}
     </Button>
   );
