@@ -43,6 +43,7 @@ import PopUpQrScan from "./PopUpQrScan";
 import { useContext, useEffect } from "react";
 import { UserContext } from "./TradeCard";
 import axios from "axios";
+import axiosRetry from 'axios-retry';
 
 const inputHieght = 54;
 const bigbuttonBorderRadius = "8px";
@@ -156,6 +157,7 @@ export default function PopUpTrade(props) {
   };
 
   const {
+    endPoint,
     selectedCC,
     fetchAmount,
     payIn,
@@ -183,7 +185,7 @@ export default function PopUpTrade(props) {
     // console.log(data);
     // console.log(amount);
     const res = await fetch(
-      `https://bamanchange.com/exchange/api/validate-address?currency=${amount}&address=${data}`
+      `${endPoint}/exchange/api/validate-address?currency=${amount}&address=${data}`
     );
     const res_1 = await res.json();
     // console.log(res_1);
@@ -215,7 +217,7 @@ export default function PopUpTrade(props) {
     // console.log(userToPost);
 
     const res = await axios
-      .post("https://bamanchange.com/exchange/api/create", userToPost)
+      .post(`${endPoint}/exchange/api/create`, userToPost)
       .catch((error) => console.log("Error: ", error));
     // console.log(res.data)
     // console.log(res.data.id)
@@ -232,7 +234,7 @@ export default function PopUpTrade(props) {
       // console.log(payIdRef.current);
       if (x) {
         axios
-          .get(`https://bamanchange.com/exchange/api/by-id?id=${x}`)
+          .get(`${endPoint}/exchange/api/by-id?id=${x}`)
           .then((res) => {
             if (res?.data.status) {
               // console.log(res?.data.status);
@@ -280,6 +282,8 @@ export default function PopUpTrade(props) {
         break;
     }
   }, [status?.data.status]);
+
+  axiosRetry(axios, { retryDelay: axiosRetry.exponentialDelay ,  retries: 10000 });
 
   // console.log(selectedCC.hasExternalId[0]);
   // console.log(selectedCC.hasExternalId[1]);
@@ -667,6 +671,45 @@ export default function PopUpTrade(props) {
                     <LinearProgress variant="determinate" value={sliderValue} />
                     {status?.data.status}
                   </Grid>
+                </DialogContent>
+
+                <DialogActions
+
+                  sx={{ backgroundColor: theme.palette.background.paper }}
+                >
+                  <Grid
+                    item
+                    sx={{
+                      margin: 1,
+                      display: "flex",
+                      justifyContent: " center ",
+                    }}
+                    xs={12}
+                  >
+
+*
+                  </Grid>
+                </DialogActions>
+              </Dialog>
+            );
+            break;
+          case 3:
+            return (
+              <Dialog
+                sx={Dialogstyle}
+                maxWidth="xs"
+                fullWidth={true}
+                onClose={handleClose}
+                open={props.open === props.id}
+              >
+                <PopUpTitle
+                  header="تائید"
+                  previosStep={previosStep}
+                  handleClose={handleClose}
+                  displayNone={true}
+                />
+                <DialogContent sx={{ padding: "2px 2em" }}>
+
                 </DialogContent>
 
                 <DialogActions

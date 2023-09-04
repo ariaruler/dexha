@@ -55,14 +55,14 @@ export default function CC(props) {
 
   
   useEffect(() => {  
-    if( (x-70) < comments.length){
+    if( (x-1) < comments.length){
 
       setTimeout(()=>{
-        // console.log(data);
+        console.log(data);
         setComments(data.slice(0 , x) );
         
-        setX(prev => prev+10)
-        // console.log(x);
+        setX(prev => prev+1)
+        console.log(x);
       },10
       )
     }

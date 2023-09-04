@@ -21,11 +21,14 @@ import SettingsIcon from "@mui/icons-material/Settings";
 import PopUpSetting from "./PopUpSetting.";
 import { Button, CircularProgress } from "@mui/material";
 import axios from "axios";
+import axiosRetry from 'axios-retry';
 
 import { useQuery } from "@tanstack/react-query";
 import manage from "../functions/manage";
 
 const inputHieght = 54;
+
+const endPoint = 'https://dexha.io';
 
 const pages = [
   {
@@ -48,22 +51,13 @@ export default function Tradecard(props) {
   useEffect(() => {
     axios
       .get(
-        `https://api.bamanchange.com/v2/exchange/currencies?active=true&flow=standard&buy=true&sell=true`
+        `${endPoint}/exchange/api/currencies?raw=true&active=true&flow=standard&buy=true&sell=true`
       )
       .then((res) => {
         // return res.data
         setData(manage(res.data));
       })
-      // .catch((error) => {
-      //   axios
-      //     .get(
-      //       `https://api.bamanchange.com/v2/exchange/currencies?active=true&flow=standard&buy=true&sell=true`
-      //     )
-      //     .then((res) => {
-      //       // return res.data
-      //       setData(manage(res.data));
-      //     });
-      // });
+
   }, []);
 
   // setData(fetch(data))
@@ -96,8 +90,8 @@ export default function Tradecard(props) {
   const [selectedCC, setselecctedCC] = useState({
     currencies: ["btc", "eth"],
     currencyImg: [
-      "https://content-api.bamanchange.com/uploads/btc_1_527dc9ec3c.svg",
-      "https://content-api.bamanchange.com/uploads/eth_f4ebb54ec0.svg",
+      `https://content-api.dexha.io/uploads/btc_1_527dc9ec3c.svg`,
+      `https://content-api.dexha.io/uploads/eth_f4ebb54ec0.svg`,
     ],
     network: ["btc", "eth"],
     hasExternalId: [false, false],
@@ -158,14 +152,14 @@ export default function Tradecard(props) {
 
   // console.log(flow);
 
-  const checkUrl = `https://bamanchange.com/exchange/api/available-pairs?fromCurrency=${selectedCC.currencies[0]}&toCurrency=${selectedCC.currencies[1]}&fromNetwork=${selectedCC.network[0]}&toNetwork=${selectedCC.network[1]}&flow=`;
+  const checkUrl = `${endPoint}/exchange/api/available-pairs?fromCurrency=${selectedCC.currencies[0]}&toCurrency=${selectedCC.currencies[1]}&fromNetwork=${selectedCC.network[0]}&toNetwork=${selectedCC.network[1]}&flow=`;
 
-  const amountUrl = `https://bamanchange.com/exchange/api/estimated-amount?fromCurrency=${selectedCC.currencies[0]}&toCurrency=${selectedCC.currencies[1]}&fromAmount=${fromAmount}&fromNetwork=${selectedCC.network[0]}&toNetwork=${selectedCC.network[1]}&flow=${flow}`;
+  const amountUrl = `${endPoint}/exchange/api/estimated-amount?fromCurrency=${selectedCC.currencies[0]}&toCurrency=${selectedCC.currencies[1]}&fromAmount=${fromAmount}&fromNetwork=${selectedCC.network[0]}&toNetwork=${selectedCC.network[1]}&flow=${flow}`;
 
   const fetchAmount = (amountRef, cc1, cc2, net1, net2, flow) => {
     axios
       .get(
-        `https://bamanchange.com/exchange/api/estimated-amount?fromCurrency=${cc1}&toCurrency=${cc2}&fromAmount=${amountRef}&fromNetwork=${net1}&toNetwork=${net2}&flow=${flow}`
+        `${endPoint}/exchange/api/estimated-amount?fromCurrency=${cc1}&toCurrency=${cc2}&fromAmount=${amountRef}&fromNetwork=${net1}&toNetwork=${net2}&flow=${flow}`
       )
       .then((res) => {
         setToAmount(res?.data.toAmount);
@@ -174,43 +168,26 @@ export default function Tradecard(props) {
         setWithdrawalFee(res?.data.withdrawalFee);
         // console.log(cc1.current);
       })
-      // .catch((error) => {
-      //   axios
-      //     .get(
-      //       `https://bamanchange.com/exchange/api/estimated-amount?fromCurrency=${cc1}&toCurrency=${cc2}&fromAmount=${amountRef}&fromNetwork=${net1}&toNetwork=${net2}&flow=${flow}`
-      //     )
-      //     .then((res) => {
-      //       setToAmount(res?.data.toAmount);
-      //       setSpeed(res?.data.transactionSpeedForecast);
-      //       setDepositFee(res?.data.depositFee);
-      //       setWithdrawalFee(res?.data.withdrawalFee);
-      //       // console.log(cc1.current);
-      //     });
-      // });
+
   };
 
   const getMinAmount = (cc1, cc2, net1, net2, flow) => {
-    let minUrl = `https://bamanchange.com/exchange/api/range?fromCurrency=${cc1}&toCurrency=${cc2}&fromNetwork=${net1}&toNetwork=${net2}&flow=${flow}`;
-    // if (flow === "standard") {
-    //   minUrl = 
-    // }
+    let minUrl = `${endPoint}/exchange/api/range?fromCurrency=${cc1}&toCurrency=${cc2}&fromNetwork=${net1}&toNetwork=${net2}&flow=${flow}`;
+    if (flow === "standard") {
+      minUrl = `${endPoint}/exchange/api/range?fromCurrency=${cc1}&toCurrency=${cc2}&fromNetwork=${net1}&toNetwork=${net2}&flow=${flow}`;
+    }
   
-    // if (flow === "fixed-rate") {
-    //   minUrl = `https://bamanchange.com/exchange/api/min-amount?fromCurrency=${cc1}&toCurrency=${cc2}&fromNetwork=${net1}&toNetwork=${net2}&flow=${flow}`;
-    // }
+    if (flow === "fixed-rate") {
+      minUrl = `${endPoint}/exchange/api/min-amount?fromCurrency=${cc1}&toCurrency=${cc2}&fromNetwork=${net1}&toNetwork=${net2}&flow=${flow}`;
+    }
     axios
       .get(minUrl)
       .then((res) => {
         setMinData(res?.data.minAmount);
-        console.log(res?.data.minAmount);
+        // console.log(res?.data.minAmount);
         setMaxData(res?.data.maxAmount);
       })
-      // .catch((error) => {
-      //   axios.get(minUrl).then((res) => {
-      //     setMinData(res?.data.minAmount);
-      //     setMaxData(res?.data.maxAmount);
-      //   });
-      // });
+
   };
   // console.log(step);
 
@@ -237,20 +214,12 @@ export default function Tradecard(props) {
       if (!payIdRef.current) {
         axios
           .get(
-            `https://bamanchange.com/exchange/api/estimated-amount?fromCurrency=${cc1.current}&toCurrency=${cc2.current}&fromAmount=${amountRef.current}&fromNetwork=${net1.current}&toNetwork=${net2.current}&flow=${flowRef.current}`
+            `${endPoint}/exchange/api/estimated-amount?fromCurrency=${cc1.current}&toCurrency=${cc2.current}&fromAmount=${amountRef.current}&fromNetwork=${net1.current}&toNetwork=${net2.current}&flow=${flowRef.current}`
           )
           .then((res) => {
             setToAmount(res?.data.toAmount);
           })
-          // .catch((error) => {
-          //   axios
-          //     .get(
-          //       `https://bamanchange.com/exchange/api/estimated-amount?fromCurrency=${cc1.current}&toCurrency=${cc2.current}&fromAmount=${amountRef.current}&fromNetwork=${net1.current}&toNetwork=${net2.current}&flow=${flowRef.current}`
-          //     )
-          //     .then((res) => {
-          //       setToAmount(res?.data.toAmount);
-          //     });
-          // });
+
         setProgress((prevProgress) =>
           prevProgress >= 100 ? 0 : prevProgress + 100
         );
@@ -265,11 +234,7 @@ export default function Tradecard(props) {
       .then((res) => {
         setCheckData(res?.data);
       })
-      // .catch((error) => {
-      //   axios.get(checkUrl).then((res) => {
-      //     setCheckData(res?.data);
-      //   });
-      // });
+
 
     return () => {
       clearInterval(fetchAmountInterval);
@@ -277,19 +242,19 @@ export default function Tradecard(props) {
   }, [fromAmount, selectedCC, flow, payId]);
 
 
-  // useEffect(() => {
+  useEffect(() => {
 
-  //   axios
-  //   .get(
-  //     `https://bamanchange.com/exchange/api/estimated-amount?fromCurrency=${selectedCC.currencies[0]}&toCurrency=${selectedCC.currencies[1]}&fromAmount=1&fromNetwork=${selectedCC.network[0]}&toNetwork=${selectedCC.network[1]}&flow=${flow}`
-  //   )
-  //   .then((res) => {
-  //     setRatio(res?.data.toAmount);
-  //   })
+    axios
+    .get(
+      `${endPoint}/estimated-amount?fromCurrency=${selectedCC.currencies[0]}&toCurrency=${selectedCC.currencies[1]}&fromAmount=1&fromNetwork=${selectedCC.network[0]}&toNetwork=${selectedCC.network[1]}&flow=${flow}`
+    )
+    .then((res) => {
+      setRatio(res?.data.toAmount);
+    })
 
 
 
-  // }, [ selectedCC, flow]);
+  }, [ selectedCC, flow]);
 
   useEffect(() => {
     // console.log(minData)
@@ -366,11 +331,15 @@ export default function Tradecard(props) {
     }
   };
 
+
+  axiosRetry(axios, { retryDelay: axiosRetry.exponentialDelay ,  retries: 10000 });
+
   // console.log(minData);
 
   return (
     <UserContext.Provider
       value={{
+        endPoint,
         data,
         // isLoading,
         // error,
@@ -472,7 +441,7 @@ export default function Tradecard(props) {
                   }}
                 />
               }
-              startAdornment={<CircularProgress />}
+              startAdornment={ toAmount ? <></> : <CircularProgress color="secondary" sx={{ height: "auto !important"}} />}
             />
           </Grid>
           {open === 0 ? (

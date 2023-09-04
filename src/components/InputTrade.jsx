@@ -68,6 +68,7 @@ export default function InputTrade(props) {
       label={props.label}
       InputProps={{
         endAdornment: <>{props.endAdornment}</>,
+        startAdornment : <>{props.startAdornment}</>
       }}
     />
   );
