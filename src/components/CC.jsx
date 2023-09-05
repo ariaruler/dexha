@@ -58,7 +58,6 @@ export default function CC(props) {
     if( (x-2) < comments.length){
 
       setTimeout(()=>{
-        console.log(data);
         setComments(data.slice(0 , x) );
         
         setX(prev => prev+1)

@@ -43,7 +43,9 @@ import PopUpQrScan from "./PopUpQrScan";
 import { useContext, useEffect } from "react";
 import { UserContext } from "./TradeCard";
 import axios from "axios";
-import axiosRetry from 'axios-retry';
+import axiosRetry from "axios-retry";
+
+import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
 
 const inputHieght = 54;
 const bigbuttonBorderRadius = "8px";
@@ -233,19 +235,17 @@ export default function PopUpTrade(props) {
     const getStatusInterval = setInterval(() => {
       // console.log(payIdRef.current);
       if (x) {
-        axios
-          .get(`${endPoint}/exchange/api/by-id?id=${x}`)
-          .then((res) => {
-            if (res?.data.status) {
-              // console.log(res?.data.status);
-              setStatus(res);
-            }
-          });
+        axios.get(`${endPoint}/exchange/api/by-id?id=${x}`).then((res) => {
+          if (res?.data.status) {
+            // console.log(res?.data.status);
+            setStatus(res);
+          }
+        });
       }
     }, 2000);
 
     if (!x) {
-      console.log('kkkkkkkkkkkkkkkkk');
+      console.log("kkkkkkkkkkkkkkkkk");
       clearInterval(getStatusInterval);
     }
   };
@@ -256,34 +256,54 @@ export default function PopUpTrade(props) {
       getStatus(payId);
     }
 
-    // return ()=>{setPayId()}
   }, [payId]);
 
-  // console.log(payIn);
+
+  useEffect(() => {
+
+    return ()=>{setPayId()}
+  }, []);
+
+  // console.log(payId);
 
   const [sliderValue, setSliderValue] = useState(0);
+
+  const [statusFa, setStatusFa] = useState('در حال ساخت تراکنش');
 
   useEffect(() => {
     switch (status?.data.status) {
       case "waiting":
         setSliderValue(20);
+        setStatusFa('در انتظار واریز');
         break;
       case "confirming":
         setSliderValue(40);
+        setStatusFa("تائید واریز");
         break;
       case "exchanging":
         setSliderValue(60);
+        setStatusFa("در حال تبادل");
         break;
       case "sending":
         setSliderValue(80);
+        setStatusFa("در حال ارسال ارز");
         break;
       case "finished":
         setSliderValue(100);
+        setStatusFa("پایان تبادل");
+        setStep(step + 1);
+        break;
+      case "failed":
+        setSliderValue(0);
+        setStatusFa("مشکل در تبادل");
         break;
     }
   }, [status?.data.status]);
 
-  axiosRetry(axios, { retryDelay: axiosRetry.exponentialDelay ,  retries: 10000 });
+  axiosRetry(axios, {
+    retryDelay: axiosRetry.exponentialDelay,
+    retries: 10000,
+  });
 
   // console.log(selectedCC.hasExternalId[0]);
   // console.log(selectedCC.hasExternalId[1]);
@@ -304,6 +324,7 @@ export default function PopUpTrade(props) {
                 <PopUpTitle
                   header="شروع تبادل"
                   handleClose={handleClose}
+                  pointerDisable={true}
                   displayNone={true}
                 />
 
@@ -418,7 +439,7 @@ export default function PopUpTrade(props) {
                       setStep(step + 1);
                     }
                   }}
-                  sx={{ backgroundColor: theme.palette.primary.main }}
+                  sx={{ backgroundColor: theme.palette.primary.main , cursor : 'pointer'  }}
                 >
                   <Grid
                     item
@@ -514,7 +535,7 @@ export default function PopUpTrade(props) {
 
                     // console.log(status);
                   }}
-                  sx={{ backgroundColor: theme.palette.primary.main }}
+                  sx={{ backgroundColor: theme.palette.primary.main , cursor : 'pointer'  }}
                 >
                   <Grid
                     item
@@ -542,7 +563,7 @@ export default function PopUpTrade(props) {
               >
                 <PopUpTitle
                   header="تائید"
-                  previosStep={previosStep}
+                  pointerDisable={true}
                   handleClose={handleClose}
                   displayNone={true}
                 />
@@ -649,7 +670,7 @@ export default function PopUpTrade(props) {
                       alignItems: "center",
                     }}
                   >
-                    کد پیگیری معمله 146946466
+                    کد پیگیری معامله {payId}
                     <ContentCopyIcon
                       sx={{
                         "&:hover": { color: theme.palette.secondary.main },
@@ -669,12 +690,11 @@ export default function PopUpTrade(props) {
                     }}
                   >
                     <LinearProgress variant="determinate" value={sliderValue} />
-                    {status?.data.status}
+
                   </Grid>
                 </DialogContent>
 
                 <DialogActions
-
                   sx={{ backgroundColor: theme.palette.background.paper }}
                 >
                   <Grid
@@ -686,8 +706,7 @@ export default function PopUpTrade(props) {
                     }}
                     xs={12}
                   >
-
-*
+                    {statusFa}
                   </Grid>
                 </DialogActions>
               </Dialog>
@@ -704,19 +723,63 @@ export default function PopUpTrade(props) {
               >
                 <PopUpTitle
                   header="تائید"
-                  previosStep={previosStep}
+                  pointerDisable={true}
                   handleClose={handleClose}
                   displayNone={true}
                 />
                 <DialogContent sx={{ padding: "2px 2em" }}>
+                <Grid
+                    item
+                    xs={12}
+                    sx={{
+                      padding: "1em 0 0 0",
+                      display: "flex",
+                      justifyContent: "center",
+                      alignItems: "center",
+                    }}
+                  >
+                  <CheckCircleOutlineIcon color="success"  sx={{fontSize: '15em'}} />
+                  </Grid>
+
+                  <Grid
+                    item
+                    xs={12}
+                    sx={{
+                      padding: "1em 0 0 0",
+                      display: "flex",
+                      justifyContent: "center",
+                      alignItems: "center",
+                    }}
+                  >
+                    تراکنش شما با موفقیت انجام شد
+
+                  </Grid>
+
+                  <Grid
+                    item
+                    xs={12}
+                    sx={{
+                      padding: "1em 0 0 0",
+                      display: "flex",
+                      justifyContent: "center",
+                      alignItems: "center",
+                    }}
+                  >
+                    کد پیگیری معامله {payId}
+                    <ContentCopyIcon
+                      sx={{
+                        "&:hover": { color: theme.palette.secondary.main },
+                      }}
+                    />
+                  </Grid>
 
                 </DialogContent>
 
                 <DialogActions
                   onClick={() => {
-                    // setStep(step + 1);
+                    window.open(`https://blockchair.com/search?q=${status?.data.payoutHash}`);
                   }}
-                  sx={{ backgroundColor: theme.palette.primary.main }}
+                  sx={{ backgroundColor: theme.palette.primary.main , cursor : 'pointer' }}
                 >
                   <Grid
                     item
@@ -727,7 +790,7 @@ export default function PopUpTrade(props) {
                     }}
                     xs={12}
                   >
-                    مرحله بعد
+                    هش تبادل
                   </Grid>
                 </DialogActions>
               </Dialog>

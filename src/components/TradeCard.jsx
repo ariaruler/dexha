@@ -55,9 +55,6 @@ export default function Tradecard(props) {
       `${endPoint}/exchange/api/currencies?raw=true&active=true&flow=standard&buy=true&sell=true`
       )
       .then((res) => {
-        console.log('llllllllllllllllllllllllllll');
-
-        console.log(res.data);
         setData(manage(res.data));
       })
 
@@ -175,14 +172,8 @@ export default function Tradecard(props) {
   };
 
   const getMinAmount = (cc1, cc2, net1, net2, flow) => {
-    let minUrl = `${endPoint}/exchange/api/range?fromCurrency=${cc1}&toCurrency=${cc2}&fromNetwork=${net1}&toNetwork=${net2}&flow=${flow}`;
-    if (flow === "standard") {
-      minUrl = `${endPoint}/exchange/api/range?fromCurrency=${cc1}&toCurrency=${cc2}&fromNetwork=${net1}&toNetwork=${net2}&flow=${flow}`;
-    }
-  
-    if (flow === "fixed-rate") {
-      minUrl = `${endPoint}/exchange/api/min-amount?fromCurrency=${cc1}&toCurrency=${cc2}&fromNetwork=${net1}&toNetwork=${net2}&flow=${flow}`;
-    }
+    const minUrl = `${endPoint}/exchange/api/range?fromCurrency=${cc1}&toCurrency=${cc2}&fromNetwork=${net1}&toNetwork=${net2}&flow=${flow}`;
+
     axios
       .get(minUrl)
       .then((res) => {
@@ -335,7 +326,7 @@ export default function Tradecard(props) {
   };
 
 
-  // axiosRetry(axios, { retryDelay: axiosRetry.exponentialDelay ,  retries: 10000 });
+  axiosRetry(axios, { retryDelay: axiosRetry.exponentialDelay ,  retries: 10000 });
 
   // console.log(minData);
 

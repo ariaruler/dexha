@@ -27,7 +27,7 @@ export default function PopUpTitle(props) {
           }}
           xs={12}
         >
-          <IconButton sx={{    opacity : props.displayNone ? 0 : 1,}} onClick={props.previosStep}>
+          <IconButton sx={{    opacity : props.displayNone ? 0 : 1,  cursor: props.pointerDisable ? 'auto' : 'pointer' ,}} onClick={props.previosStep}>
             <ArrowForwardIosSharpIcon
               sx={arowIcon}
             />

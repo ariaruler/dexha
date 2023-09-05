@@ -14,9 +14,9 @@ import TableRow from "@mui/material/TableRow";
 
 import { useContext, useEffect } from "react";
 import { UserContext } from "./TradeCard";
-import { Typography } from "@mui/material";
+import { Box, Typography } from "@mui/material";
 
-export default function Buttonfee({ inputHieght, bigbuttonBorderRadius }) {
+export default function Buttonfee() {
 
   const {
     selectedCC,
@@ -28,44 +28,12 @@ export default function Buttonfee({ inputHieght, bigbuttonBorderRadius }) {
 
   const theme = useTheme();
 
-  const feeButton = {
-    height: inputHieght,
-    maxHeight: inputHieght,
-    minHeight : "0 !important" ,
-    "& .MuiAccordionSummary-content": {
-      display: "flex",
-      justifyContent: "space-between",
-    },
-    "& .muirtl-o4b71y-MuiAccordionSummary-content.Mui-expanded": {
-      margin : 0,
-      transition : 'none'
-    },
-    width: "100%",
-    borderRadius: bigbuttonBorderRadius,
-    border: `none`,
-    color: theme.palette.primary.contrastText,
-    fontsize: .0000001*theme.typography.fontsize,
 
-  };
-
-  const feeButtonMother ={
-    backgroundColor: 'transparent',
-    backgroundImage : 'none',
-    transition : 'none',
-    boxShadow : 'none',
-  }
 
   return (
-    <MuiAccordion expanded sx={feeButtonMother}>
-      <MuiAccordionSummary
-        // expandIcon={<ExpandMoreIcon />}
-        sx={feeButton}
-      >
-         <Typography sx={{ textTransform: "uppercase" }}> {'1' +  selectedCC.currencies[0]  + '='  + ratio +  selectedCC.currencies[1]}</Typography>
-        <div>0.17%</div>
-      </MuiAccordionSummary>
-      <MuiAccordionDetails
-        sx={{ backgroundColor: theme.palette.background.default ,padding: 1}}
+
+      <Box
+        sx={{ backgroundColor: theme.palette.background.default ,padding: 1 ,    borderRadius: theme.shape.borderRadius[1],}}
       >
         <TableContainer>
           <Table>
@@ -105,7 +73,7 @@ export default function Buttonfee({ inputHieght, bigbuttonBorderRadius }) {
             </TableBody>
           </Table>
         </TableContainer>
-      </MuiAccordionDetails>
-    </MuiAccordion>
+      </Box>
+
   );
 }
