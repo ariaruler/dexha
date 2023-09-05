@@ -45,7 +45,7 @@ import { UserContext } from "./TradeCard";
 import axios from "axios";
 import axiosRetry from "axios-retry";
 
-import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
+import CheckCircleOutlineIcon from "@mui/icons-material/CheckCircleOutline";
 
 const inputHieght = 54;
 const bigbuttonBorderRadius = "8px";
@@ -195,10 +195,10 @@ export default function PopUpTrade(props) {
   };
   useEffect(() => {
     if (data1 || data2) {
-      checkData(data1, selectedCC.network[0]).then((res) =>
+      checkData(data1, selectedCC.legacyTicker[0]).then((res) =>
         setCheck2(res?.result)
       );
-      checkData(data2, selectedCC.network[1]).then((res) =>
+      checkData(data2, selectedCC.legacyTicker[1]).then((res) =>
         setCheck1(res?.result)
       );
     }
@@ -255,26 +255,25 @@ export default function PopUpTrade(props) {
     if (payId) {
       getStatus(payId);
     }
-
   }, [payId]);
 
-
   useEffect(() => {
-
-    return ()=>{setPayId()}
+    return () => {
+      setPayId();
+    };
   }, []);
 
   // console.log(payId);
 
   const [sliderValue, setSliderValue] = useState(0);
 
-  const [statusFa, setStatusFa] = useState('در حال ساخت تراکنش');
+  const [statusFa, setStatusFa] = useState("در حال ساخت تراکنش");
 
   useEffect(() => {
     switch (status?.data.status) {
       case "waiting":
         setSliderValue(20);
-        setStatusFa('در انتظار واریز');
+        setStatusFa("در انتظار واریز");
         break;
       case "confirming":
         setSliderValue(40);
@@ -439,7 +438,10 @@ export default function PopUpTrade(props) {
                       setStep(step + 1);
                     }
                   }}
-                  sx={{ backgroundColor: theme.palette.primary.main , cursor : 'pointer'  }}
+                  sx={{
+                    backgroundColor: theme.palette.primary.main,
+                    cursor: "pointer",
+                  }}
                 >
                   <Grid
                     item
@@ -535,7 +537,10 @@ export default function PopUpTrade(props) {
 
                     // console.log(status);
                   }}
-                  sx={{ backgroundColor: theme.palette.primary.main , cursor : 'pointer'  }}
+                  sx={{
+                    backgroundColor: theme.palette.primary.main,
+                    cursor: "pointer",
+                  }}
                 >
                   <Grid
                     item
@@ -578,7 +583,13 @@ export default function PopUpTrade(props) {
                       alignItems: "center",
                     }}
                   >
-                    <Box>
+                    <Box
+                      sx={{
+                        display: "flex",
+                        justifyContent: "center",
+                        alignItems: "center",
+                      }}
+                    >
                       <QRcode
                         style={{
                           borderRadius: bigbuttonBorderRadius,
@@ -589,10 +600,27 @@ export default function PopUpTrade(props) {
                         value={payIn}
                         size={200}
                         includeMargin={true}
-                      >
-                        <div style={box}></div>
-                        <div style={stack}></div>
-                      </QRcode>
+                      ></QRcode>
+                      {payIn ? (
+                        <></>
+                      ) : (
+                        <Box
+                          sx={{
+                            backgroundColor: "rgba(0,0,0,0.2)",
+                            position: "absolute",
+                            backdropFilter: "blur(2px)",
+                            borderRadius: bigbuttonBorderRadius,
+                            margin: "-1px 0 0 0",
+                            width: "200px",
+                            height: "196px",
+                            display: "flex",
+                            justifyContent: "center",
+                            alignItems: "center",
+                          }}
+                        >
+                          <CircularProgress color="common" />
+                        </Box>
+                      )}
                     </Box>
                   </Grid>
 
@@ -690,7 +718,6 @@ export default function PopUpTrade(props) {
                     }}
                   >
                     <LinearProgress variant="determinate" value={sliderValue} />
-
                   </Grid>
                 </DialogContent>
 
@@ -728,7 +755,7 @@ export default function PopUpTrade(props) {
                   displayNone={true}
                 />
                 <DialogContent sx={{ padding: "2px 2em" }}>
-                <Grid
+                  <Grid
                     item
                     xs={12}
                     sx={{
@@ -738,7 +765,10 @@ export default function PopUpTrade(props) {
                       alignItems: "center",
                     }}
                   >
-                  <CheckCircleOutlineIcon color="success"  sx={{fontSize: '15em'}} />
+                    <CheckCircleOutlineIcon
+                      color="success"
+                      sx={{ fontSize: "15em" }}
+                    />
                   </Grid>
 
                   <Grid
@@ -752,7 +782,6 @@ export default function PopUpTrade(props) {
                     }}
                   >
                     تراکنش شما با موفقیت انجام شد
-
                   </Grid>
 
                   <Grid
@@ -772,14 +801,18 @@ export default function PopUpTrade(props) {
                       }}
                     />
                   </Grid>
-
                 </DialogContent>
 
                 <DialogActions
                   onClick={() => {
-                    window.open(`https://blockchair.com/search?q=${status?.data.payoutHash}`);
+                    window.open(
+                      `https://blockchair.com/search?q=${status?.data.payoutHash}`
+                    );
                   }}
-                  sx={{ backgroundColor: theme.palette.primary.main , cursor : 'pointer' }}
+                  sx={{
+                    backgroundColor: theme.palette.primary.main,
+                    cursor: "pointer",
+                  }}
                 >
                   <Grid
                     item

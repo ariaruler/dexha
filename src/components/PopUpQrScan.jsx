@@ -7,6 +7,7 @@ import Dialog from "@mui/material/Dialog";
 import Typography from "@mui/material/Typography";
 
 import {
+  Box,
   DialogActions,
   DialogContent,
   Grid,
@@ -24,6 +25,7 @@ import { AnimatePresence } from "framer-motion";
 import { motion } from "framer-motion";
 
 import QrScan, { QrReader } from "react-qr-reader";
+import  '../styles/QRScanner.css'; // Create a CSS file for styling 
 
 export default function PopUpQrScan(props) {
   const theme = useTheme();
@@ -39,15 +41,19 @@ export default function PopUpQrScan(props) {
     "& .MuiPaper-root": { backgroundColor: theme.palette.background.default },
   };
 
-//   const { onClose, selectedValue, open, id } = props;
+
 
   const handleClose = () => {
     props.onClose(props.selectedValue);
   };
 
+  // console.error(props.id);
+  // console.error(props.open);
 
-// console.error(props.id);
-// console.error(props.open);
+useEffect(() => {
+  handleClose()
+  
+}, [props.data]);
 
   return (
     <Dialog
@@ -58,29 +64,45 @@ export default function PopUpQrScan(props) {
       onClose={handleClose}
       open={props.open === props.id}
     >
-        
-        <DialogContent
-                sx={{
-                  padding: 0,
-                  borderBottom: `1px  solid ${theme.palette.grey["50"]}`,
-                  borderTop: `1px  solid ${theme.palette.grey["50"]}`,
-                }}
-                dividers
-              >
-      <QrReader
-        onResult={(result, error) => {
-          if (!!result) {
-            props.setData((prev)=>   result?.text);
-          }
-
-          if (!!error) {
-            // console.info(error);
-          }
+      <DialogContent
+        sx={{
+          padding: 0,
+          borderBottom: `1px  solid ${theme.palette.grey["50"]}`,
+          borderTop: `1px  solid ${theme.palette.grey["50"]}`,
         }}
-        style={{ width: '100%' }}
-      />
-      <p>{props.data}</p>
-        </DialogContent>
+        dividers
+      >
+
+
+
+        <QrReader
+          onResult={(result, error) => {
+            if (!!result) {
+              props.setData((prev) => result?.text);
+            }
+            
+            if (!!error) {
+              // console.info(error);
+            }
+          }}
+          style={{ width: "100%"  }}
+          
+          />
+
+        <Grid
+          item
+          xs={12}
+          sx={{
+            padding: 3,
+            margin : '-40px 0 0 0',
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+          }}
+        >
+          لطفا نور صفحه گوشی خود را کم کنید
+        </Grid>
+      </DialogContent>
     </Dialog>
   );
 }

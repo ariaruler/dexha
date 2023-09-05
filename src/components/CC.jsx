@@ -62,7 +62,7 @@ export default function CC(props) {
         
         setX(prev => prev+1)
         console.log(x);
-      },10
+      },1
       )
     }
 
@@ -133,7 +133,7 @@ export default function CC(props) {
               <Button
                 key={j}
                 onClick={() => {
-                  selectedCC.putCC(props.id, x.ticker, y, x.image[j] , x.hasExternalId[j]);
+                  selectedCC.putCC(props.id, x.ticker, y, x.image[j] , x.hasExternalId[j] , x.legacyTicker[j]);
                   fetchAmount();
                 }}
                 variant="outlined"

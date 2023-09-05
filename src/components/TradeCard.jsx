@@ -95,7 +95,8 @@ export default function Tradecard(props) {
     ],
     network: ["btc", "eth"],
     hasExternalId: [false, false],
-    putCC: (id, currency, network, currencyImg, hasExternalId) => {
+    legacyTicker: ["btc", "eth"],
+    putCC: (id, currency, network, currencyImg, hasExternalId ,legacyTicker) => {
       // console.log(id);
       if (id === 0) {
         setselecctedCC((prev) => {
@@ -105,6 +106,7 @@ export default function Tradecard(props) {
             network: { ...prev.network, 0: network },
             currencyImg: { ...prev.currencyImg, 0: currencyImg },
             hasExternalId: { ...prev.hasExternalId, 0: hasExternalId },
+            legacyTicker: { ...prev.legacyTicker, 0: legacyTicker },
           };
         });
         // console.log(selectedCC);
@@ -117,6 +119,7 @@ export default function Tradecard(props) {
             network: { ...prev.network, 1: network },
             currencyImg: { ...prev.currencyImg, 1: currencyImg },
             hasExternalId: { ...prev.hasExternalId, 1: hasExternalId },
+            legacyTicker: { ...prev.legacyTicker, 1: legacyTicker },
           };
         });
       }
