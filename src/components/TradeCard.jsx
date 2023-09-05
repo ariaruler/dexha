@@ -49,12 +49,15 @@ export default function Tradecard(props) {
   const [data, setData] = useState([]);
 
   useEffect(() => {
+
     axios
-      .get(
-        `${endPoint}/exchange/api/currencies?raw=true&active=true&flow=standard&buy=true&sell=true`
+    .get(
+      `${endPoint}/exchange/api/currencies?raw=true&active=true&flow=standard&buy=true&sell=true`
       )
       .then((res) => {
-        // return res.data
+        console.log('llllllllllllllllllllllllllll');
+
+        console.log(res.data);
         setData(manage(res.data));
       })
 
@@ -246,7 +249,7 @@ export default function Tradecard(props) {
 
     axios
     .get(
-      `${endPoint}/estimated-amount?fromCurrency=${selectedCC.currencies[0]}&toCurrency=${selectedCC.currencies[1]}&fromAmount=1&fromNetwork=${selectedCC.network[0]}&toNetwork=${selectedCC.network[1]}&flow=${flow}`
+      `${endPoint}/exchange/api/estimated-amount?fromCurrency=${selectedCC.currencies[0]}&toCurrency=${selectedCC.currencies[1]}&fromAmount=1&fromNetwork=${selectedCC.network[0]}&toNetwork=${selectedCC.network[1]}&flow=${flow}`
     )
     .then((res) => {
       setRatio(res?.data.toAmount);
@@ -332,7 +335,7 @@ export default function Tradecard(props) {
   };
 
 
-  axiosRetry(axios, { retryDelay: axiosRetry.exponentialDelay ,  retries: 10000 });
+  // axiosRetry(axios, { retryDelay: axiosRetry.exponentialDelay ,  retries: 10000 });
 
   // console.log(minData);
 

@@ -51,11 +51,11 @@ export default function CC(props) {
 
   const [network, setNetwork] = useState("");
 
-  const [x , setX] = useState(10)
+  const [x , setX] = useState(1)
 
   
   useEffect(() => {  
-    if( (x-1) < comments.length){
+    if( (x-2) < comments.length){
 
       setTimeout(()=>{
         console.log(data);
