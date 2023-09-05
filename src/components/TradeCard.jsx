@@ -258,6 +258,7 @@ export default function Tradecard(props) {
     // console.log(fromAmount)
 
     if (!maxData) {
+      // console.log('lllllllllll');
       if (fromAmount < minData) {
         setIsError(true);
       }
@@ -267,12 +268,15 @@ export default function Tradecard(props) {
     }
 
     if (maxData) {
-      if (fromAmount < minData && fromAmount > minData) {
+      // console.log('oooooooooooooo');
+      if (fromAmount < minData 
+        || fromAmount > maxData
+        ) {
         setIsError(true);
       } else if (
         fromAmount > minData ||
-        fromAmount.length < 1 ||
-        fromAmount < minData
+        fromAmount.length < 1
+        //  || fromAmount < maxData
       ) {
         setIsError(false);
       }

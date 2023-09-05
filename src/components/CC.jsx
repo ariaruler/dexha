@@ -61,7 +61,7 @@ export default function CC(props) {
         setComments(data.slice(0 , x) );
         
         setX(prev => prev+1)
-        console.log(x);
+        // console.log(x);
       },1
       )
     }
