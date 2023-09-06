@@ -21,14 +21,14 @@ import SettingsIcon from "@mui/icons-material/Settings";
 import PopUpSetting from "./PopUpSetting.";
 import { Button, CircularProgress } from "@mui/material";
 import axios from "axios";
-import axiosRetry from 'axios-retry';
+import axiosRetry from "axios-retry";
 
 import { useQuery } from "@tanstack/react-query";
 import manage from "../functions/manage";
 
 const inputHieght = 54;
 
-const endPoint = 'https://dexha.io';
+const endPoint = "https://dexha.io";
 
 const pages = [
   {
@@ -49,15 +49,13 @@ export default function Tradecard(props) {
   const [data, setData] = useState([]);
 
   useEffect(() => {
-
     axios
-    .get(
-      `${endPoint}/exchange/api/currencies?raw=true&active=true&flow=standard&buy=true&sell=true`
+      .get(
+        `${endPoint}/exchange/api/currencies?raw=true&active=true&flow=standard&buy=true&sell=true`
       )
       .then((res) => {
         setData(manage(res.data));
-      })
-
+      });
   }, []);
 
   // setData(fetch(data))
@@ -96,7 +94,14 @@ export default function Tradecard(props) {
     network: ["btc", "eth"],
     hasExternalId: [false, false],
     legacyTicker: ["btc", "eth"],
-    putCC: (id, currency, network, currencyImg, hasExternalId ,legacyTicker) => {
+    putCC: (
+      id,
+      currency,
+      network,
+      currencyImg,
+      hasExternalId,
+      legacyTicker
+    ) => {
       // console.log(id);
       if (id === 0) {
         setselecctedCC((prev) => {
@@ -153,6 +158,8 @@ export default function Tradecard(props) {
 
   const [ratio, setRatio] = useState();
 
+  const [minOrMax, setMinOrMax] = useState();
+
   // console.log(flow);
 
   const checkUrl = `${endPoint}/exchange/api/available-pairs?fromCurrency=${selectedCC.currencies[0]}&toCurrency=${selectedCC.currencies[1]}&fromNetwork=${selectedCC.network[0]}&toNetwork=${selectedCC.network[1]}&flow=`;
@@ -170,21 +177,17 @@ export default function Tradecard(props) {
         setDepositFee(res?.data.depositFee);
         setWithdrawalFee(res?.data.withdrawalFee);
         // console.log(cc1.current);
-      })
-
+      });
   };
 
   const getMinAmount = (cc1, cc2, net1, net2, flow) => {
     const minUrl = `${endPoint}/exchange/api/range?fromCurrency=${cc1}&toCurrency=${cc2}&fromNetwork=${net1}&toNetwork=${net2}&flow=${flow}`;
 
-    axios
-      .get(minUrl)
-      .then((res) => {
-        setMinData(res?.data.minAmount);
-        // console.log(res?.data.minAmount);
-        setMaxData(res?.data.maxAmount);
-      })
-
+    axios.get(minUrl).then((res) => {
+      setMinData(res?.data.minAmount);
+      // console.log(res?.data.minAmount);
+      setMaxData(res?.data.maxAmount);
+    });
   };
   // console.log(step);
 
@@ -215,7 +218,7 @@ export default function Tradecard(props) {
           )
           .then((res) => {
             setToAmount(res?.data.toAmount);
-          })
+          });
 
         setProgress((prevProgress) =>
           prevProgress >= 100 ? 0 : prevProgress + 100
@@ -223,35 +226,32 @@ export default function Tradecard(props) {
       }
     }, 5000);
 
-
     getMinAmount(cc1.current, cc2.current, net1.current, net2.current, flow);
 
-    axios
-      .get(checkUrl)
-      .then((res) => {
-        setCheckData(res?.data);
-      })
-
+    axios.get(checkUrl).then((res) => {
+      setCheckData(res?.data);
+    });
 
     return () => {
       clearInterval(fetchAmountInterval);
     };
-  }, [fromAmount, selectedCC, flow, payId]);
-
+  }, [
+    fromAmount,
+    selectedCC.legacyTicker[0],
+    selectedCC.legacyTicker[1],
+    flow,
+    payId,
+  ]);
 
   useEffect(() => {
-
     axios
-    .get(
-      `${endPoint}/exchange/api/estimated-amount?fromCurrency=${selectedCC.currencies[0]}&toCurrency=${selectedCC.currencies[1]}&fromAmount=1&fromNetwork=${selectedCC.network[0]}&toNetwork=${selectedCC.network[1]}&flow=${flow}`
-    )
-    .then((res) => {
-      setRatio(res?.data.toAmount);
-    })
-
-
-
-  }, [ selectedCC, flow]);
+      .get(
+        `${endPoint}/exchange/api/estimated-amount?fromCurrency=${selectedCC.currencies[0]}&toCurrency=${selectedCC.currencies[1]}&fromAmount=1&fromNetwork=${selectedCC.network[0]}&toNetwork=${selectedCC.network[1]}&flow=${flow}`
+      )
+      .then((res) => {
+        setRatio(res?.data.toAmount);
+      });
+  }, [selectedCC.legacyTicker[0], selectedCC.legacyTicker[1], flow]);
 
   useEffect(() => {
     // console.log(minData)
@@ -261,27 +261,30 @@ export default function Tradecard(props) {
       // console.log('lllllllllll');
       if (fromAmount < minData) {
         setIsError(true);
-      }
-      if (fromAmount > minData || fromAmount.length < 1) {
+      } else if (fromAmount > minData || fromAmount.length < 1) {
         setIsError(false);
       }
     }
 
     if (maxData) {
       // console.log('oooooooooooooo');
-      if (fromAmount < minData 
-        || fromAmount > maxData
-        ) {
+      if (fromAmount < minData) {
         setIsError(true);
-      } else if (
-        fromAmount > minData ||
-        fromAmount.length < 1
-        //  || fromAmount < maxData
-      ) {
+        setMinOrMax(0);
+      } else if (fromAmount > maxData) {
+        setMinOrMax(1);
+        setIsError(true);
+      } else if ((fromAmount > minData  &&   fromAmount < maxData) || fromAmount.length < 1 ) {
         setIsError(false);
       }
     }
-  }, [minData, fromAmount, selectedCC, flow]);
+  }, [
+    minData,
+    fromAmount,
+    selectedCC.legacyTicker[0],
+    selectedCC.legacyTicker[1],
+    flow,
+  ]);
 
   // console.log("fjsldfjskdfjlskfjskfjlsdfjlsfjlsfjlsfj")
 
@@ -332,8 +335,10 @@ export default function Tradecard(props) {
     }
   };
 
-
-  axiosRetry(axios, { retryDelay: axiosRetry.exponentialDelay ,  retries: 10000 });
+  axiosRetry(axios, {
+    retryDelay: axiosRetry.exponentialDelay,
+    retries: 10000,
+  });
 
   // console.log(minData);
 
@@ -405,7 +410,7 @@ export default function Tradecard(props) {
               }}
               error={isError}
               label={
-                isError ? `حداقل میزان معامله ${minData} می باشد` : "پرداخت"
+                isError ? `${minOrMax ? 'حداکثر' : 'حداقل'} میزان معامله ${minOrMax ? maxData : minData} می باشد` : "پرداخت"
               }
               type="number"
               height={inputHieght}
@@ -442,7 +447,16 @@ export default function Tradecard(props) {
                   }}
                 />
               }
-              startAdornment={ toAmount ? <></> : <CircularProgress color="secondary" sx={{ height: "auto !important"}} />}
+              startAdornment={
+                toAmount ? (
+                  <></>
+                ) : (
+                  <CircularProgress
+                    color="secondary"
+                    sx={{ height: "auto !important" }}
+                  />
+                )
+              }
             />
           </Grid>
           {open === 0 ? (
@@ -511,7 +525,7 @@ export default function Tradecard(props) {
             <></>
           )}
           <Grid item xs={12}>
-            <Buttonfee inputHieght={inputHieght}  />
+            <Buttonfee inputHieght={inputHieght} />
           </Grid>
         </Grid>
       </Box>
