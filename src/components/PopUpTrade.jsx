@@ -46,6 +46,7 @@ import axios from "axios";
 import axiosRetry from "axios-retry";
 
 import CheckCircleOutlineIcon from "@mui/icons-material/CheckCircleOutline";
+import PopUpError from "./PopUpError";
 
 const inputHieght = 54;
 const bigbuttonBorderRadius = "8px";
@@ -115,22 +116,29 @@ AirbnbThumbComponent.propTypes = {
 export default function PopUpTrade(props) {
   const [open2, setOpen2] = useState(-1);
 
+
+
+
   const handleClickOpen = (id) => {
     setOpen2(id);
   };
 
+
+
   // console.log(open2)
 
-  const handleClose2 = (value) => {
+  const handleClose2 = () => {
     setOpen2(-1);
   };
+
+
 
   const theme = useTheme();
   const Dialogstyle = {
     "& .MuiPaper-root": {
       maxWidth: 400,
       height: 556,
-
+      margin : 0,
       backgroundColor: theme.palette.background.default,
       backgroundImage: "none",
       borderRadius: props.borderRadius,
@@ -186,10 +194,11 @@ export default function PopUpTrade(props) {
   const checkData = async (data, amount) => {
     // console.log(data);
     // console.log(amount);
-    const res = await fetch(
+    const res = await axios.get(
       `${endPoint}/exchange/api/validate-address?currency=${amount}&address=${data}`
-    );
-    const res_1 = await res.json();
+    )
+    .catch((error)=> { console.log(error);})
+    const res_1 = await res.data;
     // console.log(res_1);
     return res_1;
   };
@@ -245,7 +254,7 @@ export default function PopUpTrade(props) {
     }, 2000);
 
     if (!x) {
-      console.log("kkkkkkkkkkkkkkkkk");
+      // console.log("kkkkkkkkkkkkkkkkk");
       clearInterval(getStatusInterval);
     }
   };
@@ -304,8 +313,7 @@ export default function PopUpTrade(props) {
     retries: 10000,
   });
 
-  // console.log(selectedCC.hasExternalId[0]);
-  // console.log(selectedCC.hasExternalId[1]);
+
 
   return (
     <>
@@ -569,10 +577,23 @@ export default function PopUpTrade(props) {
                 <PopUpTitle
                   header="تائید"
                   pointerDisable={true}
-                  handleClose={handleClose}
+                  handleClose={() => {
+                    handleClickOpen(2);
+                  }}
                   displayNone={true}
                 />
                 <DialogContent sx={{ padding: "2px 2em" }}>
+
+
+                <PopUpError
+                  id={2}
+                  borderRadius={props.borderRadius}
+                  open={open2}
+                  onClose={handleClose2}
+                  handleClose={handleClose}
+                />
+
+
                   <Grid
                     item
                     xs={12}

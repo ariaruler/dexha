@@ -66,6 +66,7 @@ export default function InputTrade(props) {
       type={props.type}
       color="common"
       label={props.label}
+      onKeyDown={props.onKeyDown}
       InputProps={{
         endAdornment: <>{props.endAdornment}</>,
         startAdornment : <>{props.startAdornment}</>

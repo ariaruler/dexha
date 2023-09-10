@@ -14,7 +14,8 @@ import ButtonTrade from "./ButtonTrade";
 import ButtonChooze from "./ButtonChooze";
 
 import { useState } from "react";
-
+import { Button } from "@mui/material";
+import MenuIcon from '@mui/icons-material/Menu';
 
 
 
@@ -106,6 +107,19 @@ export default function Header() {
 
 
           <ButtonTrade  borderRadius='6px' content=" اتصال به کیف پول" />
+
+
+          <Button
+              // onClick={() => {
+              //   handleClickOpen(3);
+              // }}
+              color="common"
+              sx={{ minWidth: 0 }}
+            >
+              <MenuIcon />
+
+            </Button>
+
 
 
         </Toolbar>

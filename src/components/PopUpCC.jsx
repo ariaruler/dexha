@@ -14,7 +14,8 @@ import {
   Switch,
 } from "@mui/material";
 import { useTheme } from "@mui/material/styles";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
+import { UserContext } from "./TradeCard";
 import InputTrade from "./InputTrade";
 import SearchIcon from "@mui/icons-material/Search";
 import CloseIcon from "@mui/icons-material/Close";
@@ -37,16 +38,40 @@ export default function PopUpCC(props) {
   const theme = useTheme();
   const Dialogstyle = {
     "& .MuiDialog-paper": {
+      margin : 0,
       maxWidth: 400,
       height:  556,
       maxHeight: 556,
-      backgroundColor: theme.palette.background.default,
+      // backgroundColor: theme.palette.background.default,
       backgroundImage: "none",
       borderRadius: props.borderRadius,
     },
     "& .MuiPaper-root": { backgroundColor: theme.palette.background.default },
   };
 
+  const {  data } = useContext(UserContext);
+
+  const [currencies, setCurrencies] = useState([]);
+
+  const [x , setX] = useState(1)
+  
+  
+  useEffect(() => {  
+    if( (x-2) < currencies.length){
+
+      setTimeout(()=>{
+        setCurrencies(data.slice(0 , x) );
+        
+        setX(prev => prev+1)
+        // console.log(x);
+      },10
+      )
+    }
+
+    // console.log(x);
+
+      
+  }, [x]);
 
 
   const handleClose = () => {
@@ -57,6 +82,23 @@ export default function PopUpCC(props) {
 
   const handleChange = (panel) => (event, newExpanded) => {
     setExpanded(newExpanded ? panel : false);
+  };
+
+
+  const [search, setSearch] = useState();
+
+
+
+
+  const bySearch = (currencies, search) => {
+    if (search) {
+      return currencies.ticker.toLowerCase().includes(search.toLowerCase()) ||  currencies.name.toLowerCase().includes(search.toLowerCase());
+    } else return currencies;
+  };
+
+  const filteredList = (currencies,  search) => {
+    return currencies
+      .filter(currencies => bySearch(currencies, search));
   };
 
 
@@ -108,6 +150,7 @@ export default function PopUpCC(props) {
                   </Grid>
                   <Grid item sx={{ margin: "1px 0 " }} xs={12}>
                     <InputTrade
+                    onChange={(e)=>setSearch(e.target.value)}
                       label="جستجو"
                       inputHieght={52}
                       borderRadius={bigbuttonBorderRadius}
@@ -130,7 +173,12 @@ export default function PopUpCC(props) {
                   animate={{ opacity: 1, width: "100%" }}
                   exit={{ opacity: 0, width: 0 }}
                 >
-                  <CC id={props.id} />
+                  <CC id={props.id}
+                   currencies={
+                    filteredList(currencies,  search)
+                    // currencies
+                  } 
+                   />
                 </motion.div>
               </DialogContent>
 

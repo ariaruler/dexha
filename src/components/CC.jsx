@@ -14,15 +14,16 @@ import Typography from "@mui/material/Typography";
 import InfiniteScroll from "react-infinite-scroller";
 import manage from "../functions/manage";
 
-import { Box, Button } from "@mui/material";
+import { Box, Button, CircularProgress } from "@mui/material";
 import { useQuery } from "@tanstack/react-query";
 
 
 const marginOfAccordion = "1px 2em";
 
 const Accordion = styled((props) => (
-  <MuiAccordion disableGutters elevation={0} square {...props} />
+  <MuiAccordion disableGutters square {...props} />
 ))(({ theme }) => ({
+  backgroundImage : 'none',
   border: `1px solid ${theme.palette.divider}`,
   "&:not(:last-child)": {
     borderBottom: 0,
@@ -40,42 +41,20 @@ const AccordionDetails = styled(MuiAccordionDetails)(({ theme }) => ({
 export default function CC(props) {
 
   // console.log("kkkkkkkkkkkk");
-  const { data , isLoading , error } = useContext(UserContext);
+
   const theme = useTheme();
 
-  const [comments, setComments] = useState([]);
+
 
   const { selectedCC, fetchAmount , getMinAmount} = useContext(UserContext);
 
-  const [currencies, setCurrencies] = useState("");
 
-  const [network, setNetwork] = useState("");
 
-  const [x , setX] = useState(1)
-
-  
-  useEffect(() => {  
-    if( (x-2) < comments.length){
-
-      setTimeout(()=>{
-        setComments(data.slice(0 , x) );
-        
-        setX(prev => prev+1)
-        // console.log(x);
-      },1
-      )
-    }
-
-    // console.log(x);
-
-      
-  }, [x]);
 
 
   useEffect(() => {
     return ( ()=>{
-      // fetchAmount();
-      // console.log("qqqqqqqqqqqqqqqqqqqq");
+
       getMinAmount();
     } )
   }, []);
@@ -86,31 +65,13 @@ export default function CC(props) {
 
   }
   
-    // console.log(comments);s
-  // if (isLoading) {
-  //   return <div>Loading...</div>;
-  // }
-
-  // if (error) {
-  //   return <div>Error: {error.message}</div>;
-  // }
 
 
   return (
-  //   <InfiniteScroll
-  //   pageStart={0}
-  //   loadMore={() => handleFetch( comments.length + 1000 )}
-  //   hasMore={true || false}
-  //   useWindow={false}
-  //   loader={
-  //     <div key="loading" className="loader">
-  //       لطفا منتظر بمانید
-  //     </div>
-  //   }
-  // >
+
   <>
-      {comments.map((x, i) => (
-        <Accordion key={i}>
+      {props.currencies[0] ? props.currencies.map((x, i) => (
+        <Accordion key={i} >
           <MuiAccordionSummary
             sx={{
               height: "56px",
@@ -131,6 +92,7 @@ export default function CC(props) {
           <AccordionDetails sx={{ padding: "1em 3em !important" }}>
             {x.network.map((y, j) => (
               <Button
+              
                 key={j}
                 onClick={() => {
                   selectedCC.putCC(props.id, x.ticker, y, x.image[j] , x.hasExternalId[j] , x.legacyTicker[j]);
@@ -153,12 +115,12 @@ export default function CC(props) {
             ))}
           </AccordionDetails>
         </Accordion>
-      ))}
+      )) : <Box sx={{width : '100%' ,display : 'flex' , alignItems: 'center' , justifyContent : 'center' , height : 300 }}>
+        <CircularProgress  />
+        </Box>
+        }
       </>
-      // </InfiniteScroll>
+
   );
 }
 
-// console.log(props, "UU");
-// ; selectedCC.putCC( props.id, currencies ,network )
-// setCurrencies(x.ticker) ; setNetwork(y);

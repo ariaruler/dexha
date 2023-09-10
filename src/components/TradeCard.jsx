@@ -55,7 +55,8 @@ export default function Tradecard(props) {
       )
       .then((res) => {
         setData(manage(res.data));
-      });
+      })
+      .catch((error)=> { console.log(error);})
   }, []);
 
   // setData(fetch(data))
@@ -132,6 +133,19 @@ export default function Tradecard(props) {
     },
   });
 
+  const handleSwap  = ()=>{
+    setselecctedCC(x => ({
+      ...x,
+      currencies: {  0: selectedCC.currencies[1] , 1: selectedCC.currencies[0]  },
+      network: {  0: selectedCC.network[1] , 1: selectedCC.network[0]  },
+      currencyImg: {  0: selectedCC.currencyImg[1] , 1: selectedCC.currencyImg[0]  },
+      hasExternalId: { 0: selectedCC.hasExternalId[1] , 1: selectedCC.hasExternalId[0] },
+      legacyTicker:  { 0: selectedCC.legacyTicker[1] , 1: selectedCC.legacyTicker[0] },
+    }))
+
+
+  }
+
   const [flow, setFlow] = useState("standard");
 
   const [toAmount, setToAmount] = useState();
@@ -165,33 +179,52 @@ export default function Tradecard(props) {
   const checkUrl = `${endPoint}/exchange/api/available-pairs?fromCurrency=${selectedCC.currencies[0]}&toCurrency=${selectedCC.currencies[1]}&fromNetwork=${selectedCC.network[0]}&toNetwork=${selectedCC.network[1]}&flow=`;
 
   const amountUrl = `${endPoint}/exchange/api/estimated-amount?fromCurrency=${selectedCC.currencies[0]}&toCurrency=${selectedCC.currencies[1]}&fromAmount=${fromAmount}&fromNetwork=${selectedCC.network[0]}&toNetwork=${selectedCC.network[1]}&flow=${flow}`;
-
+  
+  const controller = new AbortController();
   const fetchAmount = (amountRef, cc1, cc2, net1, net2, flow) => {
+    
+    setToAmount();
+    setSpeed();
+    setDepositFee();
+    setWithdrawalFee();
+
     axios
       .get(
         `${endPoint}/exchange/api/estimated-amount?fromCurrency=${cc1}&toCurrency=${cc2}&fromAmount=${amountRef}&fromNetwork=${net1}&toNetwork=${net2}&flow=${flow}`
+        , {
+          signal: controller.signal
+       }
       )
       .then((res) => {
         setToAmount(res?.data.toAmount);
+        // console.log('lllllllllll');
         setSpeed(res?.data.transactionSpeedForecast);
         setDepositFee(res?.data.depositFee);
         setWithdrawalFee(res?.data.withdrawalFee);
         // console.log(cc1.current);
-      });
+      })
+      .catch((error)=> { console.log(error);})
+
+
   };
 
   const getMinAmount = (cc1, cc2, net1, net2, flow) => {
     const minUrl = `${endPoint}/exchange/api/range?fromCurrency=${cc1}&toCurrency=${cc2}&fromNetwork=${net1}&toNetwork=${net2}&flow=${flow}`;
 
-    axios.get(minUrl).then((res) => {
+    axios.get(minUrl        , {
+      signal: controller.signal
+   }).then((res) => {
       setMinData(res?.data.minAmount);
       // console.log(res?.data.minAmount);
       setMaxData(res?.data.maxAmount);
-    });
+    })
+    .catch((error)=> { console.log(error);})
   };
   // console.log(step);
 
   useEffect(() => {
+// console.log('kkkkkkkkkkkkkkkkkkkk');
+
     amountRef.current = fromAmount;
     cc1.current = selectedCC.currencies[0];
     cc2.current = selectedCC.currencies[1];
@@ -199,6 +232,7 @@ export default function Tradecard(props) {
     net2.current = selectedCC.network[1];
     flowRef.current = flow;
     payIdRef.current = payId;
+
 
     fetchAmount(
       fromAmount,
@@ -209,6 +243,7 @@ export default function Tradecard(props) {
       flow
     );
 
+
     const fetchAmountInterval = setInterval(() => {
       // console.log(payIdRef.current);
       if (!payIdRef.current) {
@@ -218,7 +253,8 @@ export default function Tradecard(props) {
           )
           .then((res) => {
             setToAmount(res?.data.toAmount);
-          });
+          })
+          .catch((error)=> { console.log(error);})
 
         setProgress((prevProgress) =>
           prevProgress >= 100 ? 0 : prevProgress + 100
@@ -234,6 +270,7 @@ export default function Tradecard(props) {
 
     return () => {
       clearInterval(fetchAmountInterval);
+      controller.abort()
     };
   }, [
     fromAmount,
@@ -250,7 +287,8 @@ export default function Tradecard(props) {
       )
       .then((res) => {
         setRatio(res?.data.toAmount);
-      });
+      })
+      .catch((error)=> { console.log(error);})
   }, [selectedCC.legacyTicker[0], selectedCC.legacyTicker[1], flow]);
 
   useEffect(() => {
@@ -342,6 +380,10 @@ export default function Tradecard(props) {
 
   // console.log(minData);
 
+  const exceptThisSymbols = ["e", "E", "+", "-", "."];
+
+
+
   return (
     <UserContext.Provider
       value={{
@@ -398,19 +440,20 @@ export default function Tradecard(props) {
               sx={{ minWidth: 0 }}
             >
               <SettingsIcon />
-              <CircularProgress variant="determinate" value={progress} />
+              {/* <CircularProgress variant="determinate" value={progress} /> */}
             </Button>
           </Grid>
 
           <Grid item xs={12}>
             <InputTrade
               value={fromAmount}
+              onKeyDown={e => exceptThisSymbols.includes(e.key) && e.preventDefault()}
               onChange={(e) => {
                 setFromAmount(e.target.value);
               }}
               error={isError}
               label={
-                isError ? `${minOrMax ? 'حداکثر' : 'حداقل'} میزان معامله ${minOrMax ? maxData : minData} می باشد` : "پرداخت"
+                isError && (minData || maxData) ? `${minOrMax ? 'حداکثر' : 'حداقل'} میزان معامله ${minOrMax ? maxData : minData} می باشد` : "پرداخت"
               }
               type="number"
               height={inputHieght}
@@ -427,7 +470,7 @@ export default function Tradecard(props) {
             />
           </Grid>
           <Grid item xs={12} sx={{ display: "flex", justifyContent: "center" }}>
-            <KeyboardArrowDownIcon sx={iconCircle} />
+            <KeyboardArrowDownIcon onClick={handleSwap} sx={iconCircle} />
           </Grid>
 
           <Grid item xs={12}>

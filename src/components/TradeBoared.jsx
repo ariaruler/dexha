@@ -56,7 +56,7 @@ export default function TradeBoared(props) {
               item
               xs={12}
             >
-              <Typography variant="h5" component="h2">
+              <Typography variant="h6" >
               {selectedCC.currencies[0] + " " +  fromAmount }
               </Typography>
             </Grid>
@@ -121,7 +121,7 @@ export default function TradeBoared(props) {
               item
               xs={12}
             >
-              <Typography variant="h5" component="h2">
+              <Typography variant="h6" >
                 {selectedCC.currencies[1] + " " + toAmount  }
               </Typography>
               </Grid>
