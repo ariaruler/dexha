@@ -15,12 +15,7 @@ import ButtonChooze from "./ButtonChooze";
 
 import { useState } from "react";
 import { Button } from "@mui/material";
-import MenuIcon from '@mui/icons-material/Menu';
-
-
-
-
-
+import MenuIcon from "@mui/icons-material/Menu";
 
 const pages = [
   {
@@ -53,39 +48,38 @@ const pages = [
     to: "/rules",
     // active : false,
   },
-]
+];
 
 export default function Header() {
-
-
   const [active, setActive] = useState(-1);
-  const changeColor = (id) => { setActive(id) };
+  const changeColor = (id) => {
+    setActive(id);
+  };
 
-  const theme = useTheme()
-
+  const theme = useTheme();
 
   const CardBox = styled("Box")({
     display: "flex",
     padding: 2,
     backgroundColor: "rgba(256,256,256,0.1)",
-    borderRadius: theme.shape.borderRadius['0'],
+    borderRadius: theme.shape.borderRadius["0"],
     justifyContent: "center",
   });
 
-
   return (
-    <AppBar sx={{ marginBottom: 3 ,backgroundColor:'transparent'}} elevation={0} position="static">
+    <AppBar
+      sx={{ marginBottom: 3, backgroundColor: "transparent" }}
+      elevation={0}
+      position="static"
+    >
       <Container maxWidth="xl">
-        <Toolbar disableGutters>
-
-
+        <Toolbar disableGutters sx={{display:'flex' ,justifyContent : 'space-between'}}>
           <Box
             component="img"
             sx={{ display: "flex", mr: 1, width: "13vw" }}
             alt="The house from the offer."
             src={logo}
           />
-
 
           <Box
             sx={{
@@ -95,32 +89,34 @@ export default function Header() {
             }}
           >
             <CardBox>
-
               {pages.map((page, index) => (
-                <Link key={index} style={{ textDecoration: 'none' }} to={page.to}>
-                  <ButtonChooze id={index} content={page.content} active={active === index} changeColor={changeColor} />
+                <Link
+                  key={index}
+                  style={{ textDecoration: "none" }}
+                  to={page.to}
+                >
+                  <ButtonChooze
+                    id={index}
+                    content={page.content}
+                    active={active === index}
+                    changeColor={changeColor}
+                  />
                 </Link>
               ))}
-
             </CardBox>
           </Box>
 
-
-          <ButtonTrade  borderRadius='6px' content=" اتصال به کیف پول" />
-
+          <ButtonTrade borderRadius="6px" content=" اتصال به کیف پول" />
 
           <Button
-              // onClick={() => {
-              //   handleClickOpen(3);
-              // }}
-              color="common"
-              sx={{ minWidth: 0 }}
-            >
-              <MenuIcon />
-
-            </Button>
-
-
+            // onClick={() => {
+            //   handleClickOpen(3);
+            // }}
+            color="common"
+            sx={{ minWidth: 0 , padding : 1 }}
+          >
+                      <MenuIcon sx={{ display: { xs: "block", md: "none" } }} />
+          </Button>
 
         </Toolbar>
       </Container>
