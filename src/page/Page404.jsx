@@ -9,7 +9,7 @@ export default function Page404() {
         animate={{opacity : 1 , width : '100%'}}
         exit={{opacity : 0, width : 0}}
         >
-        <Typography variant="h1" gutterBottom>
+        <Typography variant="h2" gutterBottom>
             404 NOT FOUND
         </Typography>
         </motion.div>
