@@ -143,8 +143,6 @@ export default function Header() {
               toggleDrawer(false);
               // console.log('ooooo');
             }}
-            sx={{}}
-            
             >
             <Box sx={{ width: "100%" ,backgroundColor : theme.palette.background.default }} role="presentation">
               <List sx={{ width: "100%" }}>
@@ -155,7 +153,10 @@ export default function Header() {
                         style={{ textDecoration: "none" , color : theme.palette.secondary.contrastText ,width: "100%" }}
                         to={x.to}
                       >
-                    <ListItemButton >
+                    <ListItemButton onClick={() => {
+              toggleDrawer(false);
+              // console.log('ooooo');
+            }} >
                         <ListItemText sx={{display : 'flex' , justifyContent : 'center' , padding : .5}} primary={x.content} />
                     </ListItemButton> 
                       </Link>
