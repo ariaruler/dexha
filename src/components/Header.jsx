@@ -14,7 +14,16 @@ import ButtonTrade from "./ButtonTrade";
 import ButtonChooze from "./ButtonChooze";
 
 import { useState } from "react";
-import { Button, Divider, Drawer, List, ListItem, ListItemButton, ListItemIcon, ListItemText } from "@mui/material";
+import {
+  Button,
+  Divider,
+  Drawer,
+  List,
+  ListItem,
+  ListItemButton,
+  ListItemIcon,
+  ListItemText,
+} from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
 
 const pages = [
@@ -69,8 +78,6 @@ export default function Header() {
   const [state, setState] = useState(false);
 
   const toggleDrawer = (open) => {
-
-
     setState(open);
   };
 
@@ -129,41 +136,33 @@ export default function Header() {
             <MenuIcon sx={{ display: { xs: "block", md: "none" } }} />
           </Button>
 
-          <Drawer anchor="top" open={state} 
-          onClose={()=>{
-
-            toggleDrawer(false)
-            // console.log('ooooo');
-          }
-          }
-          >
-    <Box
-      sx={{ width : 250 }}
-      role="presentation"
-
-    >
-      <List>
-        {['Inbox', 'Starred', 'Send email', 'Drafts'].map((text, index) => (
-          <ListItem key={text} disablePadding>
-            <ListItemButton>
-
-              <ListItemText primary={text} />
-            </ListItemButton>
-          </ListItem>
-        ))}
-      </List>
-      <Divider />
-      <List>
-        {['All mail', 'Trash', 'Spam'].map((text, index) => (
-          <ListItem key={text} disablePadding>
-            <ListItemButton>
-
-              <ListItemText primary={text} />
-            </ListItemButton>
-          </ListItem>
-        ))}
-      </List>
-    </Box>
+          <Drawer
+            anchor="top"
+            open={state}
+            onClose={() => {
+              toggleDrawer(false);
+              // console.log('ooooo');
+            }}
+            sx={{}}
+            
+            >
+            <Box sx={{ width: "100%" ,backgroundColor : theme.palette.background.default }} role="presentation">
+              <List sx={{ width: "100%" }}>
+                {pages.map((x, index) => (
+                  <ListItem key={x.content} disablePadding>
+                      <Link
+                        key={index}
+                        style={{ textDecoration: "none" , color : theme.palette.secondary.contrastText ,width: "100%" }}
+                        to={x.to}
+                      >
+                    <ListItemButton >
+                        <ListItemText sx={{display : 'flex' , justifyContent : 'center' , padding : .5}} primary={x.content} />
+                    </ListItemButton> 
+                      </Link>
+                  </ListItem>
+                ))}
+              </List>
+            </Box>
           </Drawer>
         </Toolbar>
       </Container>
