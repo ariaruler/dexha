@@ -16,7 +16,7 @@ import vazirMedium from "./assets/fonts/Vazir-Medium.woff2";
 import AnimatedRoutes from "./components/AnimatedRoutes";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { useEffect, useRef, useState } from "react";
-import { Button, Drawer } from "@mui/material";
+
 
 const darkTheme = createTheme({
   direction: "rtl",
@@ -96,20 +96,6 @@ const cacheRtl = createCache({
 
 function App() {
 
-  const [state, setState] = useState({
-    top: false,
-    left: false,
-    bottom: false,
-    right: false,
-  });
-
-  const toggleDrawer = (anchor, open) => (event) => {
-    if (event.type === 'keydown' && (event.key === 'Tab' || event.key === 'Shift')) {
-      return;
-    }
-
-    setState({ ...state, top: open });
-  };
 
 
   const client = new QueryClient();
@@ -121,13 +107,7 @@ function App() {
           <CssBaseline />
           <BrowserRouter>
             <Header />
-            <Drawer
-            anchor='top'
-            open={0}
-            onClose={toggleDrawer('top', false)}
-          >
-<Button />
-          </Drawer>
+
             <AnimatedRoutes />
           </BrowserRouter>
         </ThemeProvider>

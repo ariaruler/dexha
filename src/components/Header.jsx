@@ -14,7 +14,7 @@ import ButtonTrade from "./ButtonTrade";
 import ButtonChooze from "./ButtonChooze";
 
 import { useState } from "react";
-import { Button } from "@mui/material";
+import { Button, Divider, Drawer, List, ListItem, ListItemButton, ListItemIcon, ListItemText } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
 
 const pages = [
@@ -66,6 +66,14 @@ export default function Header() {
     justifyContent: "center",
   });
 
+  const [state, setState] = useState(false);
+
+  const toggleDrawer = (open) => {
+
+
+    setState(open);
+  };
+
   return (
     <AppBar
       sx={{ marginBottom: 3, backgroundColor: "transparent" }}
@@ -73,7 +81,10 @@ export default function Header() {
       position="static"
     >
       <Container maxWidth="xl">
-        <Toolbar disableGutters sx={{display:'flex' ,justifyContent : 'space-between'}}>
+        <Toolbar
+          disableGutters
+          sx={{ display: "flex", justifyContent: "space-between" }}
+        >
           <Box
             component="img"
             sx={{ display: "flex", mr: 1, width: "13vw" }}
@@ -109,15 +120,51 @@ export default function Header() {
           <ButtonTrade borderRadius="6px" content=" اتصال به کیف پول" />
 
           <Button
-            // onClick={() => {
-            //   handleClickOpen(3);
-            // }}
+            onClick={() => {
+              toggleDrawer(true);
+            }}
             color="common"
-            sx={{ minWidth: 0 , padding : 1 }}
+            sx={{ minWidth: 0, padding: 1 }}
           >
-                      <MenuIcon sx={{ display: { xs: "block", md: "none" } }} />
+            <MenuIcon sx={{ display: { xs: "block", md: "none" } }} />
           </Button>
 
+          <Drawer anchor="top" open={state} 
+          onClose={()=>{
+
+            toggleDrawer(false)
+            // console.log('ooooo');
+          }
+          }
+          >
+    <Box
+      sx={{ width : 250 }}
+      role="presentation"
+
+    >
+      <List>
+        {['Inbox', 'Starred', 'Send email', 'Drafts'].map((text, index) => (
+          <ListItem key={text} disablePadding>
+            <ListItemButton>
+
+              <ListItemText primary={text} />
+            </ListItemButton>
+          </ListItem>
+        ))}
+      </List>
+      <Divider />
+      <List>
+        {['All mail', 'Trash', 'Spam'].map((text, index) => (
+          <ListItem key={text} disablePadding>
+            <ListItemButton>
+
+              <ListItemText primary={text} />
+            </ListItemButton>
+          </ListItem>
+        ))}
+      </List>
+    </Box>
+          </Drawer>
         </Toolbar>
       </Container>
     </AppBar>
