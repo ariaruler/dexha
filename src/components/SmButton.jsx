@@ -6,7 +6,7 @@ import AvatarCC from "./AvatarCC";
 
 import { useTheme } from "@emotion/react";
 import {  useContext } from "react";
-import { UserContext } from './TradeCard'
+import { UserContext } from "../App";
 
 
 export default function SmButton(props) {

@@ -15,7 +15,7 @@ import {
 } from "@mui/material";
 import { useTheme } from "@mui/material/styles";
 import { useState, useEffect, useContext } from "react";
-import { UserContext } from "./TradeCard";
+import { UserContext } from "../App";
 import InputTrade from "./InputTrade";
 import SearchIcon from "@mui/icons-material/Search";
 import CloseIcon from "@mui/icons-material/Close";
@@ -27,7 +27,7 @@ import { motion } from "framer-motion";
 import CC from "./CC";
 
 const inputHieght = 54;
-const bigbuttonBorderRadius = "8px";
+
 const marginOfAccordion = "1px 2em";
 
 
@@ -37,6 +37,8 @@ export default function PopUpCC(props) {
 
   const theme = useTheme();
   const Dialogstyle = {
+    left: '-18px',
+    right: '-18px',
     "& .MuiDialog-paper": {
       margin : 0,
       maxWidth: 400,
@@ -153,7 +155,7 @@ export default function PopUpCC(props) {
                     onChange={(e)=>setSearch(e.target.value)}
                       label="جستجو"
                       inputHieght={52}
-                      borderRadius={bigbuttonBorderRadius}
+                      borderRadius={theme.shape.borderRadius[1]}
                       endAdornment={<SearchIcon sx={{ marginLeft: 20 }} />}
                     />
                   </Grid>

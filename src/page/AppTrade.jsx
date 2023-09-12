@@ -21,9 +21,13 @@ export default function AppTrade() {
   
   return (
     <motion.div
-    initial={{opacity : 0 , width : 0}}
+    initial={{opacity : 0 ,
+      //  width : 0
+      }}
     animate={{opacity : 1 , width : '100%'}}
-    exit={{opacity : 0, width : 0}}
+    exit={{opacity : 0,
+      //  width : 0
+      }}
     >
     <Container maxWidth="xs">
       {/* <Grid container spacing={2}  sx={{ justifyContent : 'center'}}>

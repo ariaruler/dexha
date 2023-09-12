@@ -27,6 +27,8 @@ export default function PopUpError(props) {
   const theme = useTheme();
 
   const Dialogstyle = {
+    left: '-18px',
+    right: '-18px',
     "& .MuiDialog-paper": {
       maxWidth: 400,
       maxHeight: 556,

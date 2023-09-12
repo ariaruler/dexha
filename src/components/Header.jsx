@@ -57,6 +57,11 @@ const pages = [
     to: "/rules",
     // active : false,
   },
+  {
+    content: "پیگیری تبادل",
+    to: "/transaction-tracking",
+    // active : false,
+  },
 ];
 
 export default function Header() {

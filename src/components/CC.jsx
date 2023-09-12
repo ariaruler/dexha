@@ -7,7 +7,7 @@ import styled from "@emotion/styled";
 import AvatarCC from "./AvatarCC";
 import axios from "axios";
 import { useState, useEffect, useContext } from "react";
-import { UserContext } from "./TradeCard";
+import { UserContext } from "../App";
 import { useTheme } from "@mui/material/styles";
 import Typography from "@mui/material/Typography";
 
@@ -18,7 +18,7 @@ import { Box, Button, CircularProgress } from "@mui/material";
 import { useQuery } from "@tanstack/react-query";
 
 
-const marginOfAccordion = "1px 2em";
+const marginOfAccordion = "1px 1.8em";
 
 const Accordion = styled((props) => (
   <MuiAccordion disableGutters square {...props} />
@@ -76,7 +76,7 @@ export default function CC(props) {
             sx={{
               height: "56px",
               alignItem: "center",
-              
+              padding : 0,
               "& .MuiAccordionSummary-expandIconWrapper": {
                 transform: "none",
               },
@@ -89,7 +89,7 @@ export default function CC(props) {
               {x.ticker}
             </Typography>
           </MuiAccordionSummary>
-          <AccordionDetails sx={{ padding: "1em 3em !important" }}>
+          <AccordionDetails sx={{ padding: "1em 2em !important" }}>
             {x.network.map((y, j) => (
               <Button
               

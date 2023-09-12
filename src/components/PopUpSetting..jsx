@@ -90,6 +90,8 @@ export default function PopUpSetting(props) {
 
   const theme = useTheme();
   const Dialogstyle = {
+    left: '-18px',
+    right: '-18px',
     "& .MuiDialog-paper": {
       maxWidth: 400,
       height:  "auto" ,

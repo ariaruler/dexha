@@ -7,7 +7,8 @@ import Help from "../page/Help";
 import FAQ from "../page/FAQ";
 import Rules from "../page/Rules";
 import { useLocation, Route, Routes } from "react-router-dom";
-import {AnimatePresence } from 'framer-motion'
+import TransactionTracking from "../page/TransactionTracking";
+// import {AnimatePresence } from 'framer-motion'
 
 // /dist/framer-motion
 
@@ -15,7 +16,7 @@ export default function AnimatedRoutes(props) {
   const location = useLocation();
 
   return (
-    <AnimatePresence>
+    // <AnimatePresence>
 
     <Routes location={location} key={location.pathname}>
       <Route path="/" element={<LandingPage />} />
@@ -25,8 +26,9 @@ export default function AnimatedRoutes(props) {
       <Route path="/faq" element={<FAQ />} />
       <Route path="/rules" element={<Rules />} />
       <Route path="*" element={<Page404 />} />
+      <Route path="/transaction-tracking" element={<TransactionTracking />} />
     </Routes>
     
-    </AnimatePresence>
+    // </AnimatePresence>
   );
 }

@@ -13,7 +13,7 @@ import TableContainer from "@mui/material/TableContainer";
 import TableRow from "@mui/material/TableRow";
 
 import { useContext, useEffect } from "react";
-import { UserContext } from "./TradeCard";
+import { UserContext } from "../App";
 import { Box, Typography } from "@mui/material";
 
 export default function Buttonfee() {

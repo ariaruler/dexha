@@ -41,12 +41,16 @@ import PropTypes from "prop-types";
 import PopUpQrScan from "./PopUpQrScan";
 
 import { useContext, useEffect } from "react";
-import { UserContext } from "./TradeCard";
+import { UserContext } from "../App";
 import axios from "axios";
 import axiosRetry from "axios-retry";
 
 import CheckCircleOutlineIcon from "@mui/icons-material/CheckCircleOutline";
 import PopUpError from "./PopUpError";
+
+import InfoOutlinedIcon from "@mui/icons-material/InfoOutlined";
+import { styled } from "@mui/material/styles";
+import Tooltip, { tooltipClasses } from "@mui/material/Tooltip";
 
 const inputHieght = 54;
 const bigbuttonBorderRadius = "8px";
@@ -116,14 +120,9 @@ AirbnbThumbComponent.propTypes = {
 export default function PopUpTrade(props) {
   const [open2, setOpen2] = useState(-1);
 
-
-
-
   const handleClickOpen = (id) => {
     setOpen2(id);
   };
-
-
 
   // console.log(open2)
 
@@ -131,14 +130,14 @@ export default function PopUpTrade(props) {
     setOpen2(-1);
   };
 
-
-
   const theme = useTheme();
   const Dialogstyle = {
+    left: "-18px",
+    right: "-18px",
     "& .MuiPaper-root": {
       maxWidth: 400,
       height: 556,
-      margin : 0,
+      margin: 0,
       backgroundColor: theme.palette.background.default,
       backgroundImage: "none",
       borderRadius: props.borderRadius,
@@ -191,13 +190,22 @@ export default function PopUpTrade(props) {
 
   const payIdRef = useRef();
 
+  const controller = new AbortController();
+
   const checkData = async (data, amount) => {
     // console.log(data);
     // console.log(amount);
-    const res = await axios.get(
-      `${endPoint}/exchange/api/validate-address?currency=${amount}&address=${data}`
-    )
-    .catch((error)=> { console.log(error);})
+    const res = await axios
+      .get(
+        `${endPoint}/exchange/api/validate-address?currency=${amount}&address=${data}`,
+        {
+          signal: controller.signal,
+        }
+      )
+      .catch((error) => {
+        console.log(error);
+      })
+    // console.log(res.data);
     const res_1 = await res.data;
     // console.log(res_1);
     return res_1;
@@ -211,6 +219,10 @@ export default function PopUpTrade(props) {
         setCheck1(res?.result)
       );
     }
+
+    return () => {
+      controller.abort();
+    };
   }, [data1, data2]);
 
   const post = async () => {
@@ -244,14 +256,18 @@ export default function PopUpTrade(props) {
     const getStatusInterval = setInterval(() => {
       // console.log(payIdRef.current);
       if (x) {
-        axios.get(`${endPoint}/exchange/api/by-id?id=${x}`).then((res) => {
+        axios.get(`${endPoint}/exchange/api/by-id?id=${x}`)
+        .catch((error) => {
+          console.log(error);
+        })
+        .then((res) => {
           if (res?.data.status) {
             // console.log(res?.data.status);
             setStatus(res);
           }
-        });
+        })
       }
-    }, 2000);
+    }, 15000);
 
     if (!x) {
       // console.log("kkkkkkkkkkkkkkkkk");
@@ -310,10 +326,19 @@ export default function PopUpTrade(props) {
 
   axiosRetry(axios, {
     retryDelay: axiosRetry.exponentialDelay,
-    retries: 10000,
+    retries: 100000,
   });
 
-
+  const BootstrapTooltip = styled(({ className, ...props }) => (
+    <Tooltip {...props} arrow classes={{ popper: className }} />
+  ))(({ theme }) => ({
+    [`& .${tooltipClasses.arrow}`]: {
+      color: theme.palette.common.black,
+    },
+    [`& .${tooltipClasses.tooltip}`]: {
+      backgroundColor: theme.palette.common.black,
+    },
+  }));
 
   return (
     <>
@@ -359,6 +384,32 @@ export default function PopUpTrade(props) {
                           }}
                         />
                       }
+                      startAdornment={
+                        data2 ? (
+                          <></>
+                        ) : (
+                          <BootstrapTooltip
+                            title="آدرس کیف پول دریافت کننده:
+
+                          آدرس کیف پول دریافت‌کننده، همان آدرس کیف پولی است که مقدار رمزارز مبادله شده به این آدرس واریز می‌شود. توجه نمایید، مسئولیت واردکردن آدرس صحیح کیف پول بر عهده شماست."
+                            // sx={{
+                            //   " .MuiTooltip-popper": {
+                            //     backgroundColor: theme.palette.secondary.main,
+                            //   },
+                            //   backgroundColor: theme.palette.secondary.main,
+                            // }}
+                            arrow
+                          >
+                                                  <Button color="common" sx={{ minWidth: 0 }}>
+
+                            <InfoOutlinedIcon
+                              color="secondary"
+                              sx={{ height: "auto !important" }}
+                              />
+                              </Button>
+                          </BootstrapTooltip>
+                        )
+                      }
                     />
                   </Grid>
 
@@ -370,7 +421,7 @@ export default function PopUpTrade(props) {
                           setExteraId(e.target.value);
                         }}
                         margin="1em auto"
-                        label="Memo خود را وارد کنید"
+                        label="Memo خود را وارد کنید "
                         height={inputHieght}
                         borderRadius={bigbuttonBorderRadius}
                       />
@@ -399,6 +450,32 @@ export default function PopUpTrade(props) {
                             "&:hover": { color: theme.palette.secondary.main },
                           }}
                         />
+                      }
+                      startAdornment={
+                        data1 ? (
+                          <></>
+                        ) : (
+                          <BootstrapTooltip
+                            title="آدرس کیف پول دریافت کننده:
+
+                          آدرس کیف پول دریافت‌کننده، همان آدرس کیف پولی است که مقدار رمزارز مبادله شده به این آدرس واریز می‌شود. توجه نمایید، مسئولیت واردکردن آدرس صحیح کیف پول بر عهده شماست."
+                            // sx={{
+                            //   " .MuiTooltip-popper": {
+                            //     backgroundColor: theme.palette.secondary.main,
+                            //   },
+                            //   backgroundColor: theme.palette.secondary.main,
+                            // }}
+                            arrow
+                          >
+                                                  <Button color="common" sx={{ minWidth: 0 }}>
+
+                            <InfoOutlinedIcon
+                              color="secondary"
+                              sx={{ height: "auto !important" }}
+                              />
+                              </Button>
+                          </BootstrapTooltip>
+                        )
                       }
                     />
                   </Grid>
@@ -539,6 +616,7 @@ export default function PopUpTrade(props) {
 
                 <DialogActions
                   onClick={() => {
+                    setPayIn()
                     setStep(step + 1);
                     post();
                     // console.log(payId);
@@ -578,21 +656,23 @@ export default function PopUpTrade(props) {
                   header="تائید"
                   pointerDisable={true}
                   handleClose={() => {
-                    handleClickOpen(2);
+                    if(!status || status?.data.status==='waiting'){
+                      handleClose();
+                    }else{
+
+                      handleClickOpen(2);
+                    }
                   }}
                   displayNone={true}
                 />
                 <DialogContent sx={{ padding: "2px 2em" }}>
-
-
-                <PopUpError
-                  id={2}
-                  borderRadius={props.borderRadius}
-                  open={open2}
-                  onClose={handleClose2}
-                  handleClose={handleClose}
-                />
-
+                  <PopUpError
+                    id={2}
+                    borderRadius={props.borderRadius}
+                    open={open2}
+                    onClose={handleClose2}
+                    handleClose={handleClose}
+                  />
 
                   <Grid
                     item
@@ -685,13 +765,30 @@ export default function PopUpTrade(props) {
                       alignItems: "center",
                     }}
                   >
+                    <BootstrapTooltip
+                      title={`کاربر گرامی، برای تکمیل تبادل با نرخ شناور، مقدار رمزارز مشخص شده را به آدرسی که نمایش داده شده است واریز نموده و منتظر تایید واریز بمانید. توجه نمایید واریز هر کوینی غیر از ${selectedCC.currencies[0]} در شبکه ${selectedCC.network[0]} به آدرس ایجاد شده، منجر به از دست رفتن آن رمز ارز برای همیشه خواهد شد. ضمنا آدرس ایجاد شده فقط برای یکبار واریز رمزارز معتبر است.`}
+                      // sx={{
+                      //   " .MuiTooltip-popper": {
+                      //     backgroundColor: theme.palette.secondary.main,
+                      //   },
+                      //   backgroundColor: theme.palette.secondary.main,
+                      // }}
+                      arrow
+                    >
+                      <Button color="common" sx={{ minWidth: 0 }}>
+                        <InfoOutlinedIcon sx={{ height: "auto !important" }} />
+                      </Button>
+                    </BootstrapTooltip>
                     لطفا مقدار {selectedCC.currencies[0] + " " + fromAmount} را
                     واریز نمائید
+                    <Button color="common" sx={{ minWidth: 0 }}>
                     <ContentCopyIcon
+                      onClick={() => navigator.clipboard.writeText(payId)}
                       sx={{
                         "&:hover": { color: theme.palette.secondary.main },
                       }}
                     />
+                    </Button>
                   </Grid>
 
                   <Grid
@@ -719,12 +816,31 @@ export default function PopUpTrade(props) {
                       alignItems: "center",
                     }}
                   >
+                    <BootstrapTooltip
+                      title="کد پیگیری:
+
+                      کد پیگیری برای پیگیری مبادله در تهران اکسچنج می باشد برای پیگیری وضعیت مبادله خود کد پیگیری را کپی و ذخیره کنید.با کد پیگیری هر زمان که بخواهید می توانید مبادله خود را در صفحه وضعیت مبادله مشاهده نمایید."
+                      // sx={{
+                      //   " .MuiTooltip-popper": {
+                      //     backgroundColor: theme.palette.secondary.main,
+                      //   },
+                      //   backgroundColor: theme.palette.secondary.main,
+                      // }}
+                      arrow
+                    >
+                      <Button color="common" sx={{ minWidth: 0 }}>
+                        <InfoOutlinedIcon sx={{ height: "auto !important" }} />
+                      </Button>
+                    </BootstrapTooltip>
                     کد پیگیری معامله {payId}
+                    <Button color="common" sx={{ minWidth: 0 }}>
                     <ContentCopyIcon
+                      onClick={() => navigator.clipboard.writeText(payId)}
                       sx={{
                         "&:hover": { color: theme.palette.secondary.main },
                       }}
                     />
+                    </Button>
                   </Grid>
 
                   <Grid
@@ -815,12 +931,31 @@ export default function PopUpTrade(props) {
                       alignItems: "center",
                     }}
                   >
+                    <BootstrapTooltip
+                      title="کد پیگیری:
+
+                      کد پیگیری برای پیگیری مبادله در تهران اکسچنج می باشد برای پیگیری وضعیت مبادله خود کد پیگیری را کپی و ذخیره کنید.با کد پیگیری هر زمان که بخواهید می توانید مبادله خود را در صفحه وضعیت مبادله مشاهده نمایید."
+                      // sx={{
+                      //   " .MuiTooltip-popper": {
+                      //     backgroundColor: theme.palette.secondary.main,
+                      //   },
+                      //   backgroundColor: theme.palette.secondary.main,
+                      // }}
+                      arrow
+                    >
+                      <Button color="common" sx={{ minWidth: 0 }}>
+                        <InfoOutlinedIcon sx={{ height: "auto !important" }} />
+                      </Button>
+                    </BootstrapTooltip>
                     کد پیگیری معامله {payId}
+                    <Button color="common" sx={{ minWidth: 0 }}>
                     <ContentCopyIcon
+                      onClick={() => navigator.clipboard.writeText(payId)}
                       sx={{
                         "&:hover": { color: theme.palette.secondary.main },
                       }}
                     />
+                    </Button>
                   </Grid>
                 </DialogContent>
 

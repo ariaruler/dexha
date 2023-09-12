@@ -5,7 +5,7 @@ import { Avatar, DialogContent, Grid } from "@mui/material";
 import ArrowCircleLeftIcon from "@mui/icons-material/ArrowCircleLeft";
 
 import {  useContext ,useEffect } from "react";
-import { UserContext } from './TradeCard'
+import { UserContext } from "../App";
 
 
 export default function TradeBoared(props) {

@@ -26,6 +26,12 @@ import axiosRetry from "axios-retry";
 import { useQuery } from "@tanstack/react-query";
 import manage from "../functions/manage";
 
+
+import { useContext } from "react";
+import { UserContext } from "../App";
+
+import Tooltip, { tooltipClasses } from '@mui/material/Tooltip';
+
 const inputHieght = 54;
 
 const endPoint = "https://dexha.io";
@@ -33,20 +39,61 @@ const endPoint = "https://dexha.io";
 const pages = [
   {
     content: "نرخ استاندارد",
+    tooltip : `نرخ استانندارد:
+    مبادله با نرخ استاندارد یعنی در این لحظه، تبادل شما با بهترین نرخ ممکن انجام می‌شود.توجه داشته باشید در مبادله با نرخ استاندارد نوسان قیمت روی دریافت مبلغ نهایی مبادله شده تاثیر دارد. `
   },
   {
     content: "نرخ ثابت",
-  },
-  {
-    content: "بهترین قیمت",
+    tooltip : `نرخ ثابت:
+    مبادله با نرخ ثابت یعنی در این لحظه، تبادل شما با نرخ تثبیت شده انجام می‌شود و دقیقا همین مقدار رمزارز را دریافت خواهید کرد.توجه داشته باشید در مبادله با نرخ ثابت، نوسان قیمت روی دریافت مبلغ نهایی مبادله شده تاثیر ندارد.`
   },
 ];
-export const UserContext = createContext();
+
 
 export default function Tradecard(props) {
-  // const { data, isLoading, error } = useQuery(['myData'], () =>{
 
-  const [data, setData] = useState([]);
+    const {
+      endPoint,
+      data,
+      setData,
+      flow,
+      setFlow,
+      setCheckData,
+      // isLoading,
+      // error,
+      isError,
+      selectedCC,
+      toAmount,
+      setToAmount,
+      fetchAmount,
+      open,
+      // post,
+      payId,
+      setPayId,
+      payIn,
+      setPayIn,
+      fromAmount,
+      setFromAmount,
+      getMinAmount,
+      speed,
+      depositFee,
+      withdrawalFee,
+      step,
+      setStep,
+      ratio,
+      setRatio,
+      maxData,
+      minData,
+      setIsError,
+      minOrMax,
+      setMinOrMax,
+      handleClickOpen,
+      handleSwap,
+      checkData,
+      selectedValue,
+      handleClose,
+    } = useContext(UserContext);
+
 
   useEffect(() => {
     axios
@@ -56,16 +103,12 @@ export default function Tradecard(props) {
       .then((res) => {
         setData(manage(res.data));
       })
-      .catch((error)=> { console.log(error);})
+      .catch((error) => {
+        console.log(error);
+      });
   }, []);
 
-  // setData(fetch(data))
 
-  // }
-
-  // );
-
-  // console.log(data);
 
   const theme = useTheme();
   // console.log( "YYYYYYYYYYYYYYYYYY")
@@ -84,146 +127,25 @@ export default function Tradecard(props) {
 
   const payIdRef = useRef();
 
-  const [fromAmount, setFromAmount] = useState(1);
-
-  const [selectedCC, setselecctedCC] = useState({
-    currencies: ["btc", "eth"],
-    currencyImg: [
-      `https://content-api.dexha.io/uploads/btc_1_527dc9ec3c.svg`,
-      `https://content-api.dexha.io/uploads/eth_f4ebb54ec0.svg`,
-    ],
-    network: ["btc", "eth"],
-    hasExternalId: [false, false],
-    legacyTicker: ["btc", "eth"],
-    putCC: (
-      id,
-      currency,
-      network,
-      currencyImg,
-      hasExternalId,
-      legacyTicker
-    ) => {
-      // console.log(id);
-      if (id === 0) {
-        setselecctedCC((prev) => {
-          return {
-            ...prev,
-            currencies: { ...prev.currencies, 0: currency },
-            network: { ...prev.network, 0: network },
-            currencyImg: { ...prev.currencyImg, 0: currencyImg },
-            hasExternalId: { ...prev.hasExternalId, 0: hasExternalId },
-            legacyTicker: { ...prev.legacyTicker, 0: legacyTicker },
-          };
-        });
-        // console.log(selectedCC);
-      }
-      if (id === 1) {
-        setselecctedCC((prev) => {
-          return {
-            ...prev,
-            currencies: { ...prev.currencies, 1: currency },
-            network: { ...prev.network, 1: network },
-            currencyImg: { ...prev.currencyImg, 1: currencyImg },
-            hasExternalId: { ...prev.hasExternalId, 1: hasExternalId },
-            legacyTicker: { ...prev.legacyTicker, 1: legacyTicker },
-          };
-        });
-      }
-      handleClose();
-    },
-  });
-
-  const handleSwap  = ()=>{
-    setselecctedCC(x => ({
-      ...x,
-      currencies: {  0: selectedCC.currencies[1] , 1: selectedCC.currencies[0]  },
-      network: {  0: selectedCC.network[1] , 1: selectedCC.network[0]  },
-      currencyImg: {  0: selectedCC.currencyImg[1] , 1: selectedCC.currencyImg[0]  },
-      hasExternalId: { 0: selectedCC.hasExternalId[1] , 1: selectedCC.hasExternalId[0] },
-      legacyTicker:  { 0: selectedCC.legacyTicker[1] , 1: selectedCC.legacyTicker[0] },
-    }))
 
 
-  }
-
-  const [flow, setFlow] = useState("standard");
-
-  const [toAmount, setToAmount] = useState();
-
-  const [speed, setSpeed] = useState();
-
-  const [depositFee, setDepositFee] = useState();
-
-  const [withdrawalFee, setWithdrawalFee] = useState();
-
-  const [minData, setMinData] = useState();
-
-  const [maxData, setMaxData] = useState();
-
-  const [checkData, setCheckData] = useState([]);
-
-  const [isError, setIsError] = useState("");
-
-  const [payIn, setPayIn] = useState();
-
-  const [payId, setPayId] = useState();
-
-  const [step, setStep] = useState(0);
-
-  const [ratio, setRatio] = useState();
-
-  const [minOrMax, setMinOrMax] = useState();
 
   // console.log(flow);
 
   const checkUrl = `${endPoint}/exchange/api/available-pairs?fromCurrency=${selectedCC.currencies[0]}&toCurrency=${selectedCC.currencies[1]}&fromNetwork=${selectedCC.network[0]}&toNetwork=${selectedCC.network[1]}&flow=`;
 
   const amountUrl = `${endPoint}/exchange/api/estimated-amount?fromCurrency=${selectedCC.currencies[0]}&toCurrency=${selectedCC.currencies[1]}&fromAmount=${fromAmount}&fromNetwork=${selectedCC.network[0]}&toNetwork=${selectedCC.network[1]}&flow=${flow}`;
-  
+
   const controller = new AbortController();
-  const fetchAmount = (amountRef, cc1, cc2, net1, net2, flow) => {
-    
-    setToAmount();
-    setSpeed();
-    setDepositFee();
-    setWithdrawalFee();
-
-    axios
-      .get(
-        `${endPoint}/exchange/api/estimated-amount?fromCurrency=${cc1}&toCurrency=${cc2}&fromAmount=${amountRef}&fromNetwork=${net1}&toNetwork=${net2}&flow=${flow}`
-        , {
-          signal: controller.signal
-       }
-      )
-      .then((res) => {
-        setToAmount(res?.data.toAmount);
-        // console.log('lllllllllll');
-        setSpeed(res?.data.transactionSpeedForecast);
-        setDepositFee(res?.data.depositFee);
-        setWithdrawalFee(res?.data.withdrawalFee);
-        // console.log(cc1.current);
-      })
-      .catch((error)=> { console.log(error);})
 
 
-  };
 
-  const getMinAmount = (cc1, cc2, net1, net2, flow) => {
-    const minUrl = `${endPoint}/exchange/api/range?fromCurrency=${cc1}&toCurrency=${cc2}&fromNetwork=${net1}&toNetwork=${net2}&flow=${flow}`;
 
-    axios.get(minUrl        , {
-      signal: controller.signal
-   }).then((res) => {
-      setMinData(res?.data.minAmount);
-      // console.log(res?.data.minAmount);
-      setMaxData(res?.data.maxAmount);
-    })
-    .catch((error)=> { console.log(error);})
-  };
+
   // console.log(step);
 
   useEffect(() => {
-// console.log('kkkkkkkkkkkkkkkkkkkk');
+    // console.log('kkkkkkkkkkkkkkkkkkkk');
 
     amountRef.current = fromAmount;
     cc1.current = selectedCC.currencies[0];
@@ -232,7 +154,6 @@ export default function Tradecard(props) {
     net2.current = selectedCC.network[1];
     flowRef.current = flow;
     payIdRef.current = payId;
-
 
     fetchAmount(
       fromAmount,
@@ -243,7 +164,6 @@ export default function Tradecard(props) {
       flow
     );
 
-
     const fetchAmountInterval = setInterval(() => {
       // console.log(payIdRef.current);
       if (!payIdRef.current) {
@@ -251,16 +171,18 @@ export default function Tradecard(props) {
           .get(
             `${endPoint}/exchange/api/estimated-amount?fromCurrency=${cc1.current}&toCurrency=${cc2.current}&fromAmount=${amountRef.current}&fromNetwork=${net1.current}&toNetwork=${net2.current}&flow=${flowRef.current}`
           )
+          .catch((error) => {
+            console.log(error);
+          })
           .then((res) => {
             setToAmount(res?.data.toAmount);
           })
-          .catch((error)=> { console.log(error);})
 
         setProgress((prevProgress) =>
           prevProgress >= 100 ? 0 : prevProgress + 100
         );
       }
-    }, 5000);
+    }, 40000);
 
     getMinAmount(cc1.current, cc2.current, net1.current, net2.current, flow);
 
@@ -270,7 +192,7 @@ export default function Tradecard(props) {
 
     return () => {
       clearInterval(fetchAmountInterval);
-      controller.abort()
+      controller.abort();
     };
   }, [
     fromAmount,
@@ -288,7 +210,9 @@ export default function Tradecard(props) {
       .then((res) => {
         setRatio(res?.data.toAmount);
       })
-      .catch((error)=> { console.log(error);})
+      .catch((error) => {
+        console.log(error);
+      });
   }, [selectedCC.legacyTicker[0], selectedCC.legacyTicker[1], flow]);
 
   useEffect(() => {
@@ -297,7 +221,7 @@ export default function Tradecard(props) {
 
     if (!maxData) {
       // console.log('lllllllllll');
-      if (fromAmount < minData) {
+      if (fromAmount < minData && fromAmount.length > 0) {
         setIsError(true);
       } else if (fromAmount > minData || fromAmount.length < 1) {
         setIsError(false);
@@ -306,13 +230,16 @@ export default function Tradecard(props) {
 
     if (maxData) {
       // console.log('oooooooooooooo');
-      if (fromAmount < minData) {
+      if (fromAmount < minData && fromAmount.length > 0) {
         setIsError(true);
         setMinOrMax(0);
       } else if (fromAmount > maxData) {
         setMinOrMax(1);
         setIsError(true);
-      } else if ((fromAmount > minData  &&   fromAmount < maxData) || fromAmount.length < 1 ) {
+      } else if (
+        (fromAmount > minData && fromAmount < maxData) ||
+        fromAmount.length < 1
+      ) {
         setIsError(false);
       }
     }
@@ -332,18 +259,10 @@ export default function Tradecard(props) {
 
   const [progress, setProgress] = useState(0);
 
-  const emails = ["username@gmail.com", "user02@gmail.com"];
-  const [open, setOpen] = useState(-1);
-  const [selectedValue, setSelectedValue] = useState(emails[1]);
 
-  const handleClickOpen = (id) => {
-    setOpen(id);
-  };
 
-  const handleClose = (value) => {
-    setOpen(-1);
-    setSelectedValue(value);
-  };
+
+
 
   const cardBox = {
     display: "flex",
@@ -375,7 +294,7 @@ export default function Tradecard(props) {
 
   axiosRetry(axios, {
     retryDelay: axiosRetry.exponentialDelay,
-    retries: 10000,
+    retries: 100000,
   });
 
   // console.log(minData);
@@ -383,33 +302,19 @@ export default function Tradecard(props) {
   const exceptThisSymbols = ["e", "E", "+", "-", "."];
 
 
+  const BootstrapTooltip = styled(({ className, ...props }) => (
+    <Tooltip {...props} arrow classes={{ popper: className }} />
+  ))(({ theme }) => ({
+    [`& .${tooltipClasses.arrow}`]: {
+      color: theme.palette.common.black,
+    },
+    [`& .${tooltipClasses.tooltip}`]: {
+      backgroundColor: theme.palette.common.black,
+    },
+  }));
 
   return (
-    <UserContext.Provider
-      value={{
-        endPoint,
-        data,
-        // isLoading,
-        // error,
-        selectedCC,
-        toAmount,
-        fetchAmount,
 
-        // post,
-        payId,
-        setPayId,
-        payIn,
-        setPayIn,
-        fromAmount,
-        getMinAmount,
-        speed,
-        depositFee,
-        withdrawalFee,
-        step,
-        setStep,
-        ratio,
-      }}
-    >
       <Box sx={cardBox}>
         <Grid container spacing={2}>
           <Grid
@@ -421,15 +326,21 @@ export default function Tradecard(props) {
               alignItems: "center",
             }}
           >
-            <div>
+            <div style={{display : 'flex' }}>
               {pages.map((page, index) => (
-                <ButtonChooze
-                  key={index}
-                  id={index}
-                  content={page.content}
-                  active={active === index}
-                  changeColor={changeColor}
-                />
+                <BootstrapTooltip title={page.tooltip} 
+                // sx={{' .MuiTooltip-popper' : {backgroundColor : theme.palette.secondary.main} ,backgroundColor : theme.palette.secondary.main}}
+                 arrow >
+                  <div >
+                    <ButtonChooze
+                      key={index}
+                      id={index}
+                      content={page.content}
+                      active={active === index}
+                      changeColor={changeColor}
+                    />
+                  </div>
+                </BootstrapTooltip>
               ))}
             </div>
             <Button
@@ -447,13 +358,19 @@ export default function Tradecard(props) {
           <Grid item xs={12}>
             <InputTrade
               value={fromAmount}
-              onKeyDown={e => exceptThisSymbols.includes(e.key) && e.preventDefault()}
+              onKeyDown={(e) =>
+                exceptThisSymbols.includes(e.key) && e.preventDefault()
+              }
               onChange={(e) => {
                 setFromAmount(e.target.value);
               }}
               error={isError}
               label={
-                isError && (minData || maxData) ? `${minOrMax ? 'حداکثر' : 'حداقل'} میزان معامله ${minOrMax ? maxData : minData} می باشد` : "پرداخت"
+                isError && (minData || maxData)
+                  ? `${minOrMax ? "حداکثر" : "حداقل"} میزان معامله ${
+                      minOrMax ? maxData : minData
+                    } می باشد`
+                  : "پرداخت"
               }
               type="number"
               height={inputHieght}
@@ -572,6 +489,6 @@ export default function Tradecard(props) {
           </Grid>
         </Grid>
       </Box>
-    </UserContext.Provider>
+
   );
 }
