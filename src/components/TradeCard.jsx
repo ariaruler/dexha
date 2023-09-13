@@ -184,7 +184,7 @@ export default function Tradecard(props) {
       }
     }, 40000);
 
-    getMinAmount(cc1.current, cc2.current, net1.current, net2.current, flow);
+    // getMinAmount(cc1.current, cc2.current, net1.current, net2.current, flow);
 
     axios.get(checkUrl).then((res) => {
       setCheckData(res?.data);
@@ -218,6 +218,8 @@ export default function Tradecard(props) {
   useEffect(() => {
     // console.log(minData)
     // console.log(fromAmount)
+
+    getMinAmount(cc1.current, cc2.current, net1.current, net2.current, flow);
 
     if (!maxData) {
       // console.log('lllllllllll');
@@ -299,7 +301,7 @@ export default function Tradecard(props) {
 
   // console.log(minData);
 
-  const exceptThisSymbols = ["e", "E", "+", "-", "."];
+  const exceptThisSymbols = ["e", "E", "+", "-", ];
 
 
   const BootstrapTooltip = styled(({ className, ...props }) => (
