@@ -204,7 +204,7 @@ export default function PopUpTrade(props) {
       )
       .catch((error) => {
         console.log(error);
-      })
+      });
     // console.log(res.data);
     const res_1 = await res.data;
     // console.log(res_1);
@@ -256,16 +256,17 @@ export default function PopUpTrade(props) {
     const getStatusInterval = setInterval(() => {
       // console.log(payIdRef.current);
       if (x) {
-        axios.get(`${endPoint}/exchange/api/by-id?id=${x}`)
-        .catch((error) => {
-          console.log(error);
-        })
-        .then((res) => {
-          if (res?.data.status) {
-            // console.log(res?.data.status);
-            setStatus(res);
-          }
-        })
+        axios
+          .get(`${endPoint}/exchange/api/by-id?id=${x}`)
+          .catch((error) => {
+            console.log(error);
+          })
+          .then((res) => {
+            if (res?.data.status) {
+              // console.log(res?.data.status);
+              setStatus(res);
+            }
+          });
       }
     }, 15000);
 
@@ -315,7 +316,7 @@ export default function PopUpTrade(props) {
       case "finished":
         setSliderValue(100);
         setStatusFa("پایان تبادل");
-        setStep(step + 1);
+        setStep(3);
         break;
       case "failed":
         setSliderValue(0);
@@ -400,13 +401,12 @@ export default function PopUpTrade(props) {
                             // }}
                             arrow
                           >
-                                                  <Button color="common" sx={{ minWidth: 0 }}>
-
-                            <InfoOutlinedIcon
-                              color="secondary"
-                              sx={{ height: "auto !important" }}
+                            <Button color="common" sx={{ minWidth: 0 }}>
+                              <InfoOutlinedIcon
+                                color="secondary"
+                                sx={{ height: "auto !important" }}
                               />
-                              </Button>
+                            </Button>
                           </BootstrapTooltip>
                         )
                       }
@@ -467,13 +467,12 @@ export default function PopUpTrade(props) {
                             // }}
                             arrow
                           >
-                                                  <Button color="common" sx={{ minWidth: 0 }}>
-
-                            <InfoOutlinedIcon
-                              color="secondary"
-                              sx={{ height: "auto !important" }}
+                            <Button color="common" sx={{ minWidth: 0 }}>
+                              <InfoOutlinedIcon
+                                color="secondary"
+                                sx={{ height: "auto !important" }}
                               />
-                              </Button>
+                            </Button>
                           </BootstrapTooltip>
                         )
                       }
@@ -520,12 +519,13 @@ export default function PopUpTrade(props) {
                     // console.log(check1)
                     // console.log(check2)
                     if (check1 && 1) {
-                      setStep(step + 1);
+                      setStep((x) => x + 1);
                     }
                   }}
                   sx={{
                     backgroundColor: theme.palette.primary.main,
                     cursor: "pointer",
+                    justifyContent: " center ",
                   }}
                 >
                   <Grid
@@ -616,8 +616,8 @@ export default function PopUpTrade(props) {
 
                 <DialogActions
                   onClick={() => {
-                    setPayIn()
-                    setStep(step + 1);
+                    setPayIn();
+                    setStep((x) => x + 1);
                     post();
                     // console.log(payId);
 
@@ -656,10 +656,9 @@ export default function PopUpTrade(props) {
                   header="تائید"
                   pointerDisable={true}
                   handleClose={() => {
-                    if(!status || status?.data.status==='waiting'){
+                    if (!status || status?.data.status === "waiting") {
                       handleClose();
-                    }else{
-
+                    } else {
                       handleClickOpen(2);
                     }
                   }}
@@ -782,12 +781,12 @@ export default function PopUpTrade(props) {
                     لطفا مقدار {selectedCC.currencies[0] + " " + fromAmount} را
                     واریز نمائید
                     <Button color="common" sx={{ minWidth: 0 }}>
-                    <ContentCopyIcon
-                      onClick={() => navigator.clipboard.writeText(payId)}
-                      sx={{
-                        "&:hover": { color: theme.palette.secondary.main },
-                      }}
-                    />
+                      <ContentCopyIcon
+                        onClick={() => navigator.clipboard.writeText(payId)}
+                        sx={{
+                          "&:hover": { color: theme.palette.secondary.main },
+                        }}
+                      />
                     </Button>
                   </Grid>
 
@@ -834,12 +833,12 @@ export default function PopUpTrade(props) {
                     </BootstrapTooltip>
                     کد پیگیری معامله {payId}
                     <Button color="common" sx={{ minWidth: 0 }}>
-                    <ContentCopyIcon
-                      onClick={() => navigator.clipboard.writeText(payId)}
-                      sx={{
-                        "&:hover": { color: theme.palette.secondary.main },
-                      }}
-                    />
+                      <ContentCopyIcon
+                        onClick={() => navigator.clipboard.writeText(payId)}
+                        sx={{
+                          "&:hover": { color: theme.palette.secondary.main },
+                        }}
+                      />
                     </Button>
                   </Grid>
 
@@ -859,7 +858,10 @@ export default function PopUpTrade(props) {
                 </DialogContent>
 
                 <DialogActions
-                  sx={{ backgroundColor: theme.palette.background.paper }}
+                  sx={{
+                    backgroundColor: theme.palette.background.paper,
+                    justifyContent: " center ",
+                  }}
                 >
                   <Grid
                     item
@@ -949,12 +951,12 @@ export default function PopUpTrade(props) {
                     </BootstrapTooltip>
                     کد پیگیری معامله {payId}
                     <Button color="common" sx={{ minWidth: 0 }}>
-                    <ContentCopyIcon
-                      onClick={() => navigator.clipboard.writeText(payId)}
-                      sx={{
-                        "&:hover": { color: theme.palette.secondary.main },
-                      }}
-                    />
+                      <ContentCopyIcon
+                        onClick={() => navigator.clipboard.writeText(payId)}
+                        sx={{
+                          "&:hover": { color: theme.palette.secondary.main },
+                        }}
+                      />
                     </Button>
                   </Grid>
                 </DialogContent>
@@ -968,6 +970,7 @@ export default function PopUpTrade(props) {
                   sx={{
                     backgroundColor: theme.palette.primary.main,
                     cursor: "pointer",
+                    justifyContent: " center ",
                   }}
                 >
                   <Grid

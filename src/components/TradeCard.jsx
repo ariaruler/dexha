@@ -453,11 +453,7 @@ export default function Tradecard(props) {
             <ButtonTrade
               handleClickOpen={() => {
                 handleClickOpen(2);
-                fetch(amountUrl)
-                  .then((res) => res.json())
-                  .then((res) => {
-                    setToAmount(res?.toAmount);
-                  });
+
               }}
               id={2}
               borderRadius={theme.shape.borderRadius["1"]}
@@ -472,18 +468,7 @@ export default function Tradecard(props) {
               disabled={!checkData[0]?.flow.standard || !toAmount || isError}
             />
           </Grid>
-          {open === 2 ? (
-            <PopUpTrade
-              toAmount={toAmount?.toAmount}
-              id={2}
-              borderRadius={props.borderRadius}
-              selectedValue={selectedValue}
-              open={open}
-              onClose={handleClose}
-            />
-          ) : (
-            <></>
-          )}
+
           <Grid item xs={12}>
             <Buttonfee inputHieght={inputHieght} />
           </Grid>

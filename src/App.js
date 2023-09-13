@@ -19,6 +19,7 @@ import { useEffect, useState, createContext, useRef } from "react";
 
 import axios from "axios";
 import axiosRetry from "axios-retry";
+import PopUpTrade from "./components/PopUpTrade";
 
 
 const darkTheme = createTheme({
@@ -322,7 +323,18 @@ const fetchAmount = (amountRef, cc1, cc2, net1, net2, flow) => {
           <CssBaseline />
           <BrowserRouter>
             <Header />
-
+            {open === 2 ? (
+            <PopUpTrade
+              toAmount={toAmount?.toAmount}
+              id={2}
+              borderRadius={darkTheme.shape.borderRadius['2']}
+              selectedValue={selectedValue}
+              open={open}
+              onClose={handleClose}
+            />
+          ) : (
+            <></>
+          )}
             <AnimatedRoutes />
           </BrowserRouter>
         </ThemeProvider>

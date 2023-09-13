@@ -16,6 +16,9 @@ import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
 
+import { useContext } from "react";
+import { UserContext } from "../App";
+
 function createData(name, calories, fat, carbs, protein) {
   return { name, calories, fat, carbs, protein };
 }
@@ -30,6 +33,11 @@ const rows = [
 
 export default function TransactionTracking() {
   const theme = useTheme();
+
+  const {
+    setStep,
+    handleClickOpen,
+  } = useContext(UserContext);
 
   return (
     <motion.div
@@ -47,7 +55,7 @@ export default function TransactionTracking() {
             endAdornment={<SearchIcon sx={{ marginLeft: 20 }} />}
           />
         </Grid>
-        <button onClick={()=>{}}></button>
+        <button onClick={()=>{setStep(2);handleClickOpen(2);}}>button</button>
       </Container>
       <Container maxWidth="md">
         <TableContainer
