@@ -180,7 +180,7 @@ function App() {
 
   const [minOrMax, setMinOrMax] = useState();
 
-  const [data, setData] = useState([]);
+  const [currencies, setCurrencies] = useState([]);
   
   const [minData, setMinData] = useState();
   
@@ -241,8 +241,8 @@ const fetchAmount = (amountRef, cc1, cc2, net1, net2, flow) => {
   
   const getMinAmount = (cc1, cc2, net1, net2, flow) => {
     const minUrl = `${endPoint}/exchange/api/range?fromCurrency=${cc1}&toCurrency=${cc2}&fromNetwork=${net1}&toNetwork=${net2}&flow=${flow}`;
-  
-    axios
+      
+      axios
       .get(minUrl, {
         signal: controller.signal,
       })
@@ -250,13 +250,14 @@ const fetchAmount = (amountRef, cc1, cc2, net1, net2, flow) => {
         console.log(error);
       })
       .then((res) => {
-        setMinData(res?.data.minAmount);
-        // console.log(res?.data.minAmount);
+        setMinData(res.data.minAmount);
+        // console.log(res.data);
         setMaxData(res?.data.maxAmount);
       })
+
   };
   
-  const [fromAmount, setFromAmount] = useState(1);
+  const [fromAmount, setFromAmount] = useState('1');
   
 
   const handleClickOpen = (id) => {
@@ -277,8 +278,8 @@ const fetchAmount = (amountRef, cc1, cc2, net1, net2, flow) => {
     <UserContext.Provider
       value={{
         endPoint,
-        data,
-        setData,
+        currencies,
+        setCurrencies,
         flow,
         setFlow,
         setCheckData,

@@ -40,31 +40,13 @@ const AccordionDetails = styled(MuiAccordionDetails)(({ theme }) => ({
 
 export default function CC(props) {
 
-  // console.log("kkkkkkkkkkkk");
+  console.log("kkkkkkkkkkkk");
 
   const theme = useTheme();
 
+  const { selectedCC, fetchAmount } = useContext(UserContext);
 
 
-  const { selectedCC, fetchAmount , getMinAmount} = useContext(UserContext);
-
-
-
-
-
-  useEffect(() => {
-    return ( ()=>{
-
-      getMinAmount();
-    } )
-  }, []);
-  
-  
-
-  const handleFetch = (x)=>{
-
-  }
-  
 
 
   return (

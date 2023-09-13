@@ -54,8 +54,8 @@ export default function Tradecard(props) {
 
     const {
       endPoint,
-      data,
-      setData,
+      currencies,
+      setCurrencies,
       flow,
       setFlow,
       setCheckData,
@@ -101,7 +101,7 @@ export default function Tradecard(props) {
         `${endPoint}/exchange/api/currencies?raw=true&active=true&flow=standard&buy=true&sell=true`
       )
       .then((res) => {
-        setData(manage(res.data));
+        setCurrencies(manage(res.data));
       })
       .catch((error) => {
         console.log(error);
@@ -113,7 +113,7 @@ export default function Tradecard(props) {
   const theme = useTheme();
   // console.log( "YYYYYYYYYYYYYYYYYY")
 
-  const amountRef = useRef(1);
+  const amountRef = useRef('1');
 
   const cc1 = useRef("btc");
 
@@ -184,7 +184,12 @@ export default function Tradecard(props) {
       }
     }, 40000);
 
-    // getMinAmount(cc1.current, cc2.current, net1.current, net2.current, flow);
+    getMinAmount(   
+      selectedCC.currencies[0],
+      selectedCC.currencies[1],
+      selectedCC.network[0],
+      selectedCC.network[1],
+      flow);
 
     axios.get(checkUrl).then((res) => {
       setCheckData(res?.data);
@@ -216,12 +221,14 @@ export default function Tradecard(props) {
   }, [selectedCC.legacyTicker[0], selectedCC.legacyTicker[1], flow]);
 
   useEffect(() => {
-    // console.log(minData)
-    // console.log(fromAmount)
+    // console.log('eeeeeeeeeeeeeeeeeeee')
+    // console.log(selectedCC.currencies[0])
+    
 
-    getMinAmount(cc1.current, cc2.current, net1.current, net2.current, flow);
-
+    
     if (!maxData) {
+      // console.log(minData) 
+      // console.log(fromAmount) 
       // console.log('lllllllllll');
       if (fromAmount < minData && fromAmount.length > 0) {
         setIsError(true);
@@ -247,13 +254,10 @@ export default function Tradecard(props) {
     }
   }, [
     minData,
-    fromAmount,
-    selectedCC.legacyTicker[0],
-    selectedCC.legacyTicker[1],
-    flow,
+    fromAmount
   ]);
 
-  // console.log("fjsldfjskdfjlskfjskfjlsdfjlsfjlsfjlsfj")
+  // console.log(selectedCC.legacyTicker[0])
 
   // console.log(toAmount);
 

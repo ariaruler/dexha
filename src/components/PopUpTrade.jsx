@@ -249,33 +249,35 @@ export default function PopUpTrade(props) {
     setPayId(res.data.id);
   };
 
+  const getStatusInterval = useRef() ;
+
   const getStatus = (x) => {
     // payIdRef.current = x;
-    // console.log(x);
-
-    const getStatusInterval = setInterval(() => {
-      // console.log(payIdRef.current);
-      if (x) {
-        axios
-          .get(`${endPoint}/exchange/api/by-id?id=${x}`)
-          .catch((error) => {
-            console.log(error);
-          })
-          .then((res) => {
-            if (res?.data.status) {
-              // console.log(res?.data.status);
-              setStatus(res);
-            }
-          });
-      }
-    }, 15000);
-
+    console.log(x);
     if (!x) {
-      // console.log("kkkkkkkkkkkkkkkkk");
-      clearInterval(getStatusInterval);
+      clearInterval(getStatusInterval.current);
     }
-  };
 
+    getStatusInterval.current = setInterval(() => {
+      if (x) {
+        console.log('ppppppppppppppppp');
+        axios
+        .get(`${endPoint}/exchange/api/by-id?id=${x}`)
+        .catch((error) => {
+          console.log(error);
+        })
+        .then((res) => {
+          if (res?.data.status) {
+            // console.log(res?.data.status);
+            setStatus(res);
+          }
+        });
+      }
+    }, 2000);
+    
+    console.log(getStatusInterval.current);
+  };
+  
   useEffect(() => {
     // console.log(payId);
     if (payId) {
@@ -314,6 +316,7 @@ export default function PopUpTrade(props) {
         setStatusFa("در حال ارسال ارز");
         break;
       case "finished":
+        getStatus();
         setSliderValue(100);
         setStatusFa("پایان تبادل");
         setStep(3);
@@ -626,6 +629,7 @@ export default function PopUpTrade(props) {
                   sx={{
                     backgroundColor: theme.palette.primary.main,
                     cursor: "pointer",
+                    justifyContent: " center ",
                   }}
                 >
                   <Grid
@@ -656,7 +660,7 @@ export default function PopUpTrade(props) {
                   header="تائید"
                   pointerDisable={true}
                   handleClose={() => {
-                    if (!status || status?.data.status === "waiting") {
+                    if (!status ) {
                       handleClose();
                     } else {
                       handleClickOpen(2);

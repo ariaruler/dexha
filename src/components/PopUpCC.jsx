@@ -25,6 +25,7 @@ import { AnimatePresence } from "framer-motion";
 import { motion } from "framer-motion";
 
 import CC from "./CC";
+import { useRef } from "react";
 
 const inputHieght = 54;
 
@@ -51,10 +52,13 @@ export default function PopUpCC(props) {
     "& .MuiPaper-root": { backgroundColor: theme.palette.background.default },
   };
 
-  const {  data } = useContext(UserContext);
+  const {  currencies  } = useContext(UserContext);
 
-  const [currencies, setCurrencies] = useState([]);
 
+  // const data = useRef(currencies)
+  
+  const [data , setData] = useState([])
+  
   const [x , setX] = useState(1)
   
   
@@ -62,7 +66,8 @@ export default function PopUpCC(props) {
     if( (x-2) < currencies.length){
 
       setTimeout(()=>{
-        setCurrencies(data.slice(0 , x) );
+        // data.current = currencies.slice(0 , x) ;
+        setData(currencies.slice(0 , x) );
         
         setX(prev => prev+1)
         // console.log(x);
@@ -73,7 +78,7 @@ export default function PopUpCC(props) {
     // console.log(x);
 
       
-  }, [x]);
+  }, [x, currencies]);
 
 
   const handleClose = () => {
@@ -177,7 +182,7 @@ export default function PopUpCC(props) {
                 >
                   <CC id={props.id}
                    currencies={
-                    filteredList(currencies,  search)
+                    filteredList(data,  search)
                     // currencies
                   } 
                    />
