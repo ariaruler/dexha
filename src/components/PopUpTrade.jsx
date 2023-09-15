@@ -192,12 +192,12 @@ export default function PopUpTrade(props) {
 
   const controller = new AbortController();
 
-  const checkData = async (data, amount) => {
-    // console.log(data);
-    // console.log(amount);
+  const checkData = async (currency, address) => {
+    console.log(currency);
+    console.log(address);
     const res = await axios
       .get(
-        `${endPoint}/exchange/api/validate-address?currency=${amount}&address=${data}`,
+        `${endPoint}/exchange/api/validate-address?currency=${currency}&address=${address}`,
         {
           signal: controller.signal,
         }
@@ -249,7 +249,7 @@ export default function PopUpTrade(props) {
     setPayId(res.data.id);
   };
 
-  const getStatusInterval = useRef() ;
+  const getStatusInterval = useRef();
 
   const getStatus = (x) => {
     // payIdRef.current = x;
@@ -260,24 +260,24 @@ export default function PopUpTrade(props) {
 
     getStatusInterval.current = setInterval(() => {
       if (x) {
-        console.log('ppppppppppppppppp');
+        console.log("ppppppppppppppppp");
         axios
-        .get(`${endPoint}/exchange/api/by-id?id=${x}`)
-        .catch((error) => {
-          console.log(error);
-        })
-        .then((res) => {
-          if (res?.data.status) {
-            // console.log(res?.data.status);
-            setStatus(res);
-          }
-        });
+          .get(`${endPoint}/exchange/api/by-id?id=${x}`)
+          .catch((error) => {
+            console.log(error);
+          })
+          .then((res) => {
+            if (res?.data.status) {
+              // console.log(res?.data.status);
+              setStatus(res);
+            }
+          });
       }
     }, 2000);
-    
+
     console.log(getStatusInterval.current);
   };
-  
+
   useEffect(() => {
     // console.log(payId);
     if (payId) {
@@ -288,6 +288,7 @@ export default function PopUpTrade(props) {
   useEffect(() => {
     return () => {
       setPayId();
+      getStatus();
     };
   }, []);
 
@@ -346,6 +347,13 @@ export default function PopUpTrade(props) {
 
   return (
     <>
+      <PopUpError
+        id={2}
+        borderRadius={props.borderRadius}
+        open={open2}
+        onClose={handleClose2}
+        handleClose={handleClose}
+      />
       {(() => {
         switch (step) {
           case 0:
@@ -359,7 +367,9 @@ export default function PopUpTrade(props) {
               >
                 <PopUpTitle
                   header="شروع تبادل"
-                  handleClose={handleClose}
+                  handleClose={() => {
+                    handleClickOpen(2);
+                  }}
                   pointerDisable={true}
                   displayNone={true}
                 />
@@ -558,7 +568,9 @@ export default function PopUpTrade(props) {
                 <PopUpTitle
                   header="تائید"
                   previosStep={previosStep}
-                  handleClose={handleClose}
+                  handleClose={() => {
+                    handleClickOpen(2);
+                  }}
                 />
                 <TradeBoared />
                 {/* toAmount={props.toAmount} */}
@@ -660,23 +672,11 @@ export default function PopUpTrade(props) {
                   header="تائید"
                   pointerDisable={true}
                   handleClose={() => {
-                    if (!status ) {
-                      handleClose();
-                    } else {
-                      handleClickOpen(2);
-                    }
+                    handleClickOpen(2);
                   }}
                   displayNone={true}
                 />
                 <DialogContent sx={{ padding: "2px 2em" }}>
-                  <PopUpError
-                    id={2}
-                    borderRadius={props.borderRadius}
-                    open={open2}
-                    onClose={handleClose2}
-                    handleClose={handleClose}
-                  />
-
                   <Grid
                     item
                     xs={12}
