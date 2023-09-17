@@ -21,6 +21,8 @@ import axios from "axios";
 import axiosRetry from "axios-retry";
 import PopUpTrade from "./components/PopUpTrade";
 
+import { useCookies } from 'react-cookie';
+
 
 const darkTheme = createTheme({
   direction: "rtl",
@@ -203,15 +205,20 @@ function App() {
   
   const [isError, setIsError] = useState("");
   
-  const [payIn, setPayIn] = useState();
+  const [payIn, setPayIn] = useState([]);
   
-  const [payId, setPayId] = useState();
+  const [payId, setPayId] = useState([]);
   
   const [step, setStep] = useState(0);
   
   const [ratio, setRatio] = useState();
 
+  const [cookies, setCookie] = useCookies(['name']);
 
+
+  // function onChange(newName) {
+  //   setCookie('name', newName);
+  // }
   
 const fetchAmount = (amountRef, cc1, cc2, net1, net2, flow) => {
   setToAmount();
