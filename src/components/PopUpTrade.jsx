@@ -144,7 +144,9 @@ export default function PopUpTrade(props) {
     },
   };
 
-  const [status, setStatus] = useState();
+  const [status, setStatus] = useState([]);
+
+  const [payOutHash, setPayOutHash] = useState();
 
   const handleClose = () => {
     getStatus();
@@ -176,6 +178,10 @@ export default function PopUpTrade(props) {
     fromAmount,
     step,
     setStep,
+    indexOfPage,
+    setIndexOfPage,
+    mainData,
+     setMainData
   } = useContext(UserContext);
 
   const [exteraId, setExteraId] = useState();
@@ -192,8 +198,8 @@ export default function PopUpTrade(props) {
   const controller = new AbortController();
 
   const checkData = async ( address ,currency) => {
-    console.log(currency);
-    console.log(address);
+    // console.log(currency);
+    // console.log(address);
     const res = await axios
       .get(
         `${endPoint}/exchange/api/validate-address?currency=${currency}&address=${address}`,
@@ -244,8 +250,9 @@ export default function PopUpTrade(props) {
     console.log(res.data)
     // console.log(res.data.id)
     setPayInExteraId(res.data.payinExtraId);
-    setPayId(x =>{ return {...x , 0 :  res.data.id};  });
-    setPayIn(x => { return{...x , 0 :  res.data.payinAddress} });
+    setPayId(x =>[...x ,   res.data.id]);
+    setPayIn(x => [...x ,  res.data.payinAddress]);
+    setMainData(x => [ ...x ,{ currencies : selectedCC.currencies ,id : res.data.id , payIn : res.data.payinAddress}])
   };
 
   const getStatusInterval = useRef();
@@ -267,8 +274,9 @@ export default function PopUpTrade(props) {
           })
           .then((res) => {
             if (res?.data.status) {
-              // console.log(res?.data.status);
-              setStatus(res);
+              console.log(res);
+              setStatus(y => {return{...y , [x] : res?.data.status}});
+              setPayOutHash(res?.data.payoutHash)
             }
           });
       }
@@ -280,7 +288,7 @@ export default function PopUpTrade(props) {
   useEffect(() => {
     // console.log(payId);
     if (payId) {
-      getStatus(payId[0]);
+      getStatus(payId[payId.length - 1]);
     }
   }, [payId]);
 
@@ -297,7 +305,7 @@ export default function PopUpTrade(props) {
   const [statusFa, setStatusFa] = useState("در حال ساخت تراکنش");
 
   useEffect(() => {
-    switch (status?.data.status) {
+    switch (status[payId]) {
       case "waiting":
         setSliderValue(20);
         setStatusFa("در انتظار واریز");
@@ -325,7 +333,7 @@ export default function PopUpTrade(props) {
         setStatusFa("مشکل در تبادل");
         break;
     }
-  }, [status?.data.status]);
+  }, [status[payId]]);
 
   axiosRetry(axios, {
     retryDelay: axiosRetry.exponentialDelay,
@@ -344,13 +352,15 @@ export default function PopUpTrade(props) {
   }));
 
 
-useEffect(() => {
+// useEffect(() => {
   console.log(payId);
-}, [payId]);
+// }, [payId]);
 
-useEffect(() => {
-  console.log(payIn);
-}, [payIn]);
+// useEffect(() => {
+  // console.log(payIn);
+  console.log(mainData);
+  console.log(status);
+// }, [payIn]);
 
 
 
@@ -641,6 +651,7 @@ useEffect(() => {
                 <DialogActions
                   onClick={() => {
                     setStep((x) => x + 1);
+                    getStatus()
                     post();
                     // console.log(payId);
 
@@ -709,11 +720,11 @@ useEffect(() => {
                         }}
                         className="alert"
                         id="myqr"
-                        value={payIn[0] }
+                        value={payIn[payIn.length - 1] }
                         size={200}
                         includeMargin={true}
                       ></QRcode>
-                      {payIn[0] ? (
+                      {payIn[payIn.length - 1] ? (
                         <></>
                       ) : (
                         <Box
@@ -746,7 +757,7 @@ useEffect(() => {
                       alignItems: "center",
                     }}
                   >
-                    {payIn[0] }
+                    {payIn[payIn.length - 1] }
                   </Grid>
 
                   {payInExteraId ? (
@@ -794,7 +805,7 @@ useEffect(() => {
                     واریز نمائید
                     <Button color="common" sx={{ minWidth: 0 }}>
                       <ContentCopyIcon
-                        onClick={() =>{ navigator.clipboard.writeText(payId[0]) }}
+                        onClick={() =>{ navigator.clipboard.writeText(payId[payId.length - 1]) }}
                         sx={{
                           "&:hover": { color: theme.palette.secondary.main },
                         }}
@@ -843,10 +854,10 @@ useEffect(() => {
                         <InfoOutlinedIcon sx={{ height: "auto !important" }} />
                       </Button>
                     </BootstrapTooltip>
-                    کد پیگیری معامله {payId[0] }
+                    کد پیگیری معامله {payId[payId.length - 1] }
                     <Button color="common" sx={{ minWidth: 0 }}>
                       <ContentCopyIcon
-                        onClick={() => { navigator.clipboard.writeText(payId[0]) }}
+                        onClick={() => { navigator.clipboard.writeText(payId[payId.length - 1]) }}
                         sx={{
                           "&:hover": { color: theme.palette.secondary.main },
                         }}
@@ -961,10 +972,10 @@ useEffect(() => {
                         <InfoOutlinedIcon sx={{ height: "auto !important" }} />
                       </Button>
                     </BootstrapTooltip>
-                    کد پیگیری معامله {payId[0]}
+                    کد پیگیری معامله {payId[payId.length - 1]}
                     <Button color="common" sx={{ minWidth: 0 }}>
                       <ContentCopyIcon
-                        onClick={() => navigator.clipboard.writeText(payId[0])}
+                        onClick={() => navigator.clipboard.writeText(payId[payId.length - 1])}
                         sx={{
                           "&:hover": { color: theme.palette.secondary.main },
                         }}
@@ -976,7 +987,7 @@ useEffect(() => {
                 <DialogActions
                   onClick={() => {
                     window.open(
-                      ` https://www.oklink.com/middle/multi-search#key=${status?.data.payoutHash}`
+                      ` https://www.oklink.com/middle/multi-search#key=${payOutHash}`
                     );
                   }}
                   sx={{

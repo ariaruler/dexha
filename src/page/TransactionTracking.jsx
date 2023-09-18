@@ -19,6 +19,8 @@ import Paper from "@mui/material/Paper";
 import { useContext } from "react";
 import { UserContext } from "../App";
 
+import VisibilityIcon from '@mui/icons-material/Visibility';
+
 function createData(name, calories, fat, carbs, protein) {
   return { name, calories, fat, carbs, protein };
 }
@@ -33,6 +35,8 @@ const rows = [
 
 export default function TransactionTracking() {
   const theme = useTheme();
+
+console.log(rows);
 
   const {
     setStep,
@@ -69,11 +73,11 @@ export default function TransactionTracking() {
                 //  `1px solid ${theme.palette.secondary.contrastText}`
                  }} 
               >
-                <TableCell>Dessert (100g serving)</TableCell>
-                <TableCell>Calories</TableCell>
+                <TableCell>تبادل</TableCell>
+                <TableCell>کد پیگیری</TableCell>
                 <TableCell>Fat&nbsp;(g)</TableCell>
                 <TableCell>Carbs&nbsp;(g)</TableCell>
-                <TableCell>Protein&nbsp;(g)</TableCell>
+                <TableCell sx={{ border: 0 , display : 'flex' ,justifyContent : 'center'}}>پیگیری تبادل</TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
@@ -88,7 +92,7 @@ export default function TransactionTracking() {
                   <TableCell sx={{ border: 0 }}>{row.calories}</TableCell>
                   <TableCell sx={{ border: 0 }}>{row.fat}</TableCell>
                   <TableCell sx={{ border: 0 }}>{row.carbs}</TableCell>
-                  <TableCell sx={{ border: 0 }}>{row.protein}</TableCell>
+                  <TableCell sx={{ border: 0 , display : 'flex' ,justifyContent : 'center' ,}}><VisibilityIcon sx={{'&:hover' : {color : theme.palette.primary.main}}} /></TableCell>
                 </TableRow>
               ))}
             </TableBody>

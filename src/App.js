@@ -111,7 +111,7 @@ export const UserContext = createContext();
 
 function App() {
 
-  const [selectedCC, setselecctedCC] = useState({
+  const [selectedCC, setSelecctedCC] = useState({
     currencies: ["btc", "eth"],
     currencyImg: [
       `https://content-api.dexha.io/uploads/btc_1_527dc9ec3c.svg`,
@@ -130,7 +130,7 @@ function App() {
     ) => {
       // console.log(id);
       if (id === 0) {
-        setselecctedCC((prev) => {
+        setSelecctedCC((prev) => {
           return {
             ...prev,
             currencies: { ...prev.currencies, 0: currency },
@@ -143,7 +143,7 @@ function App() {
         // console.log(selectedCC);
       }
       if (id === 1) {
-        setselecctedCC((prev) => {
+        setSelecctedCC((prev) => {
           return {
             ...prev,
             currencies: { ...prev.currencies, 1: currency },
@@ -159,7 +159,7 @@ function App() {
   });
 
   const handleSwap = () => {
-    setselecctedCC((x) => ({
+    setSelecctedCC((x) => ({
       ...x,
       currencies: { 0: selectedCC.currencies[1], 1: selectedCC.currencies[0] },
       network: { 0: selectedCC.network[1], 1: selectedCC.network[0] },
@@ -214,6 +214,11 @@ function App() {
   const [ratio, setRatio] = useState();
 
   const [cookies, setCookie] = useCookies(['name']);
+
+  const [indexOfPage, setIndexOfPage] = useCookies(-1);
+
+  const [mainData, setMainData] = useState([]);
+
 
 
   // function onChange(newName) {
@@ -323,6 +328,10 @@ const fetchAmount = (amountRef, cc1, cc2, net1, net2, flow) => {
         checkData,
         selectedValue,
         handleClose,
+        indexOfPage,
+        setIndexOfPage,
+        mainData,
+         setMainData,
       }}
     >
     <QueryClientProvider client={client}>
