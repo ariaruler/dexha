@@ -319,6 +319,8 @@ export default function Tradecard(props) {
     },
   }));
 
+  console.log(checkData[0]);
+
   return (
 
       <Box sx={cardBox}>
@@ -464,7 +466,7 @@ export default function Tradecard(props) {
               id={2}
               borderRadius={theme.shape.borderRadius["1"]}
               content={
-                checkData[0]?.flow.standard === false
+                checkData[0]?.flow[flow] === false
                   ? "جفت ارز مورد نظر موجود نیست"
                   : "تبادل"
               }

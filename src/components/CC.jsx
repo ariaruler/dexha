@@ -40,7 +40,7 @@ const AccordionDetails = styled(MuiAccordionDetails)(({ theme }) => ({
 
 export default function CC(props) {
 
-  console.log("kkkkkkkkkkkk");
+  // console.log("kkkkkkkkkkkk");
 
   const theme = useTheme();
 
