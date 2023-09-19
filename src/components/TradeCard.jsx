@@ -38,9 +38,8 @@ const endPoint = "https://dexha.io";
 
 const pages = [
   {
-    content: "نرخ استاندارد",
-    tooltip : `نرخ استانندارد:
-    مبادله با نرخ استاندارد یعنی در این لحظه، تبادل شما با بهترین نرخ ممکن انجام می‌شود.توجه داشته باشید در مبادله با نرخ استاندارد نوسان قیمت روی دریافت مبلغ نهایی مبادله شده تاثیر دارد. `
+    content: "نرخ متغیر",
+    tooltip : `نرخ متغیر: مبادله با نرخ متغیر یعنی در این لحظه، تبادل شما با بهترین نرخ ممکن انجام می‌شود.توجه داشته باشید در مبادله با نرخ شناور نوسان قیمت روی دریافت مبلغ نهایی مبادله شده تاثیر دارد.`  
   },
   {
     content: "نرخ ثابت",
@@ -92,6 +91,7 @@ export default function Tradecard(props) {
       checkData,
       selectedValue,
       handleClose,
+      handleClickAlert,
     } = useContext(UserContext);
 
 
@@ -105,6 +105,7 @@ export default function Tradecard(props) {
       })
       .catch((error) => {
         console.log(error);
+        handleClickAlert();
       });
   }, []);
 
@@ -166,23 +167,26 @@ export default function Tradecard(props) {
 
     const fetchAmountInterval = setInterval(() => {
       // console.log(payIdRef.current);
-      if (!payIdRef.current) {
+
         axios
           .get(
             `${endPoint}/exchange/api/estimated-amount?fromCurrency=${cc1.current}&toCurrency=${cc2.current}&fromAmount=${amountRef.current}&fromNetwork=${net1.current}&toNetwork=${net2.current}&flow=${flowRef.current}`
           )
           .catch((error) => {
             console.log(error);
+            handleClickAlert();
           })
           .then((res) => {
             setToAmount(res?.data.toAmount);
           })
 
+          console.log('llllllllll');
+
         setProgress((prevProgress) =>
           prevProgress >= 100 ? 0 : prevProgress + 100
         );
-      }
-    }, 40000);
+
+    }, 2000);
 
     getMinAmount(   
       selectedCC.currencies[0],
@@ -193,6 +197,10 @@ export default function Tradecard(props) {
 
     axios.get(checkUrl).then((res) => {
       setCheckData(res?.data);
+    })
+    .catch((error) => {
+      console.log(error);
+      handleClickAlert();
     });
 
     return () => {
@@ -217,6 +225,7 @@ export default function Tradecard(props) {
       })
       .catch((error) => {
         console.log(error);
+        handleClickAlert();
       });
   }, [selectedCC.legacyTicker[0], selectedCC.legacyTicker[1], flow]);
 
@@ -319,7 +328,7 @@ export default function Tradecard(props) {
     },
   }));
 
-  console.log(checkData[0]);
+  // console.log(checkData[0]);
 
   return (
 
@@ -358,8 +367,8 @@ export default function Tradecard(props) {
               color="common"
               sx={{ minWidth: 0 }}
             >
-              <SettingsIcon />
-              {/* <CircularProgress variant="determinate" value={progress} /> */}
+              {/* <SettingsIcon /> */}
+              <CircularProgress  variant="determinate" value={progress} />
             </Button>
           </Grid>
 
@@ -447,7 +456,7 @@ export default function Tradecard(props) {
           ) : (
             <></>
           )}
-          {open === 3 ? (
+          {/* {open === 3 ? (
             <PopUpSetting
               id={3}
               borderRadius={props.borderRadius}
@@ -456,7 +465,7 @@ export default function Tradecard(props) {
             />
           ) : (
             <></>
-          )}
+          )} */}
           <Grid item xs={12}>
             <ButtonTrade
               handleClickOpen={() => {

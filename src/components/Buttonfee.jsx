@@ -40,14 +40,6 @@ export default function Buttonfee() {
             <TableBody>
               <TableRow>
                 <TableCell sx={{ padding: 0.5, border: "none" }}>
-                  سرعت انتقال
-                </TableCell>
-                <TableCell sx={{ padding: 0.5, border: "none" }} align="right">
-                 {speed}
-                </TableCell>
-              </TableRow>
-              <TableRow>
-                <TableCell sx={{ padding: 0.5, border: "none" }}>
                   کارمزد واریز
                 </TableCell>
                 <TableCell sx={{ padding: 0.5, border: "none" }} align="right">

@@ -21,8 +21,10 @@ import axios from "axios";
 import axiosRetry from "axios-retry";
 import PopUpTrade from "./components/PopUpTrade";
 
-import { useCookies } from 'react-cookie';
+import { useCookies } from "react-cookie";
 
+import Snackbar from "@mui/material/Snackbar";
+import MuiAlert from "@mui/material/Alert";
 
 const darkTheme = createTheme({
   direction: "rtl",
@@ -88,7 +90,6 @@ const darkTheme = createTheme({
   shape: {
     borderRadius: ["6px", "8px", "12px"],
   },
-
 });
 
 darkTheme.shadows[24] = darkTheme.shadows[0];
@@ -98,7 +99,6 @@ const controller = new AbortController();
 // console.log(darkTheme);
 const endPoint = "https://dexha.io";
 
-
 const cacheRtl = createCache({
   key: "muirtl",
   stylisPlugins: [prefixer, rtlPlugin],
@@ -106,11 +106,9 @@ const cacheRtl = createCache({
 
 const emails = ["username@gmail.com", "user02@gmail.com"];
 
-
 export const UserContext = createContext();
 
 function App() {
-
   const [selectedCC, setSelecctedCC] = useState({
     currencies: ["btc", "eth"],
     currencyImg: [
@@ -183,94 +181,92 @@ function App() {
   const [minOrMax, setMinOrMax] = useState();
 
   const [currencies, setCurrencies] = useState([]);
-  
+
   const [minData, setMinData] = useState();
-  
+
   const [maxData, setMaxData] = useState();
-  
+
   const [flow, setFlow] = useState("standard");
-  
+
   const [toAmount, setToAmount] = useState();
-  
+
   const [speed, setSpeed] = useState();
-  
+
   const [depositFee, setDepositFee] = useState();
-  
+
   const [withdrawalFee, setWithdrawalFee] = useState();
-  
- 
+
   const [selectedValue, setSelectedValue] = useState(emails[1]);
-  
+
   const [checkData, setCheckData] = useState([]);
-  
+
   const [isError, setIsError] = useState("");
-  
+
   const [payIn, setPayIn] = useState([]);
-  
+
   const [payId, setPayId] = useState([]);
-  
+
   const [step, setStep] = useState(0);
-  
+
   const [ratio, setRatio] = useState();
 
-  const [cookies, setCookie] = useCookies(['name']);
+  const [cookies, setCookie] = useCookies(["name"]);
 
   const [indexOfPage, setIndexOfPage] = useCookies(-1);
 
   const [mainData, setMainData] = useState([]);
 
-
-
   // function onChange(newName) {
   //   setCookie('name', newName);
   // }
-  
-const fetchAmount = (amountRef, cc1, cc2, net1, net2, flow) => {
-  setToAmount();
-  setSpeed();
-  setDepositFee();
-  setWithdrawalFee();
 
-  axios
-    .get(
-      `${endPoint}/exchange/api/estimated-amount?fromCurrency=${cc1}&toCurrency=${cc2}&fromAmount=${amountRef}&fromNetwork=${net1}&toNetwork=${net2}&flow=${flow}`,
-      {
-        signal: controller.signal,
-      }
-    )
-    .catch((error) => {
-      console.log(error);
-    })
-    .then((res) => {
-      setToAmount(res?.data.toAmount);
-      // console.log('lllllllllll');
-      setSpeed(res?.data.transactionSpeedForecast);
-      setDepositFee(res?.data.depositFee);
-      setWithdrawalFee(res?.data.withdrawalFee);
-      // console.log(cc1.current);
-    })
-};
+  const fetchAmount = (amountRef, cc1, cc2, net1, net2, flow) => {
+    setToAmount();
+    setSpeed();
+    setDepositFee();
+    setWithdrawalFee();
+
+    axios
+      .get(
+        `${endPoint}/exchange/api/estimated-amount?fromCurrency=${cc1}&toCurrency=${cc2}&fromAmount=${amountRef}&fromNetwork=${net1}&toNetwork=${net2}&flow=${flow}`,
+        {
+          signal: controller.signal,
+        }
+      )
+      .catch((error) => {
+        console.log(error);
+        console.log('jjjjjjjjjjjj');
+        handleClickAlert();
+      })
+      .then((res) => {
+        setToAmount(res?.data.toAmount);
+        // console.log('lllllllllll');
+        setSpeed(res?.data.transactionSpeedForecast);
+        setDepositFee(res?.data.depositFee);
+        setWithdrawalFee(res?.data.withdrawalFee);
+        // console.log(cc1.current);
+      });
+  };
   
   const getMinAmount = (cc1, cc2, net1, net2, flow) => {
     const minUrl = `${endPoint}/exchange/api/range?fromCurrency=${cc1}&toCurrency=${cc2}&fromNetwork=${net1}&toNetwork=${net2}&flow=${flow}`;
-      
-      axios
+
+    axios
       .get(minUrl, {
         signal: controller.signal,
       })
       .catch((error) => {
         console.log(error);
+        handleClickAlert();
       })
       .then((res) => {
         setMinData(res.data.minAmount);
         // console.log(res.data);
         setMaxData(res?.data.maxAmount);
-      })
-
+      });
   };
-  
-  const [fromAmount, setFromAmount] = useState('1');
-  
+
+  const [fromAmount, setFromAmount] = useState("1");
 
   const handleClickOpen = (id) => {
     setOpen(id);
@@ -281,12 +277,23 @@ const fetchAmount = (amountRef, cc1, cc2, net1, net2, flow) => {
     setSelectedValue(value);
   };
 
-  
+  const [openAlert, setOpenAlert] = useState(false);
+
+  const handleClickAlert = () => {
+    setOpenAlert(true);
+  };
+
+  const handleCloseAlert = (event, reason) => {
+    if (reason === "clickaway") {
+      return;
+    }
+
+    setOpenAlert(false);
+  };
 
   const client = new QueryClient();
 
   return (
-    
     <UserContext.Provider
       value={{
         endPoint,
@@ -331,33 +338,49 @@ const fetchAmount = (amountRef, cc1, cc2, net1, net2, flow) => {
         indexOfPage,
         setIndexOfPage,
         mainData,
-         setMainData,
+        setMainData,
+        handleClickAlert,
       }}
     >
-    <QueryClientProvider client={client}>
-      <CacheProvider value={cacheRtl}>
-        <ThemeProvider theme={darkTheme}>
-          <CssBaseline />
-          <BrowserRouter>
-            <Header />
-            {open === 2 ? (
-            <PopUpTrade
-              toAmount={toAmount?.toAmount}
-              id={2}
-              borderRadius={darkTheme.shape.borderRadius['2']}
-              selectedValue={selectedValue}
-              open={open}
-              onClose={handleClose}
-            />
-          ) : (
-            <></>
-          )}
-            <AnimatedRoutes />
-          </BrowserRouter>
-        </ThemeProvider>
-      </CacheProvider>
-    </QueryClientProvider>
-        </UserContext.Provider>
+      <QueryClientProvider client={client}>
+        <CacheProvider value={cacheRtl}>
+          <ThemeProvider theme={darkTheme}>
+            <CssBaseline />
+            <BrowserRouter>
+              <Header />
+              {open === 2 ? (
+                <PopUpTrade
+                  toAmount={toAmount?.toAmount}
+                  id={2}
+                  borderRadius={darkTheme.shape.borderRadius["2"]}
+                  selectedValue={selectedValue}
+                  open={open}
+                  onClose={handleClose}
+                />
+              ) : (
+                <></>
+              )}
+
+              <Snackbar
+                open={openAlert}
+                autoHideDuration={6000}
+                onClose={handleCloseAlert}
+              >
+                <MuiAlert
+                  onClose={handleCloseAlert}
+                  severity="warning"
+                  sx={{ width: "100%" }}
+                >
+                  به نظر میاد مشکلی با اینترنت شما وجود داره!
+                </MuiAlert>
+              </Snackbar>
+
+              <AnimatedRoutes />
+            </BrowserRouter>
+          </ThemeProvider>
+        </CacheProvider>
+      </QueryClientProvider>
+    </UserContext.Provider>
   );
 }
 

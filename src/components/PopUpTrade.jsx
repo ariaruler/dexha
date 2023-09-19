@@ -181,7 +181,8 @@ export default function PopUpTrade(props) {
     indexOfPage,
     setIndexOfPage,
     mainData,
-     setMainData
+    setMainData,
+    handleClickAlert,
   } = useContext(UserContext);
 
   const [exteraId, setExteraId] = useState();
@@ -194,10 +195,9 @@ export default function PopUpTrade(props) {
 
   const [data1, setData1] = useState();
 
-
   const controller = new AbortController();
 
-  const checkData = async ( address ,currency) => {
+  const checkData = async (address, currency) => {
     // console.log(currency);
     // console.log(address);
     const res = await axios
@@ -209,6 +209,7 @@ export default function PopUpTrade(props) {
       )
       .catch((error) => {
         console.log(error);
+        handleClickAlert();
       });
     // console.log(res.data);
     const res_1 = await res.data;
@@ -246,13 +247,23 @@ export default function PopUpTrade(props) {
 
     const res = await axios
       .post(`${endPoint}/exchange/api/create`, userToPost)
-      .catch((error) => console.log("Error: ", error));
-    console.log(res.data)
+      .catch((error) => {
+        console.log("Error: ", error);
+        handleClickAlert();
+      });
+    console.log(res.data);
     // console.log(res.data.id)
     setPayInExteraId(res.data.payinExtraId);
-    setPayId(x =>[...x ,   res.data.id]);
-    setPayIn(x => [...x ,  res.data.payinAddress]);
-    setMainData(x => [ ...x ,{ currencies : selectedCC.currencies ,id : res.data.id , payIn : res.data.payinAddress}])
+    setPayId((x) => [...x, res.data.id]);
+    setPayIn((x) => [...x, res.data.payinAddress]);
+    setMainData((x) => [
+      ...x,
+      {
+        currencies: selectedCC.currencies,
+        id: res.data.id,
+        payIn: res.data.payinAddress,
+      },
+    ]);
   };
 
   const getStatusInterval = useRef();
@@ -271,12 +282,15 @@ export default function PopUpTrade(props) {
           .get(`${endPoint}/exchange/api/by-id?id=${x}`)
           .catch((error) => {
             console.log(error);
+            handleClickAlert();
           })
           .then((res) => {
             if (res?.data.status) {
               console.log(res);
-              setStatus(y => {return{...y , [x] : res?.data.status}});
-              setPayOutHash(res?.data.payoutHash)
+              setStatus((y) => {
+                return { ...y, [x]: res?.data.status };
+              });
+              setPayOutHash(res?.data.payoutHash);
             }
           });
       }
@@ -351,18 +365,15 @@ export default function PopUpTrade(props) {
     },
   }));
 
-
-// useEffect(() => {
+  // useEffect(() => {
   console.log(payId);
-// }, [payId]);
+  // }, [payId]);
 
-// useEffect(() => {
+  // useEffect(() => {
   // console.log(payIn);
   console.log(mainData);
   console.log(status);
-// }, [payIn]);
-
-
+  // }, [payIn]);
 
   return (
     <>
@@ -404,7 +415,7 @@ export default function PopUpTrade(props) {
                       }}
                       error={!check1}
                       margin="1em auto"
-                      label="آدرس کیف پول خود را وارد کنید"
+                      label="آدرس کیف پول مقصد را وارد کنید"
                       height={inputHieght}
                       borderRadius={bigbuttonBorderRadius}
                       endAdornment={
@@ -651,7 +662,7 @@ export default function PopUpTrade(props) {
                 <DialogActions
                   onClick={() => {
                     setStep((x) => x + 1);
-                    getStatus()
+                    getStatus();
                     post();
                     // console.log(payId);
 
@@ -720,7 +731,7 @@ export default function PopUpTrade(props) {
                         }}
                         className="alert"
                         id="myqr"
-                        value={payIn[payIn.length - 1] }
+                        value={payIn[payIn.length - 1]}
                         size={200}
                         includeMargin={true}
                       ></QRcode>
@@ -757,7 +768,7 @@ export default function PopUpTrade(props) {
                       alignItems: "center",
                     }}
                   >
-                    {payIn[payIn.length - 1] }
+                    {payIn[payIn.length - 1]}
                   </Grid>
 
                   {payInExteraId ? (
@@ -805,7 +816,11 @@ export default function PopUpTrade(props) {
                     واریز نمائید
                     <Button color="common" sx={{ minWidth: 0 }}>
                       <ContentCopyIcon
-                        onClick={() =>{ navigator.clipboard.writeText(payId[payId.length - 1]) }}
+                        onClick={() => {
+                          navigator.clipboard.writeText(
+                            payId[payId.length - 1]
+                          );
+                        }}
                         sx={{
                           "&:hover": { color: theme.palette.secondary.main },
                         }}
@@ -854,10 +869,14 @@ export default function PopUpTrade(props) {
                         <InfoOutlinedIcon sx={{ height: "auto !important" }} />
                       </Button>
                     </BootstrapTooltip>
-                    کد پیگیری معامله {payId[payId.length - 1] }
+                    کد پیگیری معامله {payId[payId.length - 1]}
                     <Button color="common" sx={{ minWidth: 0 }}>
                       <ContentCopyIcon
-                        onClick={() => { navigator.clipboard.writeText(payId[payId.length - 1]) }}
+                        onClick={() => {
+                          navigator.clipboard.writeText(
+                            payId[payId.length - 1]
+                          );
+                        }}
                         sx={{
                           "&:hover": { color: theme.palette.secondary.main },
                         }}
@@ -975,7 +994,9 @@ export default function PopUpTrade(props) {
                     کد پیگیری معامله {payId[payId.length - 1]}
                     <Button color="common" sx={{ minWidth: 0 }}>
                       <ContentCopyIcon
-                        onClick={() => navigator.clipboard.writeText(payId[payId.length - 1])}
+                        onClick={() =>
+                          navigator.clipboard.writeText(payId[payId.length - 1])
+                        }
                         sx={{
                           "&:hover": { color: theme.palette.secondary.main },
                         }}
