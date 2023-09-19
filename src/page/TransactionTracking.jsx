@@ -19,29 +19,67 @@ import Paper from "@mui/material/Paper";
 import { useContext } from "react";
 import { UserContext } from "../App";
 
-import VisibilityIcon from '@mui/icons-material/Visibility';
+import VisibilityIcon from "@mui/icons-material/Visibility";
+import { useState } from "react";
+import axios from "axios";
+import { useEffect } from "react";
 
-function createData(name, calories, fat, carbs, protein) {
-  return { name, calories, fat, carbs, protein };
-}
-
-const rows = [
-  createData("Frozen yoghurt", 159, 6.0, 24, 4.0),
-  createData("Ice cream sandwich", 237, 9.0, 37, 4.3),
-  createData("Eclair", 262, 16.0, 24, 6.0),
-  createData("Cupcake", 305, 3.7, 67, 4.3),
-  createData("Gingerbread", 356, 16.0, 49, 3.9),
-];
+import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 
 export default function TransactionTracking() {
+  const [status, setStatus] = useState({});
+
+  const [statusFa, setStatusFa] = useState("در حال ساخت تراکنش");
+
+  const getStatus = (x) => {
+    if (x) {
+      axios
+      .get(`${endPoint}/exchange/api/by-id?id=${x}`)
+      .catch((error) => {
+        console.log(error);
+      })
+      .then((res) => {
+        console.log("ppppppppppppppppp");
+
+            console.log(res?.data);
+            setStatus(res?.data);
+
+        });
+    }
+
+    // console.log(getStatusInterval.current);
+  };
+
+  
+  useEffect(() => {
+    switch (status?.status) {
+      case "waiting":
+        setStatusFa("در انتظار واریز");
+        break;
+      case "confirming":
+        setStatusFa("تائید واریز");
+        break;
+      case "exchanging":
+        setStatusFa("در حال تبادل");
+        break;
+      case "sending":
+        setStatusFa("در حال ارسال ارز");
+        break;
+      case "finished":
+        setStatusFa("پایان تبادل");
+        break;
+      case "failed":
+        setStatusFa("مشکل در تبادل");
+        break;
+    }
+  }, [status?.status]);
+
+
   const theme = useTheme();
 
-console.log(rows);
+  const { setStep, handleClickOpen, endPoint } = useContext(UserContext);
 
-  const {
-    setStep,
-    handleClickOpen,
-  } = useContext(UserContext);
+  console.log(status);
 
   return (
     <motion.div
@@ -52,14 +90,13 @@ console.log(rows);
       <Container maxWidth="xs">
         <Grid item sx={{ margin: "1px 0 " }} xs={12}>
           <InputTrade
-            onChange={(e) => e.target.value}
+            onChange={(e) => getStatus(e.target.value)}
             label="جستجو"
             inputHieght={52}
             borderRadius={theme.shape.borderRadius[1]}
             endAdornment={<SearchIcon sx={{ marginLeft: 20 }} />}
           />
         </Grid>
-        <button onClick={()=>{setStep(2);handleClickOpen(2);}}>button</button>
       </Container>
       <Container maxWidth="md">
         <TableContainer
@@ -69,32 +106,37 @@ console.log(rows);
           <Table aria-label="simple table">
             <TableHead>
               <TableRow
-                sx={{ "&:last-child td, &:last-child th": { border: 0 } ,border: 'none'
-                //  `1px solid ${theme.palette.secondary.contrastText}`
-                 }} 
+                sx={{
+                  "&:last-child td, &:last-child th": { border: 0 },
+                  border: "none",
+                  //  `1px solid ${theme.palette.secondary.contrastText}`
+                }}
               >
                 <TableCell>تبادل</TableCell>
                 <TableCell>کد پیگیری</TableCell>
-                <TableCell>Fat&nbsp;(g)</TableCell>
-                <TableCell>Carbs&nbsp;(g)</TableCell>
-                <TableCell sx={{ border: 0 , display : 'flex' ,justifyContent : 'center'}}>پیگیری تبادل</TableCell>
+                <TableCell>زمان انجام مبادله</TableCell>
+                <TableCell>وضعیت</TableCell>
+                {/* <TableCell sx={{ border: 0 , display : 'flex' ,justifyContent : 'center'}}>پیگیری تبادل</TableCell> */}
               </TableRow>
             </TableHead>
             <TableBody>
-              {rows.map((row) => (
+              {status.status ? (
                 <TableRow
-                  key={row.name}
-                  sx={{ border: 'none'
-                    //  `1px solid ${theme.palette.secondary.contrastText}` 
-                    }}
+                  key={status?.id}
+                  sx={{
+                    border: "none",
+                    //  `1px solid ${theme.palette.secondary.contrastText}`
+                  }}
                 >
-                  <TableCell sx={{ border: 0 }}>{row.name}</TableCell>
-                  <TableCell sx={{ border: 0 }}>{row.calories}</TableCell>
-                  <TableCell sx={{ border: 0 }}>{row.fat}</TableCell>
-                  <TableCell sx={{ border: 0 }}>{row.carbs}</TableCell>
-                  <TableCell sx={{ border: 0 , display : 'flex' ,justifyContent : 'center' ,}}><VisibilityIcon sx={{'&:hover' : {color : theme.palette.primary.main}}} /></TableCell>
+                  <TableCell sx={{ border: 0 }}>{status?.fromCurrency} <ArrowForwardIcon sx={{ fontSize: 10 }}  /> {status?.toCurrency}</TableCell>
+                  <TableCell sx={{ border: 0 }}>{status?.id}</TableCell>
+                  <TableCell sx={{ border: 0 }}>{status?.createdAt}</TableCell>
+                  <TableCell sx={{ border: 0 }}>{statusFa}</TableCell>
+                  {/* <TableCell sx={{ border: 0 , display : 'flex' ,justifyContent : 'center' ,}}><VisibilityIcon sx={{'&:hover' : {color : theme.palette.primary.main}}} /></TableCell> */}
                 </TableRow>
-              ))}
+              ) : (
+                <></>
+              )}
             </TableBody>
           </Table>
         </TableContainer>

@@ -29,7 +29,7 @@ import MenuIcon from "@mui/icons-material/Menu";
 const pages = [
   {
     content: "صفحه اصلی",
-    to: "/",
+    to: "https://dexha.io/",
     // active : false,
   },
   {
