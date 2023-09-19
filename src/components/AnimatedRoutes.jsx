@@ -20,7 +20,7 @@ export default function AnimatedRoutes(props) {
 
     <Routes location={location} key={location.pathname}>
       <Route path="https://dexha.io/" element={<LandingPage />} />
-      <Route path="/app" element={<AppTrade />} />
+      <Route path="/swap" element={<AppTrade />} />
       <Route path="/contact-us" element={<ContactUs />} />
       <Route path="/help" element={<Help />} />
       <Route path="/faq" element={<FAQ />} />

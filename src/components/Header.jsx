@@ -34,7 +34,7 @@ const pages = [
   },
   {
     content: "اپ",
-    to: "/app",
+    to: "/swap",
     // active : false,
   },
   {
