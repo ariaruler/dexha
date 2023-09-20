@@ -296,7 +296,7 @@ export default function Tradecard(props) {
 
   axiosRetry(axios, {
     retryDelay: axiosRetry.exponentialDelay,
-    retries: 100000,
+    retries: 4,
   });
 
   // console.log(minData);
@@ -319,7 +319,7 @@ export default function Tradecard(props) {
         >
           <FlowChooze active={active} changeColor={changeColor} />
 
-          <ButtonRefresh />
+          <ButtonRefresh  />
         </Grid>
 
         <Grid item xs={12}>

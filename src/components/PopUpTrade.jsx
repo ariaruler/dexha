@@ -203,8 +203,8 @@ export default function PopUpTrade(props) {
   const checkData = async (address, currency) => {
     // console.log(currency);
     // console.log(address);
-    const res = await axios
-      .get(
+    let res_1;
+    axios.get(
         `${endPoint}/exchange/api/validate-address?currency=${currency}&address=${address}`,
         {
           signal: controller.signal,
@@ -213,16 +213,18 @@ export default function PopUpTrade(props) {
       .catch((error) => {
         console.log(error);
         handleClickAlert();
-      });
-    // console.log(res.data);
-    const res_1 = await res.data;
-    if (res.status > 199 && res.status < 300) {
-      // console.log(res_1);
+      }).then((res)=>{
+        
+        res_1 = res.data;
+      })
+      console.log(res_1);
+      if (res_1) {
       return res_1;
     } else {
       handleClickAlert();
     }
   };
+
   useEffect(() => {
     if (data1 || data2) {
       checkData(data1, selectedCC.legacyTicker[0]).then((res) =>
@@ -296,7 +298,7 @@ export default function PopUpTrade(props) {
             handleClickAlert();
           })
           .then((res) => {
-            if (res?.data.status) {
+            if (res) {
               console.log(res);
               setStatus((y) => {
                 return { ...y, [x]: res?.data.status };
@@ -362,7 +364,7 @@ export default function PopUpTrade(props) {
 
   axiosRetry(axios, {
     retryDelay: axiosRetry.exponentialDelay,
-    retries: 100000,
+    retries: 4,
   });
 
   const BootstrapTooltip = styled(({ className, ...props }) => (
@@ -375,16 +377,6 @@ export default function PopUpTrade(props) {
       backgroundColor: theme.palette.common.black,
     },
   }));
-
-  // useEffect(() => {
-  console.log(payId);
-  // }, [payId]);
-
-  // useEffect(() => {
-  // console.log(payIn);
-  console.log(mainData);
-  console.log(status);
-  // }, [payIn]);
 
   return (
     <>
@@ -414,11 +406,11 @@ export default function PopUpTrade(props) {
                   rightComponent={
                     <IconButton
                       sx={{
-                        opacity:  0 ,
-                        cursor:  "auto" ,
+                        opacity: 0,
+                        cursor: "auto",
                       }}
                     >
-                      <ArrowForwardIosSharpIcon sx={arowIcon}/>
+                      <ArrowForwardIosSharpIcon sx={arowIcon} />
                     </IconButton>
                   }
                 />
@@ -620,11 +612,13 @@ export default function PopUpTrade(props) {
                   }}
                   backgroundPaper={theme.palette.background.paper}
                   rightComponent={
-                    <IconButton sx={{    opacity : 1,  cursor:  'pointer' ,}} onClick={previosStep}>
-
+                    <IconButton
+                      sx={{ opacity: 1, cursor: "pointer" }}
+                      onClick={previosStep}
+                    >
                       <ArrowForwardIosSharpIcon sx={arowIcon} />
                     </IconButton>
-                }
+                  }
                 />
                 <TradeBoared />
                 {/* toAmount={props.toAmount} */}
@@ -723,18 +717,15 @@ export default function PopUpTrade(props) {
               >
                 <PopUpTitle
                   header="تائید"
-
                   handleClose={() => {
                     handleClickOpen(2);
                   }}
-
                   backgroundPaper={theme.palette.background.paper}
                   rightComponent={
-                    <IconButton sx={{    opacity : 0 ,  cursor: 'auto' ,}}  >
-
+                    <IconButton sx={{ opacity: 0, cursor: "auto" }}>
                       <ArrowForwardIosSharpIcon sx={arowIcon} />
                     </IconButton>
-                }
+                  }
                 />
                 <DialogContent sx={{ padding: "2px 2em" }}>
                   <Grid
@@ -968,11 +959,10 @@ export default function PopUpTrade(props) {
                   handleClose={handleClose}
                   backgroundPaper={theme.palette.background.paper}
                   rightComponent={
-                    <IconButton sx={{    opacity : 0 ,  cursor: 'auto' ,}} >
-
+                    <IconButton sx={{ opacity: 0, cursor: "auto" }}>
                       <ArrowForwardIosSharpIcon sx={arowIcon} />
                     </IconButton>
-                }
+                  }
                 />
                 <DialogContent sx={{ padding: "2px 2em" }}>
                   <Grid

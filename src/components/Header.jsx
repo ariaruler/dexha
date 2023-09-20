@@ -108,7 +108,7 @@ export default function Header() {
         >
           <Box
             component="img"
-            sx={{ display: "flex", mr: 1, width: "13vw" }}
+            sx={{ display: "flex", mr: 1, width: 120 }}
             alt="DEXHA"
             src={logo}
           />
@@ -138,7 +138,7 @@ export default function Header() {
             </CardBox>
           </Box>
 
-          <ButtonTrade borderRadius="6px" content=" اتصال به کیف پول" />
+          <ButtonTrade  display={ 'xs: "none", md: "flex"' } borderRadius="6px" content=" اتصال به کیف پول" />
 
           <Button
             onClick={() => {

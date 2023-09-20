@@ -11,6 +11,7 @@ export default function ButtonTrade(props) {
     fontSize : props.fontSize,
     boxShadow : props.disabled ? 'none' : "rgba(38, 105, 245, 0.25) 0px 0px 16px ",
     margin : props.margin,
+    
   };
 
   return (

@@ -32,6 +32,7 @@ export default function ButtonRefresh() {
     return (
         <Button
         onClick={() => {
+            setProgress(0)
           fetchAmount(
             fromAmount,
             selectedCC.currencies[0],

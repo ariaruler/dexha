@@ -233,23 +233,22 @@ function App() {
           signal: controller.signal,
         }
       )
+      .then((res) => {
+        if(res){
+          setToAmount(res?.data.toAmount);
+          // console.log('lllllllllll');
+          setSpeed(res?.data.transactionSpeedForecast);
+          setDepositFee(res?.data.depositFee);
+          setWithdrawalFee(res?.data.withdrawalFee);
+          // console.log(cc1.current);
+        } else{
+          handleClickAlert();
+        }
+      })
       .catch((error) => {
-        console.log(error);
         console.log('jjjjjjjjjjjj');
         handleClickAlert();
       })
-      .then((res) => {
-        if(res){
-        setToAmount(res?.data.toAmount);
-        // console.log('lllllllllll');
-        setSpeed(res?.data.transactionSpeedForecast);
-        setDepositFee(res?.data.depositFee);
-        setWithdrawalFee(res?.data.withdrawalFee);
-        // console.log(cc1.current);
-      } else{
-        handleClickAlert();
-      }
-      });
   };
   
   const getMinAmount = (cc1, cc2, net1, net2, flow) => {
