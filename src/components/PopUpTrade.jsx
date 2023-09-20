@@ -12,6 +12,7 @@ import {
   DialogContent,
   FormControlLabel,
   Grid,
+  IconButton,
   LinearProgress,
   Slider,
   SliderThumb,
@@ -409,10 +410,17 @@ export default function PopUpTrade(props) {
                   handleClose={() => {
                     handleClickOpen(2);
                   }}
-                  pointerDisable={true}
-                  displayNone={true}
                   backgroundPaper={theme.palette.background.paper}
-                  rightComponent={<ArrowForwardIosSharpIcon sx={arowIcon} />}
+                  rightComponent={
+                    <IconButton
+                      sx={{
+                        opacity:  0 ,
+                        cursor:  "auto" ,
+                      }}
+                    >
+                      <ArrowForwardIosSharpIcon sx={arowIcon}/>
+                    </IconButton>
+                  }
                 />
 
                 <TradeBoared />
@@ -607,12 +615,16 @@ export default function PopUpTrade(props) {
               >
                 <PopUpTitle
                   header="تائید"
-                  previosStep={previosStep}
                   handleClose={() => {
                     handleClickOpen(2);
                   }}
                   backgroundPaper={theme.palette.background.paper}
-                  rightComponent={<ArrowForwardIosSharpIcon sx={arowIcon} />}
+                  rightComponent={
+                    <IconButton sx={{    opacity : 1,  cursor:  'pointer' ,}} onClick={previosStep}>
+
+                      <ArrowForwardIosSharpIcon sx={arowIcon} />
+                    </IconButton>
+                }
                 />
                 <TradeBoared />
                 {/* toAmount={props.toAmount} */}
@@ -711,13 +723,18 @@ export default function PopUpTrade(props) {
               >
                 <PopUpTitle
                   header="تائید"
-                  pointerDisable={true}
+
                   handleClose={() => {
                     handleClickOpen(2);
                   }}
-                  displayNone={true}
+
                   backgroundPaper={theme.palette.background.paper}
-                  rightComponent={<ArrowForwardIosSharpIcon sx={arowIcon} />}
+                  rightComponent={
+                    <IconButton sx={{    opacity : 0 ,  cursor: 'auto' ,}}  >
+
+                      <ArrowForwardIosSharpIcon sx={arowIcon} />
+                    </IconButton>
+                }
                 />
                 <DialogContent sx={{ padding: "2px 2em" }}>
                   <Grid
@@ -732,7 +749,8 @@ export default function PopUpTrade(props) {
                   >
                     <Box
                       sx={{
-                        position: "relative", display: "inline-flex",
+                        position: "relative",
+                        display: "inline-flex",
                         justifyContent: "center",
                         alignItems: "center",
                       }}
@@ -947,11 +965,14 @@ export default function PopUpTrade(props) {
               >
                 <PopUpTitle
                   header="تائید"
-                  pointerDisable={true}
                   handleClose={handleClose}
-                  displayNone={true}
                   backgroundPaper={theme.palette.background.paper}
-                  rightComponent={<ArrowForwardIosSharpIcon sx={arowIcon} />}
+                  rightComponent={
+                    <IconButton sx={{    opacity : 0 ,  cursor: 'auto' ,}} >
+
+                      <ArrowForwardIosSharpIcon sx={arowIcon} />
+                    </IconButton>
+                }
                 />
                 <DialogContent sx={{ padding: "2px 2em" }}>
                   <Grid

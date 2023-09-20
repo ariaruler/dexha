@@ -29,26 +29,16 @@ import manage from "../functions/manage";
 import { useContext } from "react";
 import { UserContext } from "../App";
 
-import Tooltip, { tooltipClasses } from "@mui/material/Tooltip";
+
 
 
 import ButtonRefresh from "./ButtonRefresh";
+import FlowChooze from "./FlowChooze";
 
 const inputHieght = 54;
 
 const endPoint = "https://dexha.io";
 
-const pages = [
-  {
-    content: "نرخ متغیر",
-    tooltip: `نرخ متغیر: مبادله با نرخ متغیر یعنی در این لحظه، تبادل شما با بهترین نرخ ممکن انجام می‌شود.توجه داشته باشید در مبادله با نرخ شناور نوسان قیمت روی دریافت مبلغ نهایی مبادله شده تاثیر دارد.`,
-  },
-  {
-    content: "نرخ ثابت",
-    tooltip: `نرخ ثابت:
-    مبادله با نرخ ثابت یعنی در این لحظه، تبادل شما با نرخ تثبیت شده انجام می‌شود و دقیقا همین مقدار رمزارز را دریافت خواهید کرد.توجه داشته باشید در مبادله با نرخ ثابت، نوسان قیمت روی دریافت مبلغ نهایی مبادله شده تاثیر ندارد.`,
-  },
-];
 
 export default function Tradecard(props) {
   const {
@@ -304,6 +294,7 @@ export default function Tradecard(props) {
   };
 
   const [active, setActive] = useState(0);
+
   const changeColor = (id, index) => {
     setActive(id);
     if (index === 0) {
@@ -323,16 +314,7 @@ export default function Tradecard(props) {
 
   const exceptThisSymbols = ["e", "E", "+", "-"];
 
-  const BootstrapTooltip = styled(({ className, ...props }) => (
-    <Tooltip {...props} arrow classes={{ popper: className }} />
-  ))(({ theme }) => ({
-    [`& .${tooltipClasses.arrow}`]: {
-      color: theme.palette.common.black,
-    },
-    [`& .${tooltipClasses.tooltip}`]: {
-      backgroundColor: theme.palette.common.black,
-    },
-  }));
+
 
   // console.log(checkData[0]);
 
@@ -348,25 +330,8 @@ export default function Tradecard(props) {
             alignItems: "center",
           }}
         >
-          <div style={{ display: "flex" }}>
-            {pages.map((page, index) => (
-              <BootstrapTooltip
-                title={page.tooltip}
-                // sx={{' .MuiTooltip-popper' : {backgroundColor : theme.palette.secondary.main} ,backgroundColor : theme.palette.secondary.main}}
-                arrow
-              >
-                <div>
-                  <ButtonChooze
-                    key={index}
-                    id={index}
-                    content={page.content}
-                    active={active === index}
-                    changeColor={changeColor}
-                  />
-                </div>
-              </BootstrapTooltip>
-            ))}
-          </div>
+
+          <FlowChooze active={active}  changeColor={changeColor}  />
 
               <ButtonRefresh />
 

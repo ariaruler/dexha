@@ -23,10 +23,8 @@ export default function PopUpTitle(props) {
           }}
           xs={12}
         >
-          <IconButton sx={{    opacity : props.displayNone ? 0 : 1,  cursor: props.pointerDisable ? 'auto' : 'pointer' ,}} onClick={props.previosStep}>
-
             {props.rightComponent}
-          </IconButton>
+
           <Typography sx={{ display: "flex", alignItems: "center" }}>
                 {props.header}
               </Typography>
