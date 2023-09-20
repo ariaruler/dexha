@@ -52,6 +52,8 @@ import InfoOutlinedIcon from "@mui/icons-material/InfoOutlined";
 import { styled } from "@mui/material/styles";
 import Tooltip, { tooltipClasses } from "@mui/material/Tooltip";
 
+import ArrowForwardIosSharpIcon from "@mui/icons-material/ArrowForwardIosSharp";
+
 const inputHieght = 54;
 const bigbuttonBorderRadius = "8px";
 
@@ -131,6 +133,12 @@ export default function PopUpTrade(props) {
   };
 
   const theme = useTheme();
+
+  const arowIcon = {
+    fontSize: 1.3 * theme.typography.fontSize,
+    width: "22px",
+  };
+
   const Dialogstyle = {
     left: "-18px",
     right: "-18px",
@@ -160,12 +168,6 @@ export default function PopUpTrade(props) {
   const [check1, setCheck1] = useState();
 
   const [check2, setCheck2] = useState();
-
-  const arowIcon = {
-    fontSize: 1.3 * theme.typography.fontSize,
-    width: "22px",
-    margin: 2,
-  };
 
   const {
     endPoint,
@@ -213,8 +215,12 @@ export default function PopUpTrade(props) {
       });
     // console.log(res.data);
     const res_1 = await res.data;
-    // console.log(res_1);
-    return res_1;
+    if (res.status > 199 && res.status < 300) {
+      // console.log(res_1);
+      return res_1;
+    } else {
+      handleClickAlert();
+    }
   };
   useEffect(() => {
     if (data1 || data2) {
@@ -251,19 +257,23 @@ export default function PopUpTrade(props) {
         console.log("Error: ", error);
         handleClickAlert();
       });
-    console.log(res.data);
-    // console.log(res.data.id)
-    setPayInExteraId(res.data.payinExtraId);
-    setPayId((x) => [...x, res.data.id]);
-    setPayIn((x) => [...x, res.data.payinAddress]);
-    setMainData((x) => [
-      ...x,
-      {
-        currencies: selectedCC.currencies,
-        id: res.data.id,
-        payIn: res.data.payinAddress,
-      },
-    ]);
+    if (res) {
+      console.log(res.data);
+      // console.log(res.data.id)
+      setPayInExteraId(res.data.payinExtraId);
+      setPayId((x) => [...x, res.data.id]);
+      setPayIn((x) => [...x, res.data.payinAddress]);
+      setMainData((x) => [
+        ...x,
+        {
+          currencies: selectedCC.currencies,
+          id: res.data.id,
+          payIn: res.data.payinAddress,
+        },
+      ]);
+    } else {
+      handleClickAlert();
+    }
   };
 
   const getStatusInterval = useRef();
@@ -402,6 +412,8 @@ export default function PopUpTrade(props) {
                   }}
                   pointerDisable={true}
                   displayNone={true}
+                  backgroundPaper={theme.palette.background.paper}
+                  rightComponent={<ArrowForwardIosSharpIcon sx={arowIcon} />}
                 />
 
                 <TradeBoared />
@@ -601,6 +613,8 @@ export default function PopUpTrade(props) {
                   handleClose={() => {
                     handleClickOpen(2);
                   }}
+                  backgroundPaper={theme.palette.background.paper}
+                  rightComponent={<ArrowForwardIosSharpIcon sx={arowIcon} />}
                 />
                 <TradeBoared />
                 {/* toAmount={props.toAmount} */}
@@ -705,6 +719,8 @@ export default function PopUpTrade(props) {
                     handleClickOpen(2);
                   }}
                   displayNone={true}
+                  backgroundPaper={theme.palette.background.paper}
+                  rightComponent={<ArrowForwardIosSharpIcon sx={arowIcon} />}
                 />
                 <DialogContent sx={{ padding: "2px 2em" }}>
                   <Grid
@@ -719,7 +735,7 @@ export default function PopUpTrade(props) {
                   >
                     <Box
                       sx={{
-                        display: "flex",
+                        position: "relative", display: "inline-flex",
                         justifyContent: "center",
                         alignItems: "center",
                       }}
@@ -741,15 +757,19 @@ export default function PopUpTrade(props) {
                         <Box
                           sx={{
                             backgroundColor: "rgba(0,0,0,0.2)",
-                            position: "absolute",
                             backdropFilter: "blur(2px)",
                             borderRadius: bigbuttonBorderRadius,
                             margin: "-1px 0 0 0",
                             width: "200px",
                             height: "196px",
+                            top: 0,
+                            left: 0,
+                            bottom: 0,
+                            right: 0,
+                            position: "absolute",
                             display: "flex",
-                            justifyContent: "center",
                             alignItems: "center",
+                            justifyContent: "center",
                           }}
                         >
                           <CircularProgress color="common" />
@@ -934,6 +954,8 @@ export default function PopUpTrade(props) {
                   pointerDisable={true}
                   handleClose={handleClose}
                   displayNone={true}
+                  backgroundPaper={theme.palette.background.paper}
+                  rightComponent={<ArrowForwardIosSharpIcon sx={arowIcon} />}
                 />
                 <DialogContent sx={{ padding: "2px 2em" }}>
                   <Grid

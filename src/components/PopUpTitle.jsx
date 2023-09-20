@@ -8,15 +8,11 @@ export default function PopUpTitle(props) {
 
   const theme = useTheme();
 
-  const arowIcon = {
-    fontSize: 1.3*theme.typography.fontSize,
-     width: "22px" ,
 
-  }
 
     return (
         <DialogTitle
-        sx={{padding: '12px 28px' , backgroundColor: theme.palette.background.paper }}
+        sx={{padding: '12px 28px' , backgroundColor: props.backgroundPaper }}
         // padding: 1, 16px 24px
       >
         <Grid
@@ -28,9 +24,8 @@ export default function PopUpTitle(props) {
           xs={12}
         >
           <IconButton sx={{    opacity : props.displayNone ? 0 : 1,  cursor: props.pointerDisable ? 'auto' : 'pointer' ,}} onClick={props.previosStep}>
-            <ArrowForwardIosSharpIcon
-              sx={arowIcon}
-            />
+
+            {props.rightComponent}
           </IconButton>
           <Typography sx={{ display: "flex", alignItems: "center" }}>
                 {props.header}

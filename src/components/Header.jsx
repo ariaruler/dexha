@@ -5,6 +5,7 @@ import Toolbar from "@mui/material/Toolbar";
 import Container from "@mui/material/Container";
 
 import logo from "../assets/logo.png";
+import logo2 from "../assets/logo1.png";
 
 import { styled } from "@mui/system";
 import { useTheme } from "@emotion/react";
@@ -25,6 +26,7 @@ import {
   ListItemText,
 } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
+import PopUpTitle from "./PopUpTitle";
 
 const pages = [
   {
@@ -100,7 +102,7 @@ export default function Header() {
           <Box
             component="img"
             sx={{ display: "flex", mr: 1, width: "13vw" }}
-            alt="The house from the offer."
+            alt="DEXHA"
             src={logo}
           />
 
@@ -142,29 +144,67 @@ export default function Header() {
           </Button>
 
           <Drawer
+            sx={{
+              "& .MuiDrawer-paper": {
+                backgroundColor: theme.palette.background.default,
+                backgroundImage: "none",
+              },
+            }}
             anchor="top"
             open={state}
             onClose={() => {
               toggleDrawer(false);
               // console.log('ooooo');
             }}
+          >
+            <PopUpTitle
+              handleClose={() => {
+                toggleDrawer(false);
+                // console.log('ooooo');
+              }}
+              rightComponent={
+                <Box
+                  component="img"
+                  sx={{ display: "flex", mr: 1, width: 22 , height : 22 , margin : 0 }}
+                  alt="DEXHA"
+                  src={logo2}
+                />
+              }
+            />
+            <Box
+              sx={{
+                width: "100%",
+              }}
+              role="presentation"
             >
-            <Box sx={{ width: "100%" ,backgroundColor : theme.palette.background.default }} role="presentation">
               <List sx={{ width: "100%" }}>
                 {pages.map((x, index) => (
                   <ListItem key={x.content} disablePadding>
-                      <Link
-                        key={index}
-                        style={{ textDecoration: "none" , color : theme.palette.secondary.contrastText ,width: "100%" }}
-                        to={x.to}
+                    <Link
+                      key={index}
+                      style={{
+                        textDecoration: "none",
+                        color: theme.palette.secondary.contrastText,
+                        width: "100%",
+                      }}
+                      to={x.to}
+                    >
+                      <ListItemButton
+                        onClick={() => {
+                          toggleDrawer(false);
+                          // console.log('ooooo');
+                        }}
                       >
-                    <ListItemButton onClick={() => {
-              toggleDrawer(false);
-              // console.log('ooooo');
-            }} >
-                        <ListItemText sx={{display : 'flex' , justifyContent : 'center' , padding : .5}} primary={x.content} />
-                    </ListItemButton> 
-                      </Link>
+                        <ListItemText
+                          sx={{
+                            display: "flex",
+                            justifyContent: "center",
+                            padding: 0.5,
+                          }}
+                          primary={x.content}
+                        />
+                      </ListItemButton>
+                    </Link>
                   </ListItem>
                 ))}
               </List>

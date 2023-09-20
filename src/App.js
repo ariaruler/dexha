@@ -180,7 +180,7 @@ function App() {
 
   const [minOrMax, setMinOrMax] = useState();
 
-  const [currencies, setCurrencies] = useState([]);
+  const [currencies, setCurrencies] = useState();
 
   const [minData, setMinData] = useState();
 
@@ -200,7 +200,7 @@ function App() {
 
   const [checkData, setCheckData] = useState([]);
 
-  const [isError, setIsError] = useState("");
+  const [isError, setIsError] = useState();
 
   const [payIn, setPayIn] = useState([]);
 
@@ -239,12 +239,16 @@ function App() {
         handleClickAlert();
       })
       .then((res) => {
+        if(res){
         setToAmount(res?.data.toAmount);
         // console.log('lllllllllll');
         setSpeed(res?.data.transactionSpeedForecast);
         setDepositFee(res?.data.depositFee);
         setWithdrawalFee(res?.data.withdrawalFee);
         // console.log(cc1.current);
+      } else{
+        handleClickAlert();
+      }
       });
   };
   
@@ -260,9 +264,13 @@ function App() {
         handleClickAlert();
       })
       .then((res) => {
+        if(res){
         setMinData(res.data.minAmount);
         // console.log(res.data);
         setMaxData(res?.data.maxAmount);
+      } else{
+        handleClickAlert();
+      }
       });
   };
 

@@ -19,18 +19,20 @@ import PopUpTrade from "./PopUpTrade";
 
 import SettingsIcon from "@mui/icons-material/Settings";
 import PopUpSetting from "./PopUpSetting.";
-import { Button, CircularProgress } from "@mui/material";
+import { Button, CircularProgress, Typography } from "@mui/material";
 import axios from "axios";
 import axiosRetry from "axios-retry";
 
 import { useQuery } from "@tanstack/react-query";
 import manage from "../functions/manage";
 
-
 import { useContext } from "react";
 import { UserContext } from "../App";
 
-import Tooltip, { tooltipClasses } from '@mui/material/Tooltip';
+import Tooltip, { tooltipClasses } from "@mui/material/Tooltip";
+
+import PropTypes from 'prop-types';
+import RefreshIcon from '@mui/icons-material/Refresh';
 
 const inputHieght = 54;
 
@@ -39,61 +41,58 @@ const endPoint = "https://dexha.io";
 const pages = [
   {
     content: "نرخ متغیر",
-    tooltip : `نرخ متغیر: مبادله با نرخ متغیر یعنی در این لحظه، تبادل شما با بهترین نرخ ممکن انجام می‌شود.توجه داشته باشید در مبادله با نرخ شناور نوسان قیمت روی دریافت مبلغ نهایی مبادله شده تاثیر دارد.`  
+    tooltip: `نرخ متغیر: مبادله با نرخ متغیر یعنی در این لحظه، تبادل شما با بهترین نرخ ممکن انجام می‌شود.توجه داشته باشید در مبادله با نرخ شناور نوسان قیمت روی دریافت مبلغ نهایی مبادله شده تاثیر دارد.`,
   },
   {
     content: "نرخ ثابت",
-    tooltip : `نرخ ثابت:
-    مبادله با نرخ ثابت یعنی در این لحظه، تبادل شما با نرخ تثبیت شده انجام می‌شود و دقیقا همین مقدار رمزارز را دریافت خواهید کرد.توجه داشته باشید در مبادله با نرخ ثابت، نوسان قیمت روی دریافت مبلغ نهایی مبادله شده تاثیر ندارد.`
+    tooltip: `نرخ ثابت:
+    مبادله با نرخ ثابت یعنی در این لحظه، تبادل شما با نرخ تثبیت شده انجام می‌شود و دقیقا همین مقدار رمزارز را دریافت خواهید کرد.توجه داشته باشید در مبادله با نرخ ثابت، نوسان قیمت روی دریافت مبلغ نهایی مبادله شده تاثیر ندارد.`,
   },
 ];
 
-
 export default function Tradecard(props) {
-
-    const {
-      endPoint,
-      currencies,
-      setCurrencies,
-      flow,
-      setFlow,
-      setCheckData,
-      // isLoading,
-      // error,
-      isError,
-      selectedCC,
-      toAmount,
-      setToAmount,
-      fetchAmount,
-      open,
-      // post,
-      payId,
-      setPayId,
-      payIn,
-      setPayIn,
-      fromAmount,
-      setFromAmount,
-      getMinAmount,
-      speed,
-      depositFee,
-      withdrawalFee,
-      step,
-      setStep,
-      ratio,
-      setRatio,
-      maxData,
-      minData,
-      setIsError,
-      minOrMax,
-      setMinOrMax,
-      handleClickOpen,
-      handleSwap,
-      checkData,
-      selectedValue,
-      handleClose,
-      handleClickAlert,
-    } = useContext(UserContext);
-
+  const {
+    endPoint,
+    currencies,
+    setCurrencies,
+    flow,
+    setFlow,
+    setCheckData,
+    // isLoading,
+    // error,
+    isError,
+    selectedCC,
+    toAmount,
+    setToAmount,
+    fetchAmount,
+    open,
+    // post,
+    payId,
+    setPayId,
+    payIn,
+    setPayIn,
+    fromAmount,
+    setFromAmount,
+    getMinAmount,
+    speed,
+    depositFee,
+    withdrawalFee,
+    step,
+    setStep,
+    ratio,
+    setRatio,
+    maxData,
+    minData,
+    setIsError,
+    minOrMax,
+    setMinOrMax,
+    handleClickOpen,
+    handleSwap,
+    checkData,
+    selectedValue,
+    handleClose,
+    handleClickAlert,
+  } = useContext(UserContext);
 
   useEffect(() => {
     axios
@@ -111,10 +110,20 @@ export default function Tradecard(props) {
 
 
 
+
+  // useEffect(() => {
+  //   const timer = setInterval(() => {
+  //     setProgress((prevProgress) => (prevProgress >= 100 ? 0 : prevProgress + 10));
+  //   }, 800);
+  //   return () => {
+  //     clearInterval(timer);
+  //   };
+  // }, []);
+
   const theme = useTheme();
   // console.log( "YYYYYYYYYYYYYYYYYY")
 
-  const amountRef = useRef('1');
+  const amountRef = useRef("1");
 
   const cc1 = useRef("btc");
 
@@ -128,9 +137,6 @@ export default function Tradecard(props) {
 
   const payIdRef = useRef();
 
-
-
-
   // console.log(flow);
 
   const checkUrl = `${endPoint}/exchange/api/available-pairs?fromCurrency=${selectedCC.currencies[0]}&toCurrency=${selectedCC.currencies[1]}&fromNetwork=${selectedCC.network[0]}&toNetwork=${selectedCC.network[1]}&flow=`;
@@ -138,10 +144,6 @@ export default function Tradecard(props) {
   const amountUrl = `${endPoint}/exchange/api/estimated-amount?fromCurrency=${selectedCC.currencies[0]}&toCurrency=${selectedCC.currencies[1]}&fromAmount=${fromAmount}&fromNetwork=${selectedCC.network[0]}&toNetwork=${selectedCC.network[1]}&flow=${flow}`;
 
   const controller = new AbortController();
-
-
-
-
 
   // console.log(step);
 
@@ -168,44 +170,56 @@ export default function Tradecard(props) {
     const fetchAmountInterval = setInterval(() => {
       // console.log(payIdRef.current);
 
-        axios
-          .get(
-            `${endPoint}/exchange/api/estimated-amount?fromCurrency=${cc1.current}&toCurrency=${cc2.current}&fromAmount=${amountRef.current}&fromNetwork=${net1.current}&toNetwork=${net2.current}&flow=${flowRef.current}`
-          )
-          .catch((error) => {
-            console.log(error);
-            handleClickAlert();
-          })
-          .then((res) => {
+      axios
+        .get(
+          `${endPoint}/exchange/api/estimated-amount?fromCurrency=${cc1.current}&toCurrency=${cc2.current}&fromAmount=${amountRef.current}&fromNetwork=${net1.current}&toNetwork=${net2.current}&flow=${flowRef.current}`
+        )
+        .catch((error) => {
+          console.log(error);
+          handleClickAlert();
+        })
+        .then((res) => {
+          if (res) {
             setToAmount(res?.data.toAmount);
-          })
+          } else {
+            handleClickAlert();
+          }
+        });
 
-          console.log('llllllllll');
+      // console.log('llllllllll');
 
-        setProgress((prevProgress) =>
-          prevProgress >= 100 ? 0 : prevProgress + 100
-        );
+      // setProgress((prevProgress) =>
+      //   prevProgress >= 100 ? 0 : prevProgress + 100
+      // );
+      setProgress((prevProgress) => (prevProgress >= 100 ? 0 : prevProgress + 100));
 
     }, 2000);
+    // const timer = setInterval(() => {
+    // }, 2000);
 
-    getMinAmount(   
+
+    getMinAmount(
       selectedCC.currencies[0],
       selectedCC.currencies[1],
       selectedCC.network[0],
       selectedCC.network[1],
-      flow);
+      flow
+    );
 
-    axios.get(checkUrl).then((res) => {
-      setCheckData(res?.data);
-    })
-    .catch((error) => {
-      console.log(error);
-      handleClickAlert();
-    });
+    axios
+      .get(checkUrl)
+      .then((res) => {
+        setCheckData(res?.data);
+      })
+      .catch((error) => {
+        console.log(error);
+        handleClickAlert();
+      });
 
     return () => {
       clearInterval(fetchAmountInterval);
       controller.abort();
+      // clearInterval(timer);
     };
   }, [
     fromAmount,
@@ -221,7 +235,11 @@ export default function Tradecard(props) {
         `${endPoint}/exchange/api/estimated-amount?fromCurrency=${selectedCC.currencies[0]}&toCurrency=${selectedCC.currencies[1]}&fromAmount=1&fromNetwork=${selectedCC.network[0]}&toNetwork=${selectedCC.network[1]}&flow=${flow}`
       )
       .then((res) => {
-        setRatio(res?.data.toAmount);
+        if (res) {
+          setRatio(res?.data.toAmount);
+        } else {
+          handleClickAlert();
+        }
       })
       .catch((error) => {
         console.log(error);
@@ -232,12 +250,10 @@ export default function Tradecard(props) {
   useEffect(() => {
     // console.log('eeeeeeeeeeeeeeeeeeee')
     // console.log(selectedCC.currencies[0])
-    
 
-    
     if (!maxData) {
-      // console.log(minData) 
-      // console.log(fromAmount) 
+      // console.log(minData)
+      // console.log(fromAmount)
       // console.log('lllllllllll');
       if (fromAmount < minData && fromAmount.length > 0) {
         setIsError(true);
@@ -261,10 +277,7 @@ export default function Tradecard(props) {
         setIsError(false);
       }
     }
-  }, [
-    minData,
-    fromAmount
-  ]);
+  }, [minData, fromAmount]);
 
   // console.log(selectedCC.legacyTicker[0])
 
@@ -273,11 +286,6 @@ export default function Tradecard(props) {
   // console.log(selectedCC.toAmount);
 
   const [progress, setProgress] = useState(0);
-
-
-
-
-
 
   const cardBox = {
     display: "flex",
@@ -314,8 +322,7 @@ export default function Tradecard(props) {
 
   // console.log(minData);
 
-  const exceptThisSymbols = ["e", "E", "+", "-", ];
-
+  const exceptThisSymbols = ["e", "E", "+", "-"];
 
   const BootstrapTooltip = styled(({ className, ...props }) => (
     <Tooltip {...props} arrow classes={{ popper: className }} />
@@ -331,132 +338,149 @@ export default function Tradecard(props) {
   // console.log(checkData[0]);
 
   return (
-
-      <Box sx={cardBox}>
-        <Grid container spacing={2}>
-          <Grid
-            item
-            xs={12}
-            sx={{
-              display: "flex",
-              justifyContent: "space-between",
-              alignItems: "center",
-            }}
-          >
-            <div style={{display : 'flex' }}>
-              {pages.map((page, index) => (
-                <BootstrapTooltip title={page.tooltip} 
+    <Box sx={cardBox}>
+      <Grid container spacing={2}>
+        <Grid
+          item
+          xs={12}
+          sx={{
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "center",
+          }}
+        >
+          <div style={{ display: "flex" }}>
+            {pages.map((page, index) => (
+              <BootstrapTooltip
+                title={page.tooltip}
                 // sx={{' .MuiTooltip-popper' : {backgroundColor : theme.palette.secondary.main} ,backgroundColor : theme.palette.secondary.main}}
-                 arrow >
-                  <div >
-                    <ButtonChooze
-                      key={index}
-                      id={index}
-                      content={page.content}
-                      active={active === index}
-                      changeColor={changeColor}
-                    />
-                  </div>
-                </BootstrapTooltip>
-              ))}
-            </div>
-            <Button
-              onClick={() => {
-                handleClickOpen(3);
-              }}
-              color="common"
-              sx={{ minWidth: 0 }}
-            >
-              {/* <SettingsIcon /> */}
-              <CircularProgress  variant="determinate" value={progress} />
-            </Button>
-          </Grid>
-
-          <Grid item xs={12}>
-            <InputTrade
-              value={fromAmount}
-              onKeyDown={(e) =>
-                exceptThisSymbols.includes(e.key) && e.preventDefault()
-              }
-              onChange={(e) => {
-                setFromAmount(e.target.value);
-              }}
-              error={isError}
-              label={
-                isError && (minData || maxData)
-                  ? `${minOrMax ? "حداکثر" : "حداقل"} میزان معامله ${
-                      minOrMax ? maxData : minData
-                    } می باشد`
-                  : "پرداخت"
-              }
-              type="number"
-              height={inputHieght}
-              borderRadius={theme.shape.borderRadius["1"]}
-              endAdornment={
-                <SmButton
-                  dropDownIcon={true}
-                  id={0}
-                  handleClickOpen={() => {
-                    handleClickOpen(0);
-                  }}
-                />
-              }
-            />
-          </Grid>
-          <Grid item xs={12} sx={{ display: "flex", justifyContent: "center" }}>
-            <KeyboardArrowDownIcon onClick={handleSwap} sx={iconCircle} />
-          </Grid>
-
-          <Grid item xs={12}>
-            <InputTrade
-              lable={true}
-              value={toAmount ? toAmount : ""}
-              label="دریافت"
-              type="number"
-              height={inputHieght}
-              borderRadius={theme.shape.borderRadius["1"]}
-              endAdornment={
-                <SmButton
-                  dropDownIcon={true}
-                  id={1}
-                  handleClickOpen={() => {
-                    handleClickOpen(1);
-                  }}
-                />
-              }
-              startAdornment={
-                toAmount ? (
-                  <></>
-                ) : (
-                  <CircularProgress
-                    color="secondary"
-                    sx={{ height: "auto !important" }}
+                arrow
+              >
+                <div>
+                  <ButtonChooze
+                    key={index}
+                    id={index}
+                    content={page.content}
+                    active={active === index}
+                    changeColor={changeColor}
                   />
-                )
-              }
-            />
-          </Grid>
-          {open === 0 ? (
-            <PopUpCC
-              id={0}
-              borderRadius={props.borderRadius}
-              open={open}
-              onClose={handleClose}
-            />
-          ) : (
-            <></>
-          )}
-          {open === 1 ? (
-            <PopUpCC
-              id={1}
-              borderRadius={props.borderRadius}
-              open={open}
-              onClose={handleClose}
-            />
-          ) : (
-            <></>
-          )}
-          {/* {open === 3 ? (
+                </div>
+              </BootstrapTooltip>
+            ))}
+          </div>
+          <Button
+            onClick={() => {
+              handleClickOpen(3);
+            }}
+            color="common"
+            sx={{ minWidth: 0 }}
+          >
+            {/* <SettingsIcon /> */}
+            <Box sx={{ position: "relative", display: "inline-flex" }}>
+              <CircularProgress variant="determinate" value={progress} />
+              <Box
+                sx={{
+                  top: 0,
+                  left: 0,
+                  bottom: 0,
+                  right: 0,
+                  position: "absolute",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                }}
+              >
+                <RefreshIcon />
+              </Box>
+            </Box>
+          </Button>
+        </Grid>
+
+        <Grid item xs={12}>
+          <InputTrade
+            value={fromAmount}
+            onKeyDown={(e) =>
+              exceptThisSymbols.includes(e.key) && e.preventDefault()
+            }
+            onChange={(e) => {
+              setFromAmount(e.target.value);
+            }}
+            error={isError}
+            label={
+              isError && (minData || maxData)
+                ? `${minOrMax ? "حداکثر" : "حداقل"} میزان معامله ${
+                    minOrMax ? maxData : minData
+                  } می باشد`
+                : "پرداخت"
+            }
+            type="number"
+            height={inputHieght}
+            borderRadius={theme.shape.borderRadius["1"]}
+            endAdornment={
+              <SmButton
+                dropDownIcon={true}
+                id={0}
+                handleClickOpen={() => {
+                  handleClickOpen(0);
+                }}
+              />
+            }
+          />
+        </Grid>
+        <Grid item xs={12} sx={{ display: "flex", justifyContent: "center" }}>
+          <KeyboardArrowDownIcon onClick={handleSwap} sx={iconCircle} />
+        </Grid>
+
+        <Grid item xs={12}>
+          <InputTrade
+            lable={true}
+            value={toAmount ? toAmount : ""}
+            label="دریافت"
+            type="number"
+            height={inputHieght}
+            borderRadius={theme.shape.borderRadius["1"]}
+            endAdornment={
+              <SmButton
+                dropDownIcon={true}
+                id={1}
+                handleClickOpen={() => {
+                  handleClickOpen(1);
+                }}
+              />
+            }
+            startAdornment={
+              toAmount ? (
+                <></>
+              ) : (
+                <CircularProgress
+                  color="secondary"
+                  sx={{ height: "auto !important" }}
+                />
+              )
+            }
+          />
+        </Grid>
+        {open === 0 ? (
+          <PopUpCC
+            id={0}
+            borderRadius={props.borderRadius}
+            open={open}
+            onClose={handleClose}
+          />
+        ) : (
+          <></>
+        )}
+        {open === 1 ? (
+          <PopUpCC
+            id={1}
+            borderRadius={props.borderRadius}
+            open={open}
+            onClose={handleClose}
+          />
+        ) : (
+          <></>
+        )}
+        {/* {open === 3 ? (
             <PopUpSetting
               id={3}
               borderRadius={props.borderRadius}
@@ -466,31 +490,29 @@ export default function Tradecard(props) {
           ) : (
             <></>
           )} */}
-          <Grid item xs={12}>
-            <ButtonTrade
-              handleClickOpen={() => {
-                handleClickOpen(2);
-
-              }}
-              id={2}
-              borderRadius={theme.shape.borderRadius["1"]}
-              content={
-                checkData[0]?.flow[flow] === false
-                  ? "جفت ارز مورد نظر موجود نیست"
-                  : "تبادل"
-              }
-              width="100%"
-              fontSize="1.2em"
-              height={50}
-              disabled={!checkData[0]?.flow.standard || !toAmount || isError}
-            />
-          </Grid>
-
-          <Grid item xs={12}>
-            <Buttonfee inputHieght={inputHieght} />
-          </Grid>
+        <Grid item xs={12}>
+          <ButtonTrade
+            handleClickOpen={() => {
+              handleClickOpen(2);
+            }}
+            id={2}
+            borderRadius={theme.shape.borderRadius["1"]}
+            content={
+              checkData[0]?.flow[flow] === false
+                ? "جفت ارز مورد نظر موجود نیست"
+                : "تبادل"
+            }
+            width="100%"
+            fontSize="1.2em"
+            height={50}
+            disabled={!checkData[0]?.flow.standard || !toAmount || isError}
+          />
         </Grid>
-      </Box>
 
+        <Grid item xs={12}>
+          <Buttonfee inputHieght={inputHieght} />
+        </Grid>
+      </Grid>
+    </Box>
   );
 }
