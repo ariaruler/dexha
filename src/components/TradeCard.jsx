@@ -29,16 +29,12 @@ import manage from "../functions/manage";
 import { useContext } from "react";
 import { UserContext } from "../App";
 
-
-
-
 import ButtonRefresh from "./ButtonRefresh";
 import FlowChooze from "./FlowChooze";
 
 const inputHieght = 54;
 
 const endPoint = "https://dexha.io";
-
 
 export default function Tradecard(props) {
   const {
@@ -97,9 +93,6 @@ export default function Tradecard(props) {
         handleClickAlert();
       });
   }, []);
-
-
-
 
   // useEffect(() => {
   //   const timer = setInterval(() => {
@@ -181,12 +174,9 @@ export default function Tradecard(props) {
       // setProgress((prevProgress) =>
       //   prevProgress >= 100 ? 0 : prevProgress + 100
       // );
-
-
     }, 20000);
     // const timer = setInterval(() => {
     // }, 2000);
-
 
     getMinAmount(
       selectedCC.currencies[0],
@@ -275,7 +265,6 @@ export default function Tradecard(props) {
 
   // console.log(selectedCC.toAmount);
 
-
   const cardBox = {
     display: "flex",
     padding: "20px",
@@ -314,8 +303,6 @@ export default function Tradecard(props) {
 
   const exceptThisSymbols = ["e", "E", "+", "-"];
 
-
-
   // console.log(checkData[0]);
 
   return (
@@ -330,11 +317,9 @@ export default function Tradecard(props) {
             alignItems: "center",
           }}
         >
+          <FlowChooze active={active} changeColor={changeColor} />
 
-          <FlowChooze active={active}  changeColor={changeColor}  />
-
-              <ButtonRefresh />
-
+          <ButtonRefresh />
         </Grid>
 
         <Grid item xs={12}>

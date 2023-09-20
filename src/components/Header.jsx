@@ -16,6 +16,7 @@ import ButtonChooze from "./ButtonChooze";
 
 import { useState } from "react";
 import {
+  Avatar,
   Button,
   Divider,
   Drawer,
@@ -24,9 +25,15 @@ import {
   ListItemButton,
   ListItemIcon,
   ListItemText,
+  Stack,
 } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
 import PopUpTitle from "./PopUpTitle";
+
+import InstagramIcon from "@mui/icons-material/Instagram";
+import TelegramIcon from "@mui/icons-material/Telegram";
+import TwitterIcon from "@mui/icons-material/Twitter";
+import LinkedInIcon from "@mui/icons-material/LinkedIn";
 
 const pages = [
   {
@@ -165,7 +172,13 @@ export default function Header() {
               rightComponent={
                 <Box
                   component="img"
-                  sx={{ display: "flex", mr: 1, width: 22 , height : 22 , margin : 0 }}
+                  sx={{
+                    display: "flex",
+                    mr: 1,
+                    width: 32,
+                    height: 32,
+                    margin: 0,
+                  }}
                   alt="DEXHA"
                   src={logo2}
                 />
@@ -209,6 +222,24 @@ export default function Header() {
                 ))}
               </List>
             </Box>
+            <Stack
+              direction="row"
+              spacing={2}
+              sx={{ justifyContent: "space-around", margin: 2 }}
+            >
+              <Avatar   sx={{ width: 30, height: 30 , backgroundColor : theme.palette.secondary.contrastText, }}>
+                <InstagramIcon />
+              </Avatar>
+              <Avatar   sx={{ width: 30, height: 30 , backgroundColor : theme.palette.secondary.contrastText, }}>
+                <TelegramIcon />
+              </Avatar>
+              <Avatar   sx={{ width: 30, height: 30 , backgroundColor : theme.palette.secondary.contrastText, }}>
+                <TwitterIcon />
+              </Avatar>
+              <Avatar   sx={{ width: 30, height: 30 , backgroundColor : theme.palette.secondary.contrastText, }}>
+                <LinkedInIcon />
+              </Avatar>
+            </Stack>
           </Drawer>
         </Toolbar>
       </Container>
