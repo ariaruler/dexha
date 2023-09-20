@@ -31,8 +31,8 @@ import { UserContext } from "../App";
 
 import Tooltip, { tooltipClasses } from "@mui/material/Tooltip";
 
-import PropTypes from 'prop-types';
-import RefreshIcon from '@mui/icons-material/Refresh';
+
+import ButtonRefresh from "./ButtonRefresh";
 
 const inputHieght = 54;
 
@@ -191,9 +191,9 @@ export default function Tradecard(props) {
       // setProgress((prevProgress) =>
       //   prevProgress >= 100 ? 0 : prevProgress + 100
       // );
-      setProgress((prevProgress) => (prevProgress >= 100 ? 0 : prevProgress + 100));
 
-    }, 2000);
+
+    }, 20000);
     // const timer = setInterval(() => {
     // }, 2000);
 
@@ -285,7 +285,6 @@ export default function Tradecard(props) {
 
   // console.log(selectedCC.toAmount);
 
-  const [progress, setProgress] = useState(0);
 
   const cardBox = {
     display: "flex",
@@ -368,32 +367,9 @@ export default function Tradecard(props) {
               </BootstrapTooltip>
             ))}
           </div>
-          <Button
-            onClick={() => {
-              handleClickOpen(3);
-            }}
-            color="common"
-            sx={{ minWidth: 0 }}
-          >
-            {/* <SettingsIcon /> */}
-            <Box sx={{ position: "relative", display: "inline-flex" }}>
-              <CircularProgress variant="determinate" value={progress} />
-              <Box
-                sx={{
-                  top: 0,
-                  left: 0,
-                  bottom: 0,
-                  right: 0,
-                  position: "absolute",
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                }}
-              >
-                <RefreshIcon />
-              </Box>
-            </Box>
-          </Button>
+
+              <ButtonRefresh />
+
         </Grid>
 
         <Grid item xs={12}>
