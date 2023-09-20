@@ -402,7 +402,6 @@ export default function PopUpTrade(props) {
                 sx={Dialogstyle}
                 maxWidth="xs"
                 fullWidth={true}
-                onClose={handleClose}
                 open={props.open === props.id}
               >
                 <PopUpTitle
@@ -604,7 +603,6 @@ export default function PopUpTrade(props) {
                 sx={Dialogstyle}
                 maxWidth="xs"
                 fullWidth={true}
-                onClose={handleClose}
                 open={props.open === props.id}
               >
                 <PopUpTitle
@@ -709,7 +707,6 @@ export default function PopUpTrade(props) {
                 sx={Dialogstyle}
                 maxWidth="xs"
                 fullWidth={true}
-                onClose={handleClose}
                 open={props.open === props.id}
               >
                 <PopUpTitle
@@ -759,9 +756,8 @@ export default function PopUpTrade(props) {
                             backgroundColor: "rgba(0,0,0,0.2)",
                             backdropFilter: "blur(2px)",
                             borderRadius: bigbuttonBorderRadius,
-                            margin: "-1px 0 0 0",
                             width: "200px",
-                            height: "196px",
+                            height: "200px",
                             top: 0,
                             left: 0,
                             bottom: 0,
