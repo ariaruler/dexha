@@ -166,9 +166,9 @@ export default function PopUpTrade(props) {
 
   const previosStep = () => setStep(step - 1);
 
-  const [check1, setCheck1] = useState();
+  const [check1, setCheck1] = useState(null);
 
-  const [check2, setCheck2] = useState();
+  const [check2, setCheck2] = useState(null);
 
   const {
     endPoint,
@@ -204,7 +204,7 @@ export default function PopUpTrade(props) {
     // console.log(currency);
     // console.log(address);
     let res_1;
-    axios.get(
+    return axios.get(
         `${endPoint}/exchange/api/validate-address?currency=${currency}&address=${address}`,
         {
           signal: controller.signal,
@@ -214,30 +214,32 @@ export default function PopUpTrade(props) {
         console.log(error);
         handleClickAlert();
       }).then((res)=>{
-        
-        res_1 = res.data;
+        if (res) {
+          // console.log(res.data);
+          return res.data.result;
+  
+      } else {
+        handleClickAlert();
+      }
       })
-      console.log(res_1);
-      if (res_1) {
-      return res_1;
-    } else {
-      handleClickAlert();
-    }
+
   };
 
   useEffect(() => {
+    setCheck2(null)
+    setCheck1(null)
     if (data1 || data2) {
       checkData(data1, selectedCC.legacyTicker[0]).then((res) =>
-        setCheck2(res?.result)
+        setCheck2(res)
       );
       checkData(data2, selectedCC.legacyTicker[1]).then((res) =>
-        setCheck1(res?.result)
+        setCheck1(res)
       );
     }
 
-    return () => {
-      controller.abort();
-    };
+    // return () => {
+    //   controller.abort();
+    // };
   }, [data1, data2]);
 
   const post = async () => {
@@ -378,6 +380,9 @@ export default function PopUpTrade(props) {
     },
   }));
 
+  console.log(check1);
+  console.log(check2);
+
   return (
     <>
       <PopUpError
@@ -424,9 +429,9 @@ export default function PopUpTrade(props) {
                       onChange={(e) => {
                         setData2(e.target.value);
                       }}
-                      error={!check1}
+                      error={( check1 === false) && data2}
                       margin="1em auto"
-                      label="آدرس کیف پول مقصد را وارد کنید"
+                      label={check1 === false && data2 ? 'آدرس کیف پول شما معتبر نیست' : "آدرس کیف پول مقصد را وارد کنید"}
                       height={inputHieght}
                       borderRadius={bigbuttonBorderRadius}
                       endAdornment={
@@ -490,9 +495,9 @@ export default function PopUpTrade(props) {
                       onChange={(e) => {
                         setData1(e.target.value);
                       }}
-                      error={!check2}
+                      error={( check2 === false) && data1}
                       margin="1em auto"
-                      label="آدرس کیف پول بازپرداخت را وارد کنید"
+                      label={check2 === false && data1 ? 'آدرس کیف پول شما معتبر نیست'  :  "آدرس کیف پول بازپرداخت را وارد کنید"}
                       height={inputHieght}
                       borderRadius={bigbuttonBorderRadius}
                       endAdornment={
@@ -572,7 +577,7 @@ export default function PopUpTrade(props) {
                   onClick={() => {
                     // console.log(check1)
                     // console.log(check2)
-                    if (check1 && 1) {
+                    if ( !(check1 === false) && 1) {
                       setStep((x) => x + 1);
                     }
                   }}

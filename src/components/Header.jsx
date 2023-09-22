@@ -35,6 +35,8 @@ import TelegramIcon from "@mui/icons-material/Telegram";
 import TwitterIcon from "@mui/icons-material/Twitter";
 import LinkedInIcon from "@mui/icons-material/LinkedIn";
 
+import Tooltip, { tooltipClasses } from "@mui/material/Tooltip";
+
 const pages = [
   {
     content: "صفحه اصلی",
@@ -95,6 +97,17 @@ export default function Header() {
     setState(open);
   };
 
+  const BootstrapTooltip = styled(({ className, ...props }) => (
+    <Tooltip {...props} arrow classes={{ popper: className }} />
+  ))(({ theme }) => ({
+    [`& .${tooltipClasses.arrow}`]: {
+      color: theme.palette.common.black,
+    },
+    [`& .${tooltipClasses.tooltip}`]: {
+      backgroundColor: theme.palette.common.black,
+    },
+  }));
+
   return (
     <AppBar
       sx={{ marginBottom: 3, backgroundColor: "transparent" }}
@@ -122,10 +135,11 @@ export default function Header() {
           >
             <CardBox>
               {pages.map((page, index) => (
-                <Link
+                <a
                   key={index}
                   style={{ textDecoration: "none" }}
                   to={page.to}
+                  href={page.href}
                 >
                   <ButtonChooze
                     id={index}
@@ -133,12 +147,18 @@ export default function Header() {
                     active={active === index}
                     changeColor={changeColor}
                   />
-                </Link>
+                </a>
               ))}
             </CardBox>
           </Box>
 
-          <ButtonTrade  display={ 'xs: "none", md: "flex"' } borderRadius="6px" content=" اتصال به کیف پول" />
+          <BootstrapTooltip
+            title='به زودی'
+            // sx={{' .MuiTooltip-popper' : {backgroundColor : theme.palette.secondary.main} ,backgroundColor : theme.palette.secondary.main}}
+            arrow
+          >
+          <ButtonTrade  display={ "none"  } borderRadius="6px" content=" اتصال به کیف پول" />
+          </BootstrapTooltip>
 
           <Button
             onClick={() => {
