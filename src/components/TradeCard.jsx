@@ -39,33 +39,19 @@ const endPoint = "https://dexha.io";
 export default function Tradecard(props) {
   const {
     endPoint,
-    currencies,
     setCurrencies,
     flow,
     setFlow,
     setCheckData,
-    // isLoading,
-    // error,
     isError,
     selectedCC,
     toAmount,
-    setToAmount,
     fetchAmount,
     open,
-    // post,
     payId,
-    setPayId,
-    payIn,
-    setPayIn,
     fromAmount,
     setFromAmount,
     getMinAmount,
-    speed,
-    depositFee,
-    withdrawalFee,
-    step,
-    setStep,
-    ratio,
     setRatio,
     maxData,
     minData,
@@ -75,7 +61,6 @@ export default function Tradecard(props) {
     handleClickOpen,
     handleSwap,
     checkData,
-    selectedValue,
     handleClose,
     handleClickAlert,
   } = useContext(UserContext);
@@ -151,32 +136,18 @@ export default function Tradecard(props) {
     );
 
     const fetchAmountInterval = setInterval(() => {
-      // console.log(payIdRef.current);
 
-      axios
-        .get(
-          `${endPoint}/exchange/api/estimated-amount?fromCurrency=${cc1.current}&toCurrency=${cc2.current}&fromAmount=${amountRef.current}&fromNetwork=${net1.current}&toNetwork=${net2.current}&flow=${flowRef.current}`
-        )
-        .catch((error) => {
-          console.log(error);
-          handleClickAlert();
-        })
-        .then((res) => {
-          if (res) {
-            setToAmount(res?.data.toAmount);
-          } else {
-            handleClickAlert();
-          }
-        });
+        fetchAmount(
+          amountRef.current,
+          cc1.current,
+          cc2.current,
+          net1.current,
+          net2.current,
+          flowRef.current
+        );
 
-      // console.log('llllllllll');
-
-      // setProgress((prevProgress) =>
-      //   prevProgress >= 100 ? 0 : prevProgress + 100
-      // );
     }, 20000);
-    // const timer = setInterval(() => {
-    // }, 2000);
+
 
     getMinAmount(
       selectedCC.currencies[0],
