@@ -1,23 +1,19 @@
 import * as React from "react";
 import Typography from "@mui/material/Typography";
-import { Avatar, DialogContent, Grid } from "@mui/material";
+import { Avatar, DialogContent, Grid, Skeleton } from "@mui/material";
 
 import ArrowCircleLeftIcon from "@mui/icons-material/ArrowCircleLeft";
 
-import {  useContext ,useEffect } from "react";
+import { useContext, useEffect } from "react";
 import { UserContext } from "../App";
 
-
 export default function TradeBoared(props) {
-
-  const { selectedCC , toAmount ,fromAmount}  = useContext(UserContext);
-
-
+  const { selectedCC, toAmount, fromAmount } = useContext(UserContext);
 
   return (
     <DialogContent
       sx={{
-        padding: "2px 2em",
+        padding: "40px 2em",
         display: "flex",
         justifyContent: "center",
         alignItems: "center",
@@ -32,7 +28,7 @@ export default function TradeBoared(props) {
         container
         spacing={2}
       >
-        <Grid sx={{ display: "flex", justifyContent: "center" }} item xs={4}>
+        <Grid sx={{ display: "flex", justifyContent: "center" }} item xs={5}>
           <Grid
             sx={{
               display: "flex",
@@ -42,39 +38,28 @@ export default function TradeBoared(props) {
             container
           >
             <Grid
-              sx={{ display: "flex", justifyContent: "center" }}
-              item
-              xs={12}
-            >
-              <Avatar
-                src={selectedCC.currencyImg[0]}
-                sx={{ width: 56, height: 56 }}
-              />
-            </Grid>
-            <Grid
-              sx={{ display: "flex", justifyContent: "center" ,padding: 1 ,}}
-              item
-              xs={12}
-            >
-              <Typography variant="h6" >
-              {selectedCC.currencies[0] + " " +  fromAmount }
-              </Typography>
-            </Grid>
-            <Grid
-              sx={{ display: "flex", justifyContent: "center" ,padding: 1 ,}}
-              item
-              xs={12}
-            >
-              <Typography  component="h2">
-              {" بر روی شبکه " + selectedCC.network[0]  }
-              </Typography>
-            </Grid>
-            <Grid
-              sx={{ display: "flex", justifyContent: "center" }}
+              sx={{ display: "flex",  }}
               item
               xs={12}
             >
               <Typography component="h2">ارسال می کنید</Typography>
+            </Grid>
+            <Grid
+              sx={{ display: "flex",  }}
+              item
+              xs={4}
+            >
+              <Avatar
+                src={selectedCC.currencyImg[0]}
+                sx={{ width: 26, height: 26 }}
+              />
+            </Grid>
+            <Grid
+              sx={{ display: "flex", }}
+              item
+              xs={8}
+            >
+              <Typography variant="h6">{fromAmount}</Typography>
             </Grid>
           </Grid>
         </Grid>
@@ -85,7 +70,7 @@ export default function TradeBoared(props) {
             alignItems: "center",
           }}
           item
-          xs={4}
+          xs={2}
         >
           <ArrowCircleLeftIcon sx={{ width: 36, height: 36 }} />
         </Grid>
@@ -96,7 +81,7 @@ export default function TradeBoared(props) {
             alignItems: "center",
           }}
           item
-          xs={4}
+          xs={5}
         >
           <Grid
             sx={{
@@ -107,39 +92,39 @@ export default function TradeBoared(props) {
             container
           >
             <Grid
-              sx={{ display: "flex", justifyContent: "center" }}
-              item
-              xs={12}
-            >
-              <Avatar
-                src={selectedCC.currencyImg[1]}
-                sx={{ width: 56, height: 56 }}
-              />
-            </Grid>
-            <Grid
-              sx={{ display: "flex", justifyContent: "center" ,padding: 1 ,}}
-              item
-              xs={12}
-            >
-              <Typography variant="h6" >
-                {selectedCC.currencies[1] + " " + toAmount  }
-              </Typography>
-              </Grid>
-            <Grid
-              sx={{ display: "flex", justifyContent: "center" }}
-              item
-              xs={12}
-            >
-              <Typography  component="h2">
-                {" بر روی شبکه " +  selectedCC.network[1]}
-              </Typography>
-            </Grid>
-            <Grid
-              sx={{ display: "flex", justifyContent: "center" }}
+              sx={{ display: "flex", justifyContent : 'flex-end'  }}
               item
               xs={12}
             >
               <Typography component="h2">دریافت می کنید</Typography>
+            </Grid>
+            <Grid
+              sx={{ display: "flex",  }}
+              item
+              xs={4}
+            >
+              <Avatar
+                src={selectedCC.currencyImg[1]}
+                sx={{ width: 26, height: 26 }}
+              />
+            </Grid>
+            <Grid
+              sx={{ display: "flex",}}
+              item
+              xs={8}
+            >
+              <Typography variant="h6">
+                {toAmount ? (
+                  toAmount
+                ) : (
+                  <Skeleton
+                    variant="text"
+                    sx={{ fontSize: "1rem" }}
+                    width={80}
+                    height={30}
+                  />
+                )}
+              </Typography>
             </Grid>
           </Grid>
         </Grid>

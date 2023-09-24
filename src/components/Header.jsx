@@ -38,11 +38,11 @@ import LinkedInIcon from "@mui/icons-material/LinkedIn";
 import Tooltip, { tooltipClasses } from "@mui/material/Tooltip";
 
 const pages = [
-  {
-    content: "صفحه اصلی",
-    to: "https://dexha.io/",
-    // active : false,
-  },
+  // {
+  //   content: "صفحه اصلی",
+  //   to: "https://dexha.io/",
+  //   // active : false,
+  // },
   {
     content: "اپ",
     to: "/swap",
@@ -134,20 +134,33 @@ export default function Header() {
             }}
           >
             <CardBox>
-              {pages.map((page, index) => (
                 <a
-                  key={index}
+                  key={0}
                   style={{ textDecoration: "none" }}
-                  to={page.to}
-                  href={page.href}
+
+                  href='https://dexha.io/'
                 >
                   <ButtonChooze
-                    id={index}
-                    content={page.content}
-                    active={active === index}
+                    id={0}
+                    content="صفحه اصلی"
+                    active={active === 0}
                     changeColor={changeColor}
                   />
                 </a>
+              {pages.map((page, index) => (
+                <Link
+                  key={index+1}
+                  style={{ textDecoration: "none" }}
+                  to={page.to}
+                  href={page.to}
+                >
+                  <ButtonChooze
+                    id={index+1}
+                    content={page.content}
+                    active={active === index+1}
+                    changeColor={changeColor}
+                  />
+                </Link>
               ))}
             </CardBox>
           </Box>

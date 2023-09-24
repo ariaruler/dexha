@@ -26,21 +26,24 @@ export default function ButtonRefresh() {
         selectedCC,
         fetchAmount,
         fromAmount,
-
+        refreshData,
+        fetchAmountInterval,
       } = useContext(UserContext);
 
     return (
         <Button
         onClick={() => {
             setProgress(0)
-          fetchAmount(
-            fromAmount,
-            selectedCC.currencies[0],
-            selectedCC.currencies[1],
-            selectedCC.network[0],
-            selectedCC.network[1],
-            flow
-          );
+            fetchAmount(
+              fromAmount,
+              selectedCC.currencies[0],
+              selectedCC.currencies[1],
+              selectedCC.network[0],
+              selectedCC.network[1],
+              flow
+            );
+            clearInterval(fetchAmountInterval.current);
+            refreshData();
         }}
         color="common"
         sx={{ minWidth: 0 }}

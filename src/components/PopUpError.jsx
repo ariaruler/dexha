@@ -10,18 +10,10 @@ import {
 import Typography from "@mui/material/Typography";
 import { Warning } from "@mui/icons-material";
 import { useTheme } from "@mui/material/styles";
-// import Alert from '@mui/joy/Alert';
-// import Alert from '@mui/material/Alert';
-// import AspectRatio from '@mui/material/AspectRatio';
-// import IconButton from '@mui/material/IconButton';
 import Box from '@mui/material/Box';
 import CircularProgress from '@mui/material/CircularProgress';
-// import LinearProgress from '@mui/material/LinearProgress';
 import Stack from '@mui/material/Stack';
-// import Typography from '@mui/material/Typography';
-// import Check from '@mui/icons-material/Check';
-// import Close from '@mui/icons-material/Close';
-// import Warning from '@mui/icons-material/Warning';
+
 
 export default function PopUpError(props) {
   const theme = useTheme();

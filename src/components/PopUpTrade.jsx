@@ -54,6 +54,7 @@ import { styled } from "@mui/material/styles";
 import Tooltip, { tooltipClasses } from "@mui/material/Tooltip";
 
 import ArrowForwardIosSharpIcon from "@mui/icons-material/ArrowForwardIosSharp";
+import Buttonfee from "./Buttonfee";
 
 const inputHieght = 54;
 const bigbuttonBorderRadius = "8px";
@@ -203,7 +204,8 @@ export default function PopUpTrade(props) {
   const checkData = async (address, currency) => {
     // console.log(currency);
     // console.log(address);
-    return axios.get(
+    return axios
+      .get(
         `${endPoint}/exchange/api/validate-address?currency=${currency}&address=${address}`,
         {
           signal: controller.signal,
@@ -212,21 +214,20 @@ export default function PopUpTrade(props) {
       .catch((error) => {
         console.log(error);
         handleClickAlert();
-      }).then((res)=>{
+      })
+      .then((res) => {
         if (res) {
           // console.log(res.data);
           return res.data.result;
-  
-      } else {
-        handleClickAlert();
-      }
-      })
-
+        } else {
+          handleClickAlert();
+        }
+      });
   };
 
   useEffect(() => {
-    setCheck1(null)
-    if ( data2) {
+    setCheck1(null);
+    if (data2) {
       checkData(data2, selectedCC.legacyTicker[1]).then((res) =>
         setCheck1(res)
       );
@@ -238,9 +239,9 @@ export default function PopUpTrade(props) {
   }, [data2]);
 
   useEffect(() => {
-    setCheck2(null)
+    setCheck2(null);
 
-    if (data1 ) {
+    if (data1) {
       checkData(data1, selectedCC.legacyTicker[0]).then((res) =>
         setCheck2(res)
       );
@@ -271,8 +272,8 @@ export default function PopUpTrade(props) {
         console.log("Error: ", error);
         handleClickAlert();
       });
-    if (res) {
       console.log(res.data);
+    if (res) {
       // console.log(res.data.id)
       setPayInExteraId(res.data.payinExtraId);
       setPayId((x) => [...x, res.data.id]);
@@ -292,34 +293,38 @@ export default function PopUpTrade(props) {
 
   const postRefund = async () => {
     const userToPost = {
-      id : payId[payId.length - 1],
-      address : "string",
-      extraId : "string"
+      id: payId[payId.length - 1],
+      address: data1,
+      extraId: exteraId2,
     };
-    // console.log(userToPost);
+    console.log(userToPost);
 
     const res = await axios
-      .post(`${endPoint}/exchange/api/continue`, userToPost)
+      .post(`${endPoint}/exchange/api/refund`, userToPost)
       .catch((error) => {
         console.log("Error: ", error);
         handleClickAlert();
       });
-    if (res.data.success) {
       console.log(res.data);
-      getStatus();
-      setSliderValue(100);
-      setStatusFa("پایان تبادل");
-      setStep(3);
-    } else {
-      postRefund()
-    }
+      if(res.data){
+
+        if (res.data.success) {
+          getStatus();
+          setSliderValue(100);
+          setStatusFa("بازپرداخت انجام شد");
+          setStep(3);
+        } else {
+          setStatusFa("عملیات دچار مشکل شده است");
+          setSliderValue(0);
+        }
+      }
   };
 
   const postContinue = async () => {
     const userToPost = {
-      id : payId[payId.length - 1]
+      id: payId[payId.length - 1],
     };
-    // console.log(userToPost);
+    console.log(userToPost);
 
     const res = await axios
       .post(`${endPoint}/exchange/api/continue`, userToPost)
@@ -327,15 +332,17 @@ export default function PopUpTrade(props) {
         console.log("Error: ", error);
         handleClickAlert();
       });
+      console.log(res.data); 
+      if(res.data){
     if (res.data.success) {
-      console.log(res.data);
       getStatus();
       setSliderValue(100);
       setStatusFa("پایان تبادل");
       setStep(3);
     } else {
-      postRefund()
+      postRefund();
     }
+  }
   };
 
   const getStatusInterval = useRef();
@@ -417,16 +424,28 @@ export default function PopUpTrade(props) {
       case "failed":
         setSliderValue(0);
         setStatusFa("مشکلی در تبادل پیش آمده");
-        axios.get(`${endPoint}/exchange/actions?id=${payId[payId.length - 1]}`)
-        .catch((error) => {
-          console.log(error);
-          handleClickAlert();
-        })
-        .then((res)=>{ if(res.data.continue.available){
-          setStatusFa('در حال ادامه تبادل');
-          setSliderValue(50);
-          postContinue();
-        }})
+        axios
+          .get(`${endPoint}/exchange/actions?id=${payId[payId.length - 1]}`)
+          .catch((error) => {
+            console.log(error);
+            handleClickAlert();
+          })
+          .then((res) => {
+            console.log(res.data);
+            if (res.data.continue.available) {
+              setStatusFa("در حال ادامه تبادل");
+              setSliderValue(50);
+              postContinue();
+            }
+            else if (!res.data.continue.available && res.data.refund.available) {
+              setStatusFa("در حال ادامه تبادل");
+              setSliderValue(50);
+              postRefund();
+            } else {
+              setStatusFa("عملیات دچار مشکل شده است");
+              setSliderValue(0);
+            }
+          });
         break;
     }
   }, [status[payId]]);
@@ -487,140 +506,160 @@ export default function PopUpTrade(props) {
                   }
                 />
 
-                <TradeBoared />
-
                 <DialogContent sx={{ padding: "2px 2em" }}>
-                  <Grid item xs={12}>
-                    <InputTrade
-                      value={data2}
-                      onChange={(e) => {
-                        setData2(e.target.value);
-                      }}
-                      error={( check1 === false) && data2}
-                      margin="1em auto"
-                      label={ ((check1 === false )&& data2 )? 'آدرس کیف پول شما معتبر نیست' : "آدرس کیف پول مقصد را وارد کنید"}
-                      height={inputHieght}
-                      borderRadius={bigbuttonBorderRadius}
-                      endAdornment={
-                        <QrCodeScannerIcon
-                          onClick={() => {
-                            handleClickOpen(0);
-                          }}
-                          sx={{
-                            "&:hover": { color: theme.palette.secondary.main },
-                          }}
-                        />
-                      }
-                      startAdornment={
-                        data2 ? (
-                          <></>
-                        ) : (
-                          <BootstrapTooltip
-                            title="آدرس کیف پول دریافت کننده:
-
-                          آدرس کیف پول دریافت‌کننده، همان آدرس کیف پولی است که مقدار رمزارز مبادله شده به این آدرس واریز می‌شود. توجه نمایید، مسئولیت واردکردن آدرس صحیح کیف پول بر عهده شماست."
-                            // sx={{
-                            //   " .MuiTooltip-popper": {
-                            //     backgroundColor: theme.palette.secondary.main,
-                            //   },
-                            //   backgroundColor: theme.palette.secondary.main,
-                            // }}
-                            arrow
-                          >
-                            <Button color="common" sx={{ minWidth: 0 }}>
-                              <InfoOutlinedIcon
-                                color="secondary"
-                                sx={{ height: "auto !important" }}
-                              />
-                            </Button>
-                          </BootstrapTooltip>
-                        )
-                      }
-                    />
-                  </Grid>
-
-                  {selectedCC.hasExternalId[0] ? (
-                    <Grid item xs={12}>
+                  <TradeBoared />
+                  <Grid container>
+                    <Grid item xs={selectedCC.hasExternalId[0] ? 8 : 12}>
                       <InputTrade
-                        value={exteraId}
+                        value={data2}
                         onChange={(e) => {
-                          setExteraId(e.target.value);
+                          setData2(e.target.value);
                         }}
+                        error={check1 === false && data2}
                         margin="1em auto"
-                        label="Memo خود را وارد کنید "
+                        label={
+                          check1 === false && data2
+                            ? "آدرس کیف پول شما معتبر نیست"
+                            : "آدرس کیف پول مقصد را وارد کنید"
+                        }
                         height={inputHieght}
                         borderRadius={bigbuttonBorderRadius}
-                      />
-                    </Grid>
-                  ) : (
-                    <></>
-                  )}
-
-                  <Grid item xs={12}>
-                    <InputTrade
-                      value={data1}
-                      onChange={(e) => {
-                        setData1(e.target.value);
-                      }}
-                      error={( check2 === false) && data1}
-                      margin="1em auto"
-                      label={ ((check2 === false )&& data1) ? 'آدرس کیف پول شما معتبر نیست'  :  "آدرس کیف پول بازپرداخت را وارد کنید"}
-                      height={inputHieght}
-                      borderRadius={bigbuttonBorderRadius}
-                      endAdornment={
-                        <QrCodeScannerIcon
-                          onClick={() => {
-                            handleClickOpen(1);
-                          }}
-                          sx={{
-                            "&:hover": { color: theme.palette.secondary.main },
-                          }}
-                        />
-                      }
-                      startAdornment={
-                        data1 ? (
-                          <></>
-                        ) : (
-                          <BootstrapTooltip
-                            title="آدرس کیف پول دریافت کننده:
+                        endAdornment={
+                          <QrCodeScannerIcon
+                            onClick={() => {
+                              handleClickOpen(0);
+                            }}
+                            sx={{
+                              "&:hover": {
+                                color: theme.palette.secondary.main,
+                              },
+                            }}
+                          />
+                        }
+                        startAdornment={
+                          data2 ? (
+                            <></>
+                          ) : (
+                            <BootstrapTooltip
+                              title="آدرس کیف پول دریافت کننده:
 
                           آدرس کیف پول دریافت‌کننده، همان آدرس کیف پولی است که مقدار رمزارز مبادله شده به این آدرس واریز می‌شود. توجه نمایید، مسئولیت واردکردن آدرس صحیح کیف پول بر عهده شماست."
-                            // sx={{
-                            //   " .MuiTooltip-popper": {
-                            //     backgroundColor: theme.palette.secondary.main,
-                            //   },
-                            //   backgroundColor: theme.palette.secondary.main,
-                            // }}
-                            arrow
-                          >
-                            <Button color="common" sx={{ minWidth: 0 }}>
-                              <InfoOutlinedIcon
-                                color="secondary"
-                                sx={{ height: "auto !important" }}
-                              />
-                            </Button>
-                          </BootstrapTooltip>
-                        )
-                      }
-                    />
-                  </Grid>
-
-                  {selectedCC.hasExternalId[1] ? (
-                    <Grid item xs={12}>
-                      <InputTrade
-                        value={exteraId2}
-                        onChange={(e) => {
-                          setExteraId2(e.target.value);
-                        }}
-                        margin="1em auto"
-                        label="Memo بازپرداخت خود را وارد کنید "
-                        height={inputHieght}
-                        borderRadius={bigbuttonBorderRadius}
+                              // sx={{
+                              //   " .MuiTooltip-popper": {
+                              //     backgroundColor: theme.palette.secondary.main,
+                              //   },
+                              //   backgroundColor: theme.palette.secondary.main,
+                              // }}
+                              arrow
+                            >
+                              <Button color="common" sx={{ minWidth: 0 }}>
+                                <InfoOutlinedIcon
+                                  color="secondary"
+                                  sx={{ height: "auto !important" }}
+                                />
+                              </Button>
+                            </BootstrapTooltip>
+                          )
+                        }
                       />
                     </Grid>
-                  ) : (
-                    <></>
-                  )}
+
+                    <Grid item xs={0.2}></Grid>
+
+                    {selectedCC.hasExternalId[0] ? (
+                      <Grid item xs={3.8}>
+                        <InputTrade
+                          value={exteraId}
+                          onChange={(e) => {
+                            setExteraId(e.target.value);
+                          }}
+                          margin="1em auto"
+                          label="Memo خود را وارد کنید "
+                          height={inputHieght}
+                          borderRadius={bigbuttonBorderRadius}
+                        />
+                      </Grid>
+                    ) : (
+                      <></>
+                    )}
+                  </Grid>
+
+                  <Grid container>
+                    <Grid item xs={selectedCC.hasExternalId[1] ? 8 : 12}>
+                      <InputTrade
+                        value={data1}
+                        onChange={(e) => {
+                          setData1(e.target.value);
+                        }}
+                        error={check2 === false && data1}
+                        margin="1em auto"
+                        label={
+                          check2 === false && data1
+                            ? "آدرس کیف پول شما معتبر نیست"
+                            : "آدرس کیف پول بازپرداخت را وارد کنید"
+                        }
+                        height={inputHieght}
+                        borderRadius={bigbuttonBorderRadius}
+                        endAdornment={
+                          <QrCodeScannerIcon
+                            onClick={() => {
+                              handleClickOpen(1);
+                            }}
+                            sx={{
+                              "&:hover": {
+                                color: theme.palette.secondary.main,
+                              },
+                            }}
+                          />
+                        }
+                        startAdornment={
+                          data1 ? (
+                            <></>
+                          ) : (
+                            <BootstrapTooltip
+                              title="آدرس کیف پول دریافت کننده:
+
+                          آدرس کیف پول دریافت‌کننده، همان آدرس کیف پولی است که مقدار رمزارز مبادله شده به این آدرس واریز می‌شود. توجه نمایید، مسئولیت واردکردن آدرس صحیح کیف پول بر عهده شماست."
+                              // sx={{
+                              //   " .MuiTooltip-popper": {
+                              //     backgroundColor: theme.palette.secondary.main,
+                              //   },
+                              //   backgroundColor: theme.palette.secondary.main,
+                              // }}
+                              arrow
+                            >
+                              <Button color="common" sx={{ minWidth: 0 }}>
+                                <InfoOutlinedIcon
+                                  color="secondary"
+                                  sx={{ height: "auto !important" }}
+                                />
+                              </Button>
+                            </BootstrapTooltip>
+                          )
+                        }
+                      />
+                    </Grid>
+
+                    <Grid item xs={0.2}></Grid>
+
+                    {selectedCC.hasExternalId[1] ? (
+                      <Grid item xs={3.8}>
+                        <InputTrade
+                          value={exteraId2}
+                          onChange={(e) => {
+                            setExteraId2(e.target.value);
+                          }}
+                          margin="1em auto"
+                          label="Memo بازپرداخت خود را وارد کنید "
+                          height={inputHieght}
+                          borderRadius={bigbuttonBorderRadius}
+                        />
+                      </Grid>
+                    ) : (
+                      <></>
+                    )}
+                  </Grid>
+                  <Buttonfee />
                 </DialogContent>
 
                 <PopUpQrScan
@@ -644,7 +683,7 @@ export default function PopUpTrade(props) {
                   onClick={() => {
                     // console.log(check1)
                     // console.log(check2)
-                    if ( !(check1 === false) && !(check2 === false)) {
+                    if (!(check1 === false) && !(check2 === false)) {
                       setStep((x) => x + 1);
                     }
                   }}
@@ -692,61 +731,120 @@ export default function PopUpTrade(props) {
                     </IconButton>
                   }
                 />
-                <TradeBoared />
                 {/* toAmount={props.toAmount} */}
                 <DialogContent sx={{ padding: "2px 2em" }}>
-                  <Grid item xs={12}>
-                    <TableContainer>
-                      <Table>
-                        <TableBody>
-                          <TableRow>
-                            <TableCell sx={{ padding: 0.5, border: "none" }}>
-                              منبع تبادل
-                            </TableCell>
-                            <TableCell
-                              sx={{ padding: 0.5, border: "none" }}
-                              align="right"
+                  <TradeBoared />
+                  <Grid container>
+                    <Grid item xs={selectedCC.hasExternalId[0] ? 8 : 12}>
+                      <InputTrade
+                        disabled
+                        value={data2}
+                        margin="1em auto"
+                        label="آدرس کیف پول مقصد "
+                        height={inputHieght}
+                        borderRadius={bigbuttonBorderRadius}
+                        startAdornment={
+                          data2 ? (
+                            <></>
+                          ) : (
+                            <BootstrapTooltip
+                              title="آدرس کیف پول دریافت کننده:
+
+                          آدرس کیف پول دریافت‌کننده، همان آدرس کیف پولی است که مقدار رمزارز مبادله شده به این آدرس واریز می‌شود. توجه نمایید، مسئولیت واردکردن آدرس صحیح کیف پول بر عهده شماست."
+                              // sx={{
+                              //   " .MuiTooltip-popper": {
+                              //     backgroundColor: theme.palette.secondary.main,
+                              //   },
+                              //   backgroundColor: theme.palette.secondary.main,
+                              // }}
+                              arrow
                             >
-                              100%
-                            </TableCell>
-                          </TableRow>
-                          <TableRow>
-                            <TableCell sx={{ padding: 0.5, border: "none" }}>
-                              کارمزد تبادل
-                            </TableCell>
-                            <TableCell
-                              sx={{ padding: 0.5, border: "none" }}
-                              align="right"
-                            >
-                              0.09%
-                            </TableCell>
-                          </TableRow>
-                          <TableRow>
-                            <TableCell sx={{ padding: 0.5, border: "none" }}>
-                              کمترین میزان تبادل
-                            </TableCell>
-                            <TableCell
-                              sx={{ padding: 0.5, border: "none" }}
-                              align="right"
-                            >
-                              1865.3961 DAI
-                            </TableCell>
-                          </TableRow>
-                          <TableRow>
-                            <TableCell sx={{ padding: 0.5, border: "none" }}>
-                              فی شبکه
-                            </TableCell>
-                            <TableCell
-                              sx={{ padding: 0.5, border: "none" }}
-                              align="right"
-                            >
-                              $4.94
-                            </TableCell>
-                          </TableRow>
-                        </TableBody>
-                      </Table>
-                    </TableContainer>
+                              <Button color="common" sx={{ minWidth: 0 }}>
+                                <InfoOutlinedIcon
+                                  color="secondary"
+                                  sx={{ height: "auto !important" }}
+                                />
+                              </Button>
+                            </BootstrapTooltip>
+                          )
+                        }
+                      />
+                    </Grid>
+
+                    <Grid item xs={0.2}></Grid>
+
+                    {selectedCC.hasExternalId[0] ? (
+                      <Grid item xs={3.8}>
+                        <InputTrade
+                          disabled
+                          value={exteraId}
+                          margin="1em auto"
+                          label="Memo "
+                          height={inputHieght}
+                          borderRadius={bigbuttonBorderRadius}
+                        />
+                      </Grid>
+                    ) : (
+                      <></>
+                    )}
                   </Grid>
+
+                  <Grid container>
+                    <Grid item xs={selectedCC.hasExternalId[1] ? 8 : 12}>
+                      <InputTrade
+                        disabled
+                        value={data1}
+                        margin="1em auto"
+                        label="آدرس کیف پول بازپرداخت "
+                        height={inputHieght}
+                        borderRadius={bigbuttonBorderRadius}
+                        startAdornment={
+                          data1 ? (
+                            <></>
+                          ) : (
+                            <BootstrapTooltip
+                              title="آدرس کیف پول دریافت کننده:
+
+                          آدرس کیف پول دریافت‌کننده، همان آدرس کیف پولی است که مقدار رمزارز مبادله شده به این آدرس واریز می‌شود. توجه نمایید، مسئولیت واردکردن آدرس صحیح کیف پول بر عهده شماست."
+                              // sx={{
+                              //   " .MuiTooltip-popper": {
+                              //     backgroundColor: theme.palette.secondary.main,
+                              //   },
+                              //   backgroundColor: theme.palette.secondary.main,
+                              // }}
+                              arrow
+                            >
+                              <Button color="common" sx={{ minWidth: 0 }}>
+                                <InfoOutlinedIcon
+                                  color="secondary"
+                                  sx={{ height: "auto !important" }}
+                                />
+                              </Button>
+                            </BootstrapTooltip>
+                          )
+                        }
+                      />
+                    </Grid>
+
+                    <Grid item xs={0.2}></Grid>
+
+                    {selectedCC.hasExternalId[1] ? (
+                      <Grid item xs={3.8}>
+                        <InputTrade
+                          disabled
+                          value={exteraId2}
+                          margin="1em auto"
+                          label="Memo "
+                          height={inputHieght}
+                          borderRadius={bigbuttonBorderRadius}
+                        />
+                      </Grid>
+                    ) : (
+                      <></>
+                    )}
+                  </Grid>
+
+                  <Buttonfee />
                 </DialogContent>
 
                 <DialogActions
@@ -773,7 +871,7 @@ export default function PopUpTrade(props) {
                     }}
                     xs={12}
                   >
-                    مرحله بعد
+                    تائید اطلاعات و شروع تبادل
                   </Grid>
                 </DialogActions>
               </Dialog>

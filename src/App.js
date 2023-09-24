@@ -216,6 +216,23 @@ function App() {
 
   const [mainData, setMainData] = useState([]);
 
+  
+  const amountRef = useRef("1");
+
+  const cc1 = useRef("btc");
+
+  const cc2 = useRef("eth");
+
+  const net1 = useRef("btc");
+
+  const net2 = useRef("eth");
+
+  const flowRef = useRef();
+
+  const payIdRef = useRef();
+
+  const fetchAmountInterval = useRef();
+
   // function onChange(newName) {
   //   setCookie('name', newName);
   // }
@@ -272,6 +289,32 @@ function App() {
       }
       });
   };
+
+  const refreshData = ()=>{
+
+    amountRef.current = fromAmount;
+    cc1.current = selectedCC.currencies[0];
+    cc2.current = selectedCC.currencies[1];
+    net1.current = selectedCC.network[0];
+    net2.current = selectedCC.network[1];
+    flowRef.current = flow;
+    payIdRef.current = payId;
+
+
+    fetchAmountInterval.current = setInterval(() => {
+
+      fetchAmount(
+        amountRef.current,
+        cc1.current,
+        cc2.current,
+        net1.current,
+        net2.current,
+        flowRef.current
+      );
+
+  }, 20000);
+
+  }
 
   const [fromAmount, setFromAmount] = useState("1");
 
@@ -347,6 +390,8 @@ function App() {
         mainData,
         setMainData,
         handleClickAlert,
+        refreshData,
+        fetchAmountInterval,
       }}
     >
       <QueryClientProvider client={client}>

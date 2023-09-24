@@ -63,6 +63,8 @@ export default function Tradecard(props) {
     checkData,
     handleClose,
     handleClickAlert,
+    refreshData,
+    fetchAmountInterval,
   } = useContext(UserContext);
 
   useEffect(() => {
@@ -79,31 +81,10 @@ export default function Tradecard(props) {
       });
   }, []);
 
-  // useEffect(() => {
-  //   const timer = setInterval(() => {
-  //     setProgress((prevProgress) => (prevProgress >= 100 ? 0 : prevProgress + 10));
-  //   }, 800);
-  //   return () => {
-  //     clearInterval(timer);
-  //   };
-  // }, []);
 
   const theme = useTheme();
   // console.log( "YYYYYYYYYYYYYYYYYY")
 
-  const amountRef = useRef("1");
-
-  const cc1 = useRef("btc");
-
-  const cc2 = useRef("eth");
-
-  const net1 = useRef("btc");
-
-  const net2 = useRef("eth");
-
-  const flowRef = useRef();
-
-  const payIdRef = useRef();
 
   // console.log(flow);
 
@@ -115,16 +96,21 @@ export default function Tradecard(props) {
 
   // console.log(step);
 
-  useEffect(() => {
-    // console.log('kkkkkkkkkkkkkkkkkkkk');
 
-    amountRef.current = fromAmount;
-    cc1.current = selectedCC.currencies[0];
-    cc2.current = selectedCC.currencies[1];
-    net1.current = selectedCC.network[0];
-    net2.current = selectedCC.network[1];
-    flowRef.current = flow;
-    payIdRef.current = payId;
+
+
+  // useEffect(() => {
+
+
+
+  //   refreshData();
+  //   return () => {
+
+  //     clearInterval(fetchAmountInterval.current);
+  //   };
+  // }, []);
+
+  useEffect(() => {
 
     fetchAmount(
       fromAmount,
@@ -134,20 +120,6 @@ export default function Tradecard(props) {
       selectedCC.network[1],
       flow
     );
-
-    const fetchAmountInterval = setInterval(() => {
-
-        fetchAmount(
-          amountRef.current,
-          cc1.current,
-          cc2.current,
-          net1.current,
-          net2.current,
-          flowRef.current
-        );
-
-    }, 20000);
-
 
     getMinAmount(
       selectedCC.currencies[0],
@@ -168,7 +140,7 @@ export default function Tradecard(props) {
       });
 
     return () => {
-      clearInterval(fetchAmountInterval);
+
       controller.abort();
       // clearInterval(timer);
     };
