@@ -247,6 +247,7 @@ export default function Tradecard(props) {
   const exceptThisSymbols = ["e", "E", "+", "-"];
 
   // console.log(checkData[0]);
+  console.log(checkData[0]?.flow[flow]);
 
   return (
     <Box sx={cardBox}>

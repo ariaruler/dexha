@@ -506,7 +506,7 @@ export default function PopUpTrade(props) {
                   }
                 />
 
-                <DialogContent sx={{ padding: "2px 2em" }}>
+                <DialogContent sx={{ padding: "2px 1.5em" }}>
                   <TradeBoared />
                   <Grid container>
                     <Grid item xs={selectedCC.hasExternalId[0] ? 8 : 12}>
@@ -683,7 +683,7 @@ export default function PopUpTrade(props) {
                   onClick={() => {
                     // console.log(check1)
                     // console.log(check2)
-                    if (!(check1 === false) && !(check2 === false)) {
+                    if (!(check1 === false) && data1 && !(check2 === false) && data2) {
                       setStep((x) => x + 1);
                     }
                   }}
@@ -732,7 +732,7 @@ export default function PopUpTrade(props) {
                   }
                 />
                 {/* toAmount={props.toAmount} */}
-                <DialogContent sx={{ padding: "2px 2em" }}>
+                <DialogContent sx={{ padding: "2px 1.5em" }}>
                   <TradeBoared />
                   <Grid container>
                     <Grid item xs={selectedCC.hasExternalId[0] ? 8 : 12}>
@@ -897,7 +897,7 @@ export default function PopUpTrade(props) {
                     </IconButton>
                   }
                 />
-                <DialogContent sx={{ padding: "2px 2em" }}>
+                <DialogContent sx={{ padding: "2px 1.5em" }}>
                   <Grid
                     item
                     xs={12}
@@ -1134,7 +1134,7 @@ export default function PopUpTrade(props) {
                     </IconButton>
                   }
                 />
-                <DialogContent sx={{ padding: "2px 2em" }}>
+                <DialogContent sx={{ padding: "2px 1.5em" }}>
                   <Grid
                     item
                     xs={12}

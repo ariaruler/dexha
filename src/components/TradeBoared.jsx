@@ -1,8 +1,7 @@
 import * as React from "react";
 import Typography from "@mui/material/Typography";
 import { Avatar, DialogContent, Grid, Skeleton } from "@mui/material";
-
-import ArrowCircleLeftIcon from "@mui/icons-material/ArrowCircleLeft";
+import KeyboardBackspaceIcon from '@mui/icons-material/KeyboardBackspace';
 
 import { useContext, useEffect } from "react";
 import { UserContext } from "../App";
@@ -13,7 +12,7 @@ export default function TradeBoared(props) {
   return (
     <DialogContent
       sx={{
-        padding: "40px 2em",
+        padding: "40px 0px",
         display: "flex",
         justifyContent: "center",
         alignItems: "center",
@@ -24,11 +23,13 @@ export default function TradeBoared(props) {
           display: "flex",
           justifyContent: "center",
           alignItems: "center",
+          width : 'auto',
+          margin :0,
         }}
         container
         spacing={2}
       >
-        <Grid sx={{ display: "flex", justifyContent: "center" }} item xs={5}>
+        <Grid sx={{ display: "flex", justifyContent: "center" , padding : '0px !important' , }} item xs={5}>
           <Grid
             sx={{
               display: "flex",
@@ -38,28 +39,23 @@ export default function TradeBoared(props) {
             container
           >
             <Grid
-              sx={{ display: "flex",  }}
+              sx={{ display: "flex", marginBottom: 1, }}
               item
               xs={12}
             >
-              <Typography component="h2">ارسال می کنید</Typography>
-            </Grid>
-            <Grid
-              sx={{ display: "flex",  }}
-              item
-              xs={4}
-            >
-              <Avatar
-                src={selectedCC.currencyImg[0]}
-                sx={{ width: 26, height: 26 }}
-              />
+              <Typography sx={{fontSize : '.8em'}} component="h2">ارسال می کنید</Typography>
             </Grid>
             <Grid
               sx={{ display: "flex", }}
               item
-              xs={8}
+              xs={12}
             >
-              <Typography variant="h6">{fromAmount}</Typography>
+              <Typography sx={{fontSize : '1.3em'}} variant="h6">{fromAmount}</Typography>
+
+              <Avatar
+                src={selectedCC.currencyImg[0]}
+                sx={{ width: 26, height: 26 ,margin: 'auto 6px'}}
+              />
             </Grid>
           </Grid>
         </Grid>
@@ -68,17 +64,19 @@ export default function TradeBoared(props) {
             display: "flex",
             justifyContent: "center",
             alignItems: "center",
+             padding : '0px !important',
           }}
           item
           xs={2}
         >
-          <ArrowCircleLeftIcon sx={{ width: 36, height: 36 }} />
+          <KeyboardBackspaceIcon sx={{ width: 25, height: 25 }} />
         </Grid>
         <Grid
           sx={{
             display: "flex",
             justifyContent: "center",
             alignItems: "center",
+            padding : '0px !important',
           }}
           item
           xs={5}
@@ -88,32 +86,28 @@ export default function TradeBoared(props) {
               display: "flex",
               justifyContent: "center",
               alignItems: "center",
+
             }}
             container
           >
             <Grid
-              sx={{ display: "flex", justifyContent : 'flex-end'  }}
+              sx={{ display: "flex", justifyContent : 'flex-end' ,  marginBottom: 1, }}
               item
               xs={12}
             >
-              <Typography component="h2">دریافت می کنید</Typography>
+              <Typography  sx={{fontSize : '.8em'}} component="h2">دریافت می کنید</Typography>
             </Grid>
             <Grid
-              sx={{ display: "flex",  }}
+              sx={{ display: "flex",justifyContent : 'flex-end' ,   }}
               item
-              xs={4}
+              xs={12}
             >
               <Avatar
                 src={selectedCC.currencyImg[1]}
-                sx={{ width: 26, height: 26 }}
+                sx={{ width: 26, height: 26 , margin:'auto 6px'}}
               />
-            </Grid>
-            <Grid
-              sx={{ display: "flex",}}
-              item
-              xs={8}
-            >
-              <Typography variant="h6">
+
+              <Typography sx={{fontSize : '1.3em'}} variant="h6">
                 {toAmount ? (
                   toAmount
                 ) : (
