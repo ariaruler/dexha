@@ -28,6 +28,7 @@ export default function Buttonfee() {
         backgroundColor: theme.palette.background.default,
         padding: 1,
         borderRadius: theme.shape.borderRadius[1],
+        width : '100%',
       }}
     >
       <TableContainer>

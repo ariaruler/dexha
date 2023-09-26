@@ -10,14 +10,7 @@ export default function TradeBoared(props) {
   const { selectedCC, toAmount, fromAmount } = useContext(UserContext);
 
   return (
-    <DialogContent
-      sx={{
-        padding: "40px 0px",
-        display: "flex",
-        justifyContent: "center",
-        alignItems: "center",
-      }}
-    >
+
       <Grid
         sx={{
           display: "flex",
@@ -50,12 +43,12 @@ export default function TradeBoared(props) {
               item
               xs={12}
             >
-              <Typography sx={{fontSize : '1.3em'}} variant="h6">{fromAmount}</Typography>
 
               <Avatar
                 src={selectedCC.currencyImg[0]}
                 sx={{ width: 26, height: 26 ,margin: 'auto 6px'}}
               />
+              <Typography sx={{fontSize : '1.3em'}} variant="h6">{fromAmount}</Typography>
             </Grid>
           </Grid>
         </Grid>
@@ -63,8 +56,9 @@ export default function TradeBoared(props) {
           sx={{
             display: "flex",
             justifyContent: "center",
-            alignItems: "center",
+            alignItems: "flex-start",
              padding : '0px !important',
+             height : '100%'
           }}
           item
           xs={2}
@@ -102,11 +96,6 @@ export default function TradeBoared(props) {
               item
               xs={12}
             >
-              <Avatar
-                src={selectedCC.currencyImg[1]}
-                sx={{ width: 26, height: 26 , margin:'auto 6px'}}
-              />
-
               <Typography sx={{fontSize : '1.3em'}} variant="h6">
                 {toAmount ? (
                   toAmount
@@ -119,10 +108,16 @@ export default function TradeBoared(props) {
                   />
                 )}
               </Typography>
+
+              <Avatar
+                src={selectedCC.currencyImg[1]}
+                sx={{ width: 26, height: 26 , margin:'auto 6px'}}
+              />
+
             </Grid>
           </Grid>
         </Grid>
       </Grid>
-    </DialogContent>
+
   );
 }

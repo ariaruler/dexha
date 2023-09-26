@@ -272,7 +272,7 @@ export default function PopUpTrade(props) {
         console.log("Error: ", error);
         handleClickAlert();
       });
-      console.log(res.data);
+    console.log(res.data);
     if (res) {
       // console.log(res.data.id)
       setPayInExteraId(res.data.payinExtraId);
@@ -305,19 +305,18 @@ export default function PopUpTrade(props) {
         console.log("Error: ", error);
         handleClickAlert();
       });
-      console.log(res.data);
-      if(res.data){
-
-        if (res.data.success) {
-          getStatus();
-          setSliderValue(100);
-          setStatusFa("بازپرداخت انجام شد");
-          setStep(3);
-        } else {
-          setStatusFa("عملیات دچار مشکل شده است");
-          setSliderValue(0);
-        }
+    console.log(res.data);
+    if (res.data) {
+      if (res.data.success) {
+        getStatus();
+        setSliderValue(100);
+        setStatusFa("بازپرداخت انجام شد");
+        setStep(3);
+      } else {
+        setStatusFa("عملیات دچار مشکل شده است");
+        setSliderValue(0);
       }
+    }
   };
 
   const postContinue = async () => {
@@ -332,17 +331,17 @@ export default function PopUpTrade(props) {
         console.log("Error: ", error);
         handleClickAlert();
       });
-      console.log(res.data); 
-      if(res.data){
-    if (res.data.success) {
-      getStatus();
-      setSliderValue(100);
-      setStatusFa("پایان تبادل");
-      setStep(3);
-    } else {
-      postRefund();
+    console.log(res.data);
+    if (res.data) {
+      if (res.data.success) {
+        getStatus();
+        setSliderValue(100);
+        setStatusFa("پایان تبادل");
+        setStep(3);
+      } else {
+        postRefund();
+      }
     }
-  }
   };
 
   const getStatusInterval = useRef();
@@ -436,8 +435,10 @@ export default function PopUpTrade(props) {
               setStatusFa("در حال ادامه تبادل");
               setSliderValue(50);
               postContinue();
-            }
-            else if (!res.data.continue.available && res.data.refund.available) {
+            } else if (
+              !res.data.continue.available &&
+              res.data.refund.available
+            ) {
               setStatusFa("در حال ادامه تبادل");
               setSliderValue(50);
               postRefund();
@@ -506,7 +507,15 @@ export default function PopUpTrade(props) {
                   }
                 />
 
-                <DialogContent sx={{ padding: "2px 1.5em" }}>
+                <DialogContent
+                  sx={{
+                    padding: "2px 1.5em",
+                    display: "flex",
+                    flexDirection: "column",
+                    justifyContent: "space-around",
+                    alignItems: "center",
+                  }}
+                >
                   <TradeBoared />
                   <Grid container>
                     <Grid item xs={selectedCC.hasExternalId[0] ? 8 : 12}>
@@ -516,7 +525,7 @@ export default function PopUpTrade(props) {
                           setData2(e.target.value);
                         }}
                         error={check1 === false && data2}
-                        margin="1em auto"
+                        // margin="1em auto"
                         label={
                           check1 === false && data2
                             ? "آدرس کیف پول شما معتبر نیست"
@@ -573,8 +582,7 @@ export default function PopUpTrade(props) {
                           onChange={(e) => {
                             setExteraId(e.target.value);
                           }}
-                          margin="1em auto"
-                          label="Memo خود را وارد کنید "
+                          label="Memo "
                           height={inputHieght}
                           borderRadius={bigbuttonBorderRadius}
                         />
@@ -592,7 +600,7 @@ export default function PopUpTrade(props) {
                           setData1(e.target.value);
                         }}
                         error={check2 === false && data1}
-                        margin="1em auto"
+                        // margin="1em auto"
                         label={
                           check2 === false && data1
                             ? "آدرس کیف پول شما معتبر نیست"
@@ -649,8 +657,7 @@ export default function PopUpTrade(props) {
                           onChange={(e) => {
                             setExteraId2(e.target.value);
                           }}
-                          margin="1em auto"
-                          label="Memo بازپرداخت خود را وارد کنید "
+                          label="Memo "
                           height={inputHieght}
                           borderRadius={bigbuttonBorderRadius}
                         />
@@ -683,7 +690,12 @@ export default function PopUpTrade(props) {
                   onClick={() => {
                     // console.log(check1)
                     // console.log(check2)
-                    if (!(check1 === false) && data1 && !(check2 === false) && data2) {
+                    if (
+                      !(check1 === false) &&
+                      data1 &&
+                      !(check2 === false) &&
+                      data2
+                    ) {
                       setStep((x) => x + 1);
                     }
                   }}
@@ -732,14 +744,21 @@ export default function PopUpTrade(props) {
                   }
                 />
                 {/* toAmount={props.toAmount} */}
-                <DialogContent sx={{ padding: "2px 1.5em" }}>
+                <DialogContent
+                  sx={{
+                    padding: "2px 1.5em",
+                    display: "flex",
+                    flexDirection: "column",
+                    justifyContent: "space-around",
+                    alignItems: "center",
+                  }}
+                >
                   <TradeBoared />
                   <Grid container>
                     <Grid item xs={selectedCC.hasExternalId[0] ? 8 : 12}>
                       <InputTrade
                         disabled
                         value={data2}
-                        margin="1em auto"
                         label="آدرس کیف پول مقصد "
                         height={inputHieght}
                         borderRadius={bigbuttonBorderRadius}
@@ -778,7 +797,6 @@ export default function PopUpTrade(props) {
                         <InputTrade
                           disabled
                           value={exteraId}
-                          margin="1em auto"
                           label="Memo "
                           height={inputHieght}
                           borderRadius={bigbuttonBorderRadius}
@@ -794,7 +812,6 @@ export default function PopUpTrade(props) {
                       <InputTrade
                         disabled
                         value={data1}
-                        margin="1em auto"
                         label="آدرس کیف پول بازپرداخت "
                         height={inputHieght}
                         borderRadius={bigbuttonBorderRadius}
@@ -833,7 +850,6 @@ export default function PopUpTrade(props) {
                         <InputTrade
                           disabled
                           value={exteraId2}
-                          margin="1em auto"
                           label="Memo "
                           height={inputHieght}
                           borderRadius={bigbuttonBorderRadius}
@@ -1089,28 +1105,117 @@ export default function PopUpTrade(props) {
                       // justifyContent: "center",
                       // alignItems: "center",
                     }}
+                  ></Grid>
+                  <Box
+                    sx={{
+                      backgroundColor: theme.palette.background.default,
+                      padding: 1,
+                      borderRadius: theme.shape.borderRadius[1],
+                      width: "100%",
+                    }}
                   >
-                    <LinearProgress variant="determinate" value={sliderValue} />
-                  </Grid>
+
+                    
+                    <TableContainer>
+                      <Table>
+                        <TableBody>
+                          <TableRow>
+                            <TableCell sx={{ padding: 0.5, border: "none" }}>
+                              کارمزد واریز
+                            </TableCell>
+                            <TableCell
+                              sx={{ padding: 0.5, border: "none" }}
+                              align="right"
+                            >
+                              {depositFee ? (
+                                depositFee
+                              ) : (
+                                <Skeleton
+                                  variant="text"
+                                  sx={{
+                                    fontSize: "1rem",
+                                    display: "inline-flex",
+                                    justifyContent: "flex-end",
+                                  }}
+                                  width={80}
+                                  height={20}
+                                />
+                              )}
+                            </TableCell>
+                          </TableRow>
+                          <TableRow>
+                            <TableCell sx={{ padding: 0.5, border: "none" }}>
+                              کارمزد برداشت
+                            </TableCell>
+                            <TableCell
+                              sx={{ padding: 0.5, border: "none" }}
+                              align="right"
+                            >
+                              {withdrawalFee ? (
+                                withdrawalFee
+                              ) : (
+                                <Skeleton
+                                  variant="text"
+                                  sx={{
+                                    fontSize: "1rem",
+                                    display: "inline-flex",
+                                    justifyContent: "flex-end",
+                                  }}
+                                  width={80}
+                                  height={20}
+                                />
+                              )}
+                            </TableCell>
+                          </TableRow>
+                          <TableRow>
+                            <TableCell sx={{ padding: 0.5, border: "none" }}>
+                              کارمزد صرافی
+                            </TableCell>
+                            <TableCell
+                              sx={{ padding: 0.5, border: "none" }}
+                              align="right"
+                            >
+                              0.5%
+                            </TableCell>
+                          </TableRow>
+                        </TableBody>
+                      </Table>
+                    </TableContainer>
+                  </Box>
                 </DialogContent>
 
                 <DialogActions
                   sx={{
                     backgroundColor: theme.palette.background.paper,
-                    justifyContent: " center ",
+                    display: "block",
+                    padding: 0,
                   }}
                 >
-                  <Grid
-                    item
-                    sx={{
-                      margin: 1,
+                  <LinearProgress
+                    sx={{ width: "100%" }}
+                    variant="determinate"
+                    value={sliderValue}
+                  />
+                  <div
+                    style={{
                       display: "flex",
                       justifyContent: " center ",
+                      width: "100%",
+                      padding: "8px",
                     }}
-                    xs={12}
                   >
-                    {statusFa}
-                  </Grid>
+                    <Grid
+                      item
+                      sx={{
+                        margin: 1,
+                        display: "flex",
+                        justifyContent: " center ",
+                      }}
+                      xs={12}
+                    >
+                      {statusFa}
+                    </Grid>
+                  </div>
                 </DialogActions>
               </Dialog>
             );
