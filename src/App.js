@@ -206,7 +206,7 @@ function App() {
 
   const [payId, setPayId] = useState();
 
-  const [step, setStep] = useState(0);
+  const [step, setStep] = useState(3);
 
   const [ratio, setRatio] = useState();
 
@@ -267,7 +267,7 @@ function App() {
         }
       })
       .catch((error) => {
-        console.log('jjjjjjjjjjjj');
+        // console.log('jjjjjjjjjjjj');
         handleClickAlert();
       })
   };

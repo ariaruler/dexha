@@ -27,6 +27,8 @@ import { motion } from "framer-motion";
 import CC from "./CC";
 import { useRef } from "react";
 
+import exchangeCompleted from '../assets/exchange-completed.svg'
+
 const inputHieght = 54;
 
 const marginOfAccordion = "1px 2em";
@@ -63,7 +65,7 @@ export default function PopUpCC(props) {
   
   
   useEffect(() => {  
-    if( (x-2) < currencies.length){
+    if( (x-2) < currencies?.length){
 
       setTimeout(()=>{
         // data.current = currencies.slice(0 , x) ;

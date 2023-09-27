@@ -58,13 +58,15 @@ import ArrowForwardIosSharpIcon from "@mui/icons-material/ArrowForwardIosSharp";
 import Buttonfee from "./Buttonfee";
 import Timer from "./Timer";
 
+import exchangeCompleted from "../assets/exchange-completed.svg";
+
 const inputHieght = 54;
 const bigbuttonBorderRadius = "8px";
 
 const marks = [
   {
     value: 0,
-    label: "در حال دریافت ارز شبا",
+    label: "در حال دریافت ارز از شما",
   },
   {
     value: 10,
@@ -125,9 +127,6 @@ AirbnbThumbComponent.propTypes = {
 
 export default function PopUpTrade(props) {
   const [open2, setOpen2] = useState(-1);
-
-
-
 
   const handleClickOpen = (id) => {
     setOpen2(id);
@@ -271,7 +270,7 @@ export default function PopUpTrade(props) {
       flow: flow,
       payoutExtraId: exteraId,
       refundExtraId: exteraId2,
-      rateId : rateId ? rateId : "",
+      rateId: rateId ? rateId : "",
     };
     console.log(userToPost);
 
@@ -382,8 +381,6 @@ export default function PopUpTrade(props) {
           });
       }
     }, 15000);
-
-
   };
 
   useEffect(() => {
@@ -1017,38 +1014,56 @@ export default function PopUpTrade(props) {
                         <TableBody>
                           {flow === "fixed-rate" ? (
                             <TableRow>
-                              <TableCell sx={{display : 'flex' , alignItems : 'center', padding: 0.5, border: "none" }}>
+                              <TableCell
+                                sx={{
+                                  display: "flex",
+                                  alignItems: "center",
+                                  padding: 0.5,
+                                  border: "none",
+                                }}
+                              >
                                 زمان انجام معامله
                                 <BootstrapTooltip
-                                title={`کاربر گرامی، برای تکمیل تبادل با نرخ شناور، مقدار رمزارز مشخص شده را به آدرسی که نمایش داده شده است واریز نموده و منتظر تایید واریز بمانید. توجه نمایید واریز هر کوینی غیر از ${selectedCC.currencies[0]} در شبکه ${selectedCC.network[0]} به آدرس ایجاد شده، منجر به از دست رفتن آن رمز ارز برای همیشه خواهد شد. ضمنا آدرس ایجاد شده فقط برای یکبار واریز رمزارز معتبر است.`}
-                                // sx={{
-                                //   " .MuiTooltip-popper": {
-                                //     backgroundColor: theme.palette.secondary.main,
-                                //   },
-                                //   backgroundColor: theme.palette.secondary.main,
-                                // }}
-                                arrow
-                              >
-                                <InfoOutlinedIcon
-                                  sx={{
-                                    height: "auto !important",
-                                    fontSize: "1.5em !important",
-                                  }}
-                                />
-                              </BootstrapTooltip>
+                                  title={`کاربر گرامی، برای تکمیل تبادل با نرخ شناور، مقدار رمزارز مشخص شده را به آدرسی که نمایش داده شده است واریز نموده و منتظر تایید واریز بمانید. توجه نمایید واریز هر کوینی غیر از ${selectedCC.currencies[0]} در شبکه ${selectedCC.network[0]} به آدرس ایجاد شده، منجر به از دست رفتن آن رمز ارز برای همیشه خواهد شد. ضمنا آدرس ایجاد شده فقط برای یکبار واریز رمزارز معتبر است.`}
+                                  // sx={{
+                                  //   " .MuiTooltip-popper": {
+                                  //     backgroundColor: theme.palette.secondary.main,
+                                  //   },
+                                  //   backgroundColor: theme.palette.secondary.main,
+                                  // }}
+                                  arrow
+                                >
+                                  <InfoOutlinedIcon
+                                    sx={{
+                                      height: "auto !important",
+                                      fontSize: "1.5em !important",
+                                    }}
+                                  />
+                                </BootstrapTooltip>
                               </TableCell>
                               <TableCell
                                 sx={{ padding: 0.5, border: "none" }}
                                 align="right"
                               >
-                                <Timer setTimeOut={setTimeOut} getStatus={getStatus} setStatusFa={setStatusFa} />
+                                <Timer
+                                  setTimeOut={setTimeOut}
+                                  getStatus={getStatus}
+                                  setStatusFa={setStatusFa}
+                                />
                               </TableCell>
                             </TableRow>
                           ) : (
                             <></>
                           )}
                           <TableRow>
-                            <TableCell sx={{display : 'flex' , alignItems : 'center', padding: 0.5, border: "none" }}>
+                            <TableCell
+                              sx={{
+                                display: "flex",
+                                alignItems: "center",
+                                padding: 0.5,
+                                border: "none",
+                              }}
+                            >
                               آدرس واریزی
                               <BootstrapTooltip
                                 title={`کاربر گرامی، برای تکمیل تبادل با نرخ شناور، مقدار رمزارز مشخص شده را به آدرسی که نمایش داده شده است واریز نموده و منتظر تایید واریز بمانید. توجه نمایید واریز هر کوینی غیر از ${selectedCC.currencies[0]} در شبکه ${selectedCC.network[0]} به آدرس ایجاد شده، منجر به از دست رفتن آن رمز ارز برای همیشه خواهد شد. ضمنا آدرس ایجاد شده فقط برای یکبار واریز رمزارز معتبر است.`}
@@ -1112,7 +1127,14 @@ export default function PopUpTrade(props) {
                           </TableRow>
                           {payInExteraId && !timeOut ? (
                             <TableRow>
-                              <TableCell sx={{display : 'flex' , alignItems : 'center', padding: 0.5, border: "none" }}>
+                              <TableCell
+                                sx={{
+                                  display: "flex",
+                                  alignItems: "center",
+                                  padding: 0.5,
+                                  border: "none",
+                                }}
+                              >
                                 آدرس Memo واریزی
                                 <BootstrapTooltip
                                   title={`کاربر گرامی، برای تکمیل تبادل با نرخ شناور، مقدار رمزارز مشخص شده را به آدرسی که نمایش داده شده است واریز نموده و منتظر تایید واریز بمانید. توجه نمایید واریز هر کوینی غیر از ${selectedCC.currencies[0]} در شبکه ${selectedCC.network[0]} به آدرس ایجاد شده، منجر به از دست رفتن آن رمز ارز برای همیشه خواهد شد. ضمنا آدرس ایجاد شده فقط برای یکبار واریز رمزارز معتبر است.`}
@@ -1136,21 +1158,19 @@ export default function PopUpTrade(props) {
                                 sx={{ padding: 0.5, border: "none" }}
                                 align="right"
                               >
-
-                                  <ContentCopyIcon
-                                    onClick={() => {
-                                      navigator.clipboard.writeText(
-                                        payInExteraId
-                                      );
-                                    }}
-                                    sx={{
-                                      fontSize: "1em !important",
-                                      "&:hover": {
-                                        color: theme.palette.secondary.main,
-                                      },
-                                    }}
-                                  />
-
+                                <ContentCopyIcon
+                                  onClick={() => {
+                                    navigator.clipboard.writeText(
+                                      payInExteraId
+                                    );
+                                  }}
+                                  sx={{
+                                    fontSize: "1em !important",
+                                    "&:hover": {
+                                      color: theme.palette.secondary.main,
+                                    },
+                                  }}
+                                />
 
                                 {payInExteraId}
                               </TableCell>
@@ -1187,7 +1207,14 @@ export default function PopUpTrade(props) {
                             </TableCell>
                           </TableRow>
                           <TableRow>
-                            <TableCell sx={{display : 'flex' , alignItems : 'center', padding: 0.5, border: "none" }}>
+                            <TableCell
+                              sx={{
+                                display: "flex",
+                                alignItems: "center",
+                                padding: 0.5,
+                                border: "none",
+                              }}
+                            >
                               کد پیگیری تبادل
                               <BootstrapTooltip
                                 title="کد پیگیری:
@@ -1315,21 +1342,12 @@ export default function PopUpTrade(props) {
                     alignItems: "center",
                   }}
                 >
-                  <Grid
-                    item
-                    xs={12}
-                    sx={{
-                      padding: "1em 0 0 0",
-                      display: "flex",
-                      justifyContent: "center",
-                      alignItems: "center",
-                    }}
-                  >
-                    <CheckCircleOutlineIcon
-                      color="success"
-                      sx={{ fontSize: "15em" }}
-                    />
-                  </Grid>
+                  <Box
+                    component="img"
+                    sx={{ display: "block", mr: 1, width: 200 }}
+                    alt="exchange completed"
+                    src={exchangeCompleted}
+                  />
 
                   <Grid
                     item

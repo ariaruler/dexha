@@ -99,16 +99,16 @@ export default function Tradecard(props) {
 
 
 
-  // useEffect(() => {
+  useEffect(() => {
 
 
 
-  //   refreshData();
-  //   return () => {
+    refreshData();
+    return () => {
 
-  //     clearInterval(fetchAmountInterval.current);
-  //   };
-  // }, []);
+      clearInterval(fetchAmountInterval.current);
+    };
+  }, []);
 
   useEffect(() => {
 
@@ -152,23 +152,7 @@ export default function Tradecard(props) {
     payId,
   ]);
 
-  useEffect(() => {
-    axios
-      .get(
-        `${endPoint}/exchange/api/estimated-amount?fromCurrency=${selectedCC.currencies[0]}&toCurrency=${selectedCC.currencies[1]}&fromAmount=1&fromNetwork=${selectedCC.network[0]}&toNetwork=${selectedCC.network[1]}&flow=${flow}`
-      )
-      .then((res) => {
-        if (res) {
-          setRatio(res?.data.toAmount);
-        } else {
-          handleClickAlert();
-        }
-      })
-      .catch((error) => {
-        console.log(error);
-        handleClickAlert();
-      });
-  }, [selectedCC.legacyTicker[0], selectedCC.legacyTicker[1], flow]);
+
 
   useEffect(() => {
     // console.log('eeeeeeeeeeeeeeeeeeee')
