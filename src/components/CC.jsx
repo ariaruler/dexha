@@ -78,7 +78,6 @@ export default function CC(props) {
                 key={j}
                 onClick={() => {
                   selectedCC.putCC(props.id, x.ticker, y, x.image[j] , x.hasExternalId[j] , x.legacyTicker[j]);
-                  fetchAmount();
                 }}
                 variant="outlined"
                 sx={{

@@ -240,11 +240,12 @@ function App() {
   // }
 
   const fetchAmount = (amountRef, cc1, cc2, net1, net2, flow) => {
-    setToAmount();
-    setSpeed();
-    setDepositFee();
-    setWithdrawalFee();
-    seRateId();
+
+    setToAmount(null);
+    setSpeed(null);
+    setDepositFee(null);
+    setWithdrawalFee(null);
+    seRateId(null);
 
     axios
       .get(
@@ -292,20 +293,24 @@ function App() {
         handleClickAlert();
       }
       });
-  };
-
+    };
+    const [fromAmount, setFromAmount] = useState("1");
+    
+  amountRef.current = fromAmount;
+  cc1.current = selectedCC.currencies[0];
+  cc2.current = selectedCC.currencies[1];
+  net1.current = selectedCC.network[0];
+  net2.current = selectedCC.network[1];
+  flowRef.current = flow;
+  payIdRef.current = payId;
+  
+  
   const refreshData = ()=>{
-
-    amountRef.current = fromAmount;
-    cc1.current = selectedCC.currencies[0];
-    cc2.current = selectedCC.currencies[1];
-    net1.current = selectedCC.network[0];
-    net2.current = selectedCC.network[1];
-    flowRef.current = flow;
-    payIdRef.current = payId;
-
-
+  
+    
     fetchAmountInterval.current = setInterval(() => {
+      console.log(cc1.current);
+      console.log(cc2.current);
 
       fetchAmount(
         amountRef.current,
@@ -320,7 +325,6 @@ function App() {
 
   }
 
-  const [fromAmount, setFromAmount] = useState("1");
 
   const handleClickOpen = (id) => {
     setOpen(id);

@@ -19,7 +19,6 @@ export default function ButtonTrade(props) {
     minWidth: 0,
   };
 
-console.log(props.connect);
 
   return (
     <Button

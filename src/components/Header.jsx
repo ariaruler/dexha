@@ -48,26 +48,26 @@ const pages = [
     to: "/swap",
     // active : false,
   },
-  {
-    content: "ارتباط با ما",
-    to: "/contact-us",
-    // active : false,
-  },
-  {
-    content: "راهنمای مبادله",
-    to: "/help",
-    // active : false,
-  },
-  {
-    content: "سوالات متداول",
-    to: "/faq",
-    // active : false,
-  },
-  {
-    content: "قوانین",
-    to: "/rules",
-    // active : false,
-  },
+  // {
+  //   content: "ارتباط با ما",
+  //   to: "/contact-us",
+  //   // active : false,
+  // },
+  // {
+  //   content: "راهنمای مبادله",
+  //   to: "/help",
+  //   // active : false,
+  // },
+  // {
+  //   content: "سوالات متداول",
+  //   to: "/faq",
+  //   // active : false,
+  // },
+  // {
+  //   content: "قوانین",
+  //   to: "/rules",
+  //   // active : false,
+  // },
   {
     content: "پیگیری تبادل",
     to: "/transaction-tracking",

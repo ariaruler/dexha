@@ -112,6 +112,7 @@ export default function Tradecard(props) {
 
   useEffect(() => {
 
+
     fetchAmount(
       fromAmount,
       selectedCC.currencies[0],
@@ -149,7 +150,7 @@ export default function Tradecard(props) {
     selectedCC.legacyTicker[0],
     selectedCC.legacyTicker[1],
     flow,
-    payId,
+    // payId,
   ]);
 
 
@@ -188,7 +189,6 @@ export default function Tradecard(props) {
 
   // console.log(selectedCC.legacyTicker[0])
 
-  // console.log(toAmount);
 
   // console.log(selectedCC.toAmount);
 
