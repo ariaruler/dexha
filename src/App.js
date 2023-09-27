@@ -202,9 +202,9 @@ function App() {
 
   const [isError, setIsError] = useState();
 
-  const [payIn, setPayIn] = useState([]);
+  const [payIn, setPayIn] = useState();
 
-  const [payId, setPayId] = useState([]);
+  const [payId, setPayId] = useState();
 
   const [step, setStep] = useState(0);
 
@@ -215,6 +215,8 @@ function App() {
   const [indexOfPage, setIndexOfPage] = useCookies(-1);
 
   const [mainData, setMainData] = useState([]);
+
+  const [rateId, seRateId] = useState();
 
   
   const amountRef = useRef("1");
@@ -242,6 +244,7 @@ function App() {
     setSpeed();
     setDepositFee();
     setWithdrawalFee();
+    seRateId();
 
     axios
       .get(
@@ -257,6 +260,7 @@ function App() {
           setSpeed(res?.data.transactionSpeedForecast);
           setDepositFee(res?.data.depositFee);
           setWithdrawalFee(res?.data.withdrawalFee);
+          seRateId(res.data.rateId)
           // console.log(cc1.current);
         } else{
           handleClickAlert();
@@ -392,6 +396,7 @@ function App() {
         handleClickAlert,
         refreshData,
         fetchAmountInterval,
+        rateId,
       }}
     >
       <QueryClientProvider client={client}>

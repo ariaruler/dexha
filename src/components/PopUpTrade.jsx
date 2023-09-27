@@ -14,6 +14,7 @@ import {
   Grid,
   IconButton,
   LinearProgress,
+  Skeleton,
   Slider,
   SliderThumb,
   Typography,
@@ -55,6 +56,7 @@ import Tooltip, { tooltipClasses } from "@mui/material/Tooltip";
 
 import ArrowForwardIosSharpIcon from "@mui/icons-material/ArrowForwardIosSharp";
 import Buttonfee from "./Buttonfee";
+import Timer from "./Timer";
 
 const inputHieght = 54;
 const bigbuttonBorderRadius = "8px";
@@ -124,6 +126,9 @@ AirbnbThumbComponent.propTypes = {
 export default function PopUpTrade(props) {
   const [open2, setOpen2] = useState(-1);
 
+
+
+
   const handleClickOpen = (id) => {
     setOpen2(id);
   };
@@ -175,11 +180,13 @@ export default function PopUpTrade(props) {
     endPoint,
     selectedCC,
     fetchAmount,
+    flow,
     payIn,
     setPayIn,
     payId,
     setPayId,
     fromAmount,
+    toAmount,
     step,
     setStep,
     indexOfPage,
@@ -187,6 +194,7 @@ export default function PopUpTrade(props) {
     mainData,
     setMainData,
     handleClickAlert,
+    rateId,
   } = useContext(UserContext);
 
   const [exteraId, setExteraId] = useState();
@@ -260,11 +268,12 @@ export default function PopUpTrade(props) {
       toNetwork: selectedCC.network[1],
       fromAmount: fromAmount,
       address: data2,
-      flow: "standard",
+      flow: flow,
       payoutExtraId: exteraId,
       refundExtraId: exteraId2,
+      rateId : rateId ? rateId : "",
     };
-    // console.log(userToPost);
+    console.log(userToPost);
 
     const res = await axios
       .post(`${endPoint}/exchange/api/create`, userToPost)
@@ -276,8 +285,8 @@ export default function PopUpTrade(props) {
     if (res) {
       // console.log(res.data.id)
       setPayInExteraId(res.data.payinExtraId);
-      setPayId((x) => [...x, res.data.id]);
-      setPayIn((x) => [...x, res.data.payinAddress]);
+      setPayId(res.data.id);
+      setPayIn(res.data.payinAddress);
       setMainData((x) => [
         ...x,
         {
@@ -293,7 +302,7 @@ export default function PopUpTrade(props) {
 
   const postRefund = async () => {
     const userToPost = {
-      id: payId[payId.length - 1],
+      id: payId,
       address: data1,
       extraId: exteraId2,
     };
@@ -321,7 +330,7 @@ export default function PopUpTrade(props) {
 
   const postContinue = async () => {
     const userToPost = {
-      id: payId[payId.length - 1],
+      id: payId,
     };
     console.log(userToPost);
 
@@ -374,19 +383,20 @@ export default function PopUpTrade(props) {
       }
     }, 15000);
 
-    // console.log(getStatusInterval.current);
+
   };
 
   useEffect(() => {
     // console.log(payId);
     if (payId) {
-      getStatus(payId[payId.length - 1]);
+      getStatus(payId);
     }
   }, [payId]);
 
   useEffect(() => {
     return () => {
       getStatus();
+      // setPayIn();
     };
   }, []);
 
@@ -424,7 +434,7 @@ export default function PopUpTrade(props) {
         setSliderValue(0);
         setStatusFa("مشکلی در تبادل پیش آمده");
         axios
-          .get(`${endPoint}/exchange/actions?id=${payId[payId.length - 1]}`)
+          .get(`${endPoint}/exchange/actions?id=${payId}`)
           .catch((error) => {
             console.log(error);
             handleClickAlert();
@@ -467,8 +477,7 @@ export default function PopUpTrade(props) {
     },
   }));
 
-  // console.log(check1);
-  console.log(check2);
+  const [timeOut, setTimeOut] = useState(false);
 
   return (
     <>
@@ -913,7 +922,15 @@ export default function PopUpTrade(props) {
                     </IconButton>
                   }
                 />
-                <DialogContent sx={{ padding: "2px 1.5em" }}>
+                <DialogContent
+                  sx={{
+                    padding: "2px 1.5em",
+                    display: "flex",
+                    flexDirection: "column",
+                    justifyContent: "space-around",
+                    alignItems: "center",
+                  }}
+                >
                   <Grid
                     item
                     xs={12}
@@ -939,173 +956,54 @@ export default function PopUpTrade(props) {
                         }}
                         className="alert"
                         id="myqr"
-                        value={payIn[payIn.length - 1]}
+                        value={payIn}
                         size={200}
                         includeMargin={true}
                       ></QRcode>
-                      {payIn[payIn.length - 1] ? (
-                        <></>
-                      ) : (
-                        <Box
-                          sx={{
-                            backgroundColor: "rgba(0,0,0,0.2)",
-                            backdropFilter: "blur(2px)",
-                            borderRadius: bigbuttonBorderRadius,
-                            width: "200px",
-                            height: "200px",
-                            top: 0,
-                            left: 0,
-                            bottom: 0,
-                            right: 0,
-                            position: "absolute",
-                            display: "flex",
-                            alignItems: "center",
-                            justifyContent: "center",
-                          }}
-                        >
+
+                      <Box
+                        sx={{
+                          backgroundColor: "rgba(0,0,0,0.4)",
+                          opacity: timeOut ? 1 : payIn ? 0 : 1,
+                          backdropFilter: "blur(2px)",
+                          borderRadius: bigbuttonBorderRadius,
+                          width: "200px",
+                          height: "200px",
+                          top: 0,
+                          left: 0,
+                          bottom: 0,
+                          right: 0,
+                          position: "absolute",
+                          display: "flex",
+                          alignItems: "center",
+                          justifyContent: "center",
+                          "&:hover": {
+                            opacity: 1,
+                          },
+                        }}
+                      >
+                        {timeOut ? (
+                          <div style={{ textAlign: "center" }}>
+                            زمان شما برای انجام معامله به پایان رسیده
+                          </div>
+                        ) : payIn ? (
+                          <ContentCopyIcon
+                            onClick={() => {
+                              navigator.clipboard.writeText(payIn);
+                            }}
+                            sx={{
+                              "&:hover": {
+                                color: theme.palette.secondary.main,
+                              },
+                            }}
+                          />
+                        ) : (
                           <CircularProgress color="common" />
-                        </Box>
-                      )}
+                        )}
+                      </Box>
                     </Box>
                   </Grid>
 
-                  <Grid
-                    item
-                    xs={12}
-                    sx={{
-                      padding: "1em 0 0 0",
-                      display: "flex",
-                      justifyContent: "center",
-                      alignItems: "center",
-                    }}
-                  >
-                    {payIn[payIn.length - 1]}
-                  </Grid>
-
-                  {payInExteraId ? (
-                    <Grid
-                      item
-                      xs={12}
-                      sx={{
-                        padding: "1em 0 0 0",
-                        display: "flex",
-                        justifyContent: "center",
-                        alignItems: "center",
-                      }}
-                    >
-                      {payInExteraId + "آدرس Memo"}
-                    </Grid>
-                  ) : (
-                    <></>
-                  )}
-
-                  <Grid
-                    item
-                    xs={12}
-                    sx={{
-                      padding: "1em 0 0 0",
-                      display: "flex",
-                      justifyContent: "center",
-                      alignItems: "center",
-                    }}
-                  >
-                    <BootstrapTooltip
-                      title={`کاربر گرامی، برای تکمیل تبادل با نرخ شناور، مقدار رمزارز مشخص شده را به آدرسی که نمایش داده شده است واریز نموده و منتظر تایید واریز بمانید. توجه نمایید واریز هر کوینی غیر از ${selectedCC.currencies[0]} در شبکه ${selectedCC.network[0]} به آدرس ایجاد شده، منجر به از دست رفتن آن رمز ارز برای همیشه خواهد شد. ضمنا آدرس ایجاد شده فقط برای یکبار واریز رمزارز معتبر است.`}
-                      // sx={{
-                      //   " .MuiTooltip-popper": {
-                      //     backgroundColor: theme.palette.secondary.main,
-                      //   },
-                      //   backgroundColor: theme.palette.secondary.main,
-                      // }}
-                      arrow
-                    >
-                      <Button color="common" sx={{ minWidth: 0 }}>
-                        <InfoOutlinedIcon sx={{ height: "auto !important" }} />
-                      </Button>
-                    </BootstrapTooltip>
-                    لطفا مقدار {selectedCC.currencies[0] + " " + fromAmount} را
-                    واریز نمائید
-                    <Button color="common" sx={{ minWidth: 0 }}>
-                      <ContentCopyIcon
-                        onClick={() => {
-                          navigator.clipboard.writeText(
-                            payId[payId.length - 1]
-                          );
-                        }}
-                        sx={{
-                          "&:hover": { color: theme.palette.secondary.main },
-                        }}
-                      />
-                    </Button>
-                  </Grid>
-
-                  <Grid
-                    item
-                    xs={12}
-                    sx={{
-                      padding: "1em 0 0 0",
-                      display: "flex",
-                      justifyContent: "center",
-                      alignItems: "center",
-                    }}
-                  >
-                    <SmButton id={0} />
-                    <ArrowBackIosNewIcon sx={arowIcon} />
-                    <SmButton id={1} />
-                  </Grid>
-
-                  <Grid
-                    item
-                    xs={12}
-                    sx={{
-                      padding: "1em 0 0 0",
-                      display: "flex",
-                      justifyContent: "center",
-                      alignItems: "center",
-                    }}
-                  >
-                    <BootstrapTooltip
-                      title="کد پیگیری:
-
-                      کد پیگیری برای پیگیری مبادله در تهران اکسچنج می باشد برای پیگیری وضعیت مبادله خود کد پیگیری را کپی و ذخیره کنید.با کد پیگیری هر زمان که بخواهید می توانید مبادله خود را در صفحه وضعیت مبادله مشاهده نمایید."
-                      // sx={{
-                      //   " .MuiTooltip-popper": {
-                      //     backgroundColor: theme.palette.secondary.main,
-                      //   },
-                      //   backgroundColor: theme.palette.secondary.main,
-                      // }}
-                      arrow
-                    >
-                      <Button color="common" sx={{ minWidth: 0 }}>
-                        <InfoOutlinedIcon sx={{ height: "auto !important" }} />
-                      </Button>
-                    </BootstrapTooltip>
-                    کد پیگیری معامله {payId[payId.length - 1]}
-                    <Button color="common" sx={{ minWidth: 0 }}>
-                      <ContentCopyIcon
-                        onClick={() => {
-                          navigator.clipboard.writeText(
-                            payId[payId.length - 1]
-                          );
-                        }}
-                        sx={{
-                          "&:hover": { color: theme.palette.secondary.main },
-                        }}
-                      />
-                    </Button>
-                  </Grid>
-
-                  <Grid
-                    item
-                    xs={12}
-                    sx={{
-                      // padding: "1em 0 0 0",
-                      padding: 3,
-                      // display: "flex",
-                      // justifyContent: "center",
-                      // alignItems: "center",
-                    }}
-                  ></Grid>
                   <Box
                     sx={{
                       backgroundColor: theme.palette.background.default,
@@ -1114,21 +1012,90 @@ export default function PopUpTrade(props) {
                       width: "100%",
                     }}
                   >
-
-                    
                     <TableContainer>
                       <Table>
                         <TableBody>
+                          {flow === "fixed-rate" ? (
+                            <TableRow>
+                              <TableCell sx={{display : 'flex' , alignItems : 'center', padding: 0.5, border: "none" }}>
+                                زمان انجام معامله
+                                <BootstrapTooltip
+                                title={`کاربر گرامی، برای تکمیل تبادل با نرخ شناور، مقدار رمزارز مشخص شده را به آدرسی که نمایش داده شده است واریز نموده و منتظر تایید واریز بمانید. توجه نمایید واریز هر کوینی غیر از ${selectedCC.currencies[0]} در شبکه ${selectedCC.network[0]} به آدرس ایجاد شده، منجر به از دست رفتن آن رمز ارز برای همیشه خواهد شد. ضمنا آدرس ایجاد شده فقط برای یکبار واریز رمزارز معتبر است.`}
+                                // sx={{
+                                //   " .MuiTooltip-popper": {
+                                //     backgroundColor: theme.palette.secondary.main,
+                                //   },
+                                //   backgroundColor: theme.palette.secondary.main,
+                                // }}
+                                arrow
+                              >
+                                <InfoOutlinedIcon
+                                  sx={{
+                                    height: "auto !important",
+                                    fontSize: "1.5em !important",
+                                  }}
+                                />
+                              </BootstrapTooltip>
+                              </TableCell>
+                              <TableCell
+                                sx={{ padding: 0.5, border: "none" }}
+                                align="right"
+                              >
+                                <Timer setTimeOut={setTimeOut} getStatus={getStatus} setStatusFa={setStatusFa} />
+                              </TableCell>
+                            </TableRow>
+                          ) : (
+                            <></>
+                          )}
                           <TableRow>
-                            <TableCell sx={{ padding: 0.5, border: "none" }}>
-                              کارمزد واریز
+                            <TableCell sx={{display : 'flex' , alignItems : 'center', padding: 0.5, border: "none" }}>
+                              آدرس واریزی
+                              <BootstrapTooltip
+                                title={`کاربر گرامی، برای تکمیل تبادل با نرخ شناور، مقدار رمزارز مشخص شده را به آدرسی که نمایش داده شده است واریز نموده و منتظر تایید واریز بمانید. توجه نمایید واریز هر کوینی غیر از ${selectedCC.currencies[0]} در شبکه ${selectedCC.network[0]} به آدرس ایجاد شده، منجر به از دست رفتن آن رمز ارز برای همیشه خواهد شد. ضمنا آدرس ایجاد شده فقط برای یکبار واریز رمزارز معتبر است.`}
+                                // sx={{
+                                //   " .MuiTooltip-popper": {
+                                //     backgroundColor: theme.palette.secondary.main,
+                                //   },
+                                //   backgroundColor: theme.palette.secondary.main,
+                                // }}
+                                arrow
+                              >
+                                <InfoOutlinedIcon
+                                  sx={{
+                                    height: "auto !important",
+                                    fontSize: "1.5em !important",
+                                  }}
+                                />
+                              </BootstrapTooltip>
                             </TableCell>
                             <TableCell
                               sx={{ padding: 0.5, border: "none" }}
                               align="right"
                             >
-                              {depositFee ? (
-                                depositFee
+                              {payIn && !timeOut ? (
+                                <ContentCopyIcon
+                                  onClick={() => {
+                                    navigator.clipboard.writeText(payIn);
+                                  }}
+                                  sx={{
+                                    fontSize: "1em !important",
+                                    "&:hover": {
+                                      color: theme.palette.secondary.main,
+                                    },
+                                  }}
+                                />
+                              ) : (
+                                <></>
+                              )}
+
+                              {payIn && !timeOut ? (
+                                payIn[0] +
+                                payIn[1] +
+                                payIn[2] +
+                                "***" +
+                                payIn[payIn.length - 3] +
+                                payIn[payIn.length - 2] +
+                                payIn[payIn.length - 1]
                               ) : (
                                 <Skeleton
                                   variant="text"
@@ -1143,16 +1110,127 @@ export default function PopUpTrade(props) {
                               )}
                             </TableCell>
                           </TableRow>
+                          {payInExteraId && !timeOut ? (
+                            <TableRow>
+                              <TableCell sx={{display : 'flex' , alignItems : 'center', padding: 0.5, border: "none" }}>
+                                آدرس Memo واریزی
+                                <BootstrapTooltip
+                                  title={`کاربر گرامی، برای تکمیل تبادل با نرخ شناور، مقدار رمزارز مشخص شده را به آدرسی که نمایش داده شده است واریز نموده و منتظر تایید واریز بمانید. توجه نمایید واریز هر کوینی غیر از ${selectedCC.currencies[0]} در شبکه ${selectedCC.network[0]} به آدرس ایجاد شده، منجر به از دست رفتن آن رمز ارز برای همیشه خواهد شد. ضمنا آدرس ایجاد شده فقط برای یکبار واریز رمزارز معتبر است.`}
+                                  // sx={{
+                                  //   " .MuiTooltip-popper": {
+                                  //     backgroundColor: theme.palette.secondary.main,
+                                  //   },
+                                  //   backgroundColor: theme.palette.secondary.main,
+                                  // }}
+                                  arrow
+                                >
+                                  <InfoOutlinedIcon
+                                    sx={{
+                                      height: "auto !important",
+                                      fontSize: "1.5em !important",
+                                    }}
+                                  />
+                                </BootstrapTooltip>
+                              </TableCell>
+                              <TableCell
+                                sx={{ padding: 0.5, border: "none" }}
+                                align="right"
+                              >
+
+                                  <ContentCopyIcon
+                                    onClick={() => {
+                                      navigator.clipboard.writeText(
+                                        payInExteraId
+                                      );
+                                    }}
+                                    sx={{
+                                      fontSize: "1em !important",
+                                      "&:hover": {
+                                        color: theme.palette.secondary.main,
+                                      },
+                                    }}
+                                  />
+
+
+                                {payInExteraId}
+                              </TableCell>
+                            </TableRow>
+                          ) : (
+                            <></>
+                          )}
                           <TableRow>
                             <TableCell sx={{ padding: 0.5, border: "none" }}>
-                              کارمزد برداشت
+                              ارز ارسالی
                             </TableCell>
                             <TableCell
                               sx={{ padding: 0.5, border: "none" }}
                               align="right"
                             >
-                              {withdrawalFee ? (
-                                withdrawalFee
+                              {fromAmount +
+                                selectedCC.currencies[0] +
+                                "بر روی شبکه " +
+                                selectedCC.network[0]}
+                            </TableCell>
+                          </TableRow>
+                          <TableRow>
+                            <TableCell sx={{ padding: 0.5, border: "none" }}>
+                              ارز دریافتی
+                            </TableCell>
+                            <TableCell
+                              sx={{ padding: 0.5, border: "none" }}
+                              align="right"
+                            >
+                              {toAmount +
+                                selectedCC.currencies[1] +
+                                "بر روی شبکه " +
+                                selectedCC.network[1]}
+                            </TableCell>
+                          </TableRow>
+                          <TableRow>
+                            <TableCell sx={{display : 'flex' , alignItems : 'center', padding: 0.5, border: "none" }}>
+                              کد پیگیری تبادل
+                              <BootstrapTooltip
+                                title="کد پیگیری:
+
+                      کد پیگیری برای پیگیری مبادله در تهران اکسچنج می باشد برای پیگیری وضعیت مبادله خود کد پیگیری را کپی و ذخیره کنید.با کد پیگیری هر زمان که بخواهید می توانید مبادله خود را در صفحه وضعیت مبادله مشاهده نمایید."
+                                // sx={{
+                                //   " .MuiTooltip-popper": {
+                                //     backgroundColor: theme.palette.secondary.main,
+                                //   },
+                                //   backgroundColor: theme.palette.secondary.main,
+                                // }}
+                                arrow
+                              >
+                                <InfoOutlinedIcon
+                                  sx={{
+                                    height: "auto !important",
+                                    fontSize: "1.5em !important",
+                                  }}
+                                />
+                              </BootstrapTooltip>
+                            </TableCell>
+                            <TableCell
+                              sx={{ padding: 0.5, border: "none" }}
+                              align="right"
+                            >
+                              {payId ? (
+                                <ContentCopyIcon
+                                  onClick={() => {
+                                    navigator.clipboard.writeText(payId);
+                                  }}
+                                  sx={{
+                                    fontSize: "1em !important",
+                                    "&:hover": {
+                                      color: theme.palette.secondary.main,
+                                    },
+                                  }}
+                                />
+                              ) : (
+                                <></>
+                              )}
+
+                              {payId ? (
+                                payId
                               ) : (
                                 <Skeleton
                                   variant="text"
@@ -1165,17 +1243,6 @@ export default function PopUpTrade(props) {
                                   height={20}
                                 />
                               )}
-                            </TableCell>
-                          </TableRow>
-                          <TableRow>
-                            <TableCell sx={{ padding: 0.5, border: "none" }}>
-                              کارمزد صرافی
-                            </TableCell>
-                            <TableCell
-                              sx={{ padding: 0.5, border: "none" }}
-                              align="right"
-                            >
-                              0.5%
                             </TableCell>
                           </TableRow>
                         </TableBody>
@@ -1239,7 +1306,15 @@ export default function PopUpTrade(props) {
                     </IconButton>
                   }
                 />
-                <DialogContent sx={{ padding: "2px 1.5em" }}>
+                <DialogContent
+                  sx={{
+                    padding: "2px 1.5em",
+                    display: "flex",
+                    flexDirection: "column",
+                    justifyContent: "space-around",
+                    alignItems: "center",
+                  }}
+                >
                   <Grid
                     item
                     xs={12}
@@ -1295,12 +1370,10 @@ export default function PopUpTrade(props) {
                         <InfoOutlinedIcon sx={{ height: "auto !important" }} />
                       </Button>
                     </BootstrapTooltip>
-                    کد پیگیری معامله {payId[payId.length - 1]}
+                    کد پیگیری معامله {payId}
                     <Button color="common" sx={{ minWidth: 0 }}>
                       <ContentCopyIcon
-                        onClick={() =>
-                          navigator.clipboard.writeText(payId[payId.length - 1])
-                        }
+                        onClick={() => navigator.clipboard.writeText(payId)}
                         sx={{
                           "&:hover": { color: theme.palette.secondary.main },
                         }}
