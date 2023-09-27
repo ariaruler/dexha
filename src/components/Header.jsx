@@ -121,7 +121,7 @@ export default function Header() {
         >
           <Box
             component="img"
-            sx={{ display: "flex", mr: 1, width: 120 }}
+            sx={{ display: {md : "flex" , xs : 'none'}, mr: 1, width: 120 }}
             alt="DEXHA"
             src={logo}
           />
@@ -149,10 +149,10 @@ export default function Header() {
                 </a>
               {pages.map((page, index) => (
                 <Link
-                  key={index+1}
-                  style={{ textDecoration: "none" }}
-                  to={page.to}
-                  href={page.to}
+                key={index+1}
+                style={{ textDecoration: "none" }}
+                to={page.to}
+                href={page.to}
                 >
                   <ButtonChooze
                     id={index+1}
@@ -170,8 +170,14 @@ export default function Header() {
             // sx={{' .MuiTooltip-popper' : {backgroundColor : theme.palette.secondary.main} ,backgroundColor : theme.palette.secondary.main}}
             arrow
           >
-          <ButtonTrade  display={ "none"  } borderRadius="6px" content=" اتصال به کیف پول" />
+          <ButtonTrade  display={ "none"  } borderRadius="6px" content=" اتصال به کیف پول" connect={true} />
           </BootstrapTooltip>
+          <Box
+            component="img"
+            sx={{ display: {xs : "flex" , md : 'none'}, mr: 1, width: 120 }}
+            alt="DEXHA"
+            src={logo}
+          />
 
           <Button
             onClick={() => {
