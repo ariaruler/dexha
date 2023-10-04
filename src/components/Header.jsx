@@ -49,20 +49,25 @@ const pages = [
     // active : false,
   },
   // {
-  //   content: "ارتباط با ما",
-  //   to: "/contact-us",
-  //   // active : false,
-  // },
-  // {
-  //   content: "راهنمای مبادله",
-  //   to: "/help",
-  //   // active : false,
-  // },
-  // {
-  //   content: "سوالات متداول",
-  //   to: "/faq",
-  //   // active : false,
-  // },
+    //   content: "ارتباط با ما",
+    //   to: "/contact-us",
+    //   // active : false,
+    // },
+    {
+    content: "درباره ما",
+    to: "/about-us",
+    // active : false,
+  },
+  {
+    content: "راهنمای مبادله",
+    to: "/help",
+    // active : false,
+  },
+  {
+    content: "سوالات متداول",
+    to: "/faq",
+    // active : false,
+  },
   // {
   //   content: "قوانین",
   //   to: "/rules",
@@ -121,7 +126,7 @@ export default function Header() {
         >
           <Box
             component="img"
-            sx={{ display: {md : "flex" , xs : 'none'}, mr: 1, width: 120 }}
+            sx={{ display: {md : "flex" , xs : 'none'}, mr: 1, width: 173 }}
             alt="DEXHA"
             src={logo}
           />

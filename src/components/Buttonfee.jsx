@@ -40,7 +40,15 @@ export default function Buttonfee() {
               </TableCell>
               <TableCell sx={{ padding: 0.5, border: "none" }} align="right">
                 {depositFee ? (
-                  depositFee
+                  <>
+                  <>
+                    {depositFee }
+                  </>
+                   <Box
+                  sx={{margin : '0 2px', display : 'inline'}}>
+                  {selectedCC.currencies[0]}
+                  </Box> 
+                </>
                 ) : (
                   <Skeleton
                     variant="text"
@@ -61,7 +69,15 @@ export default function Buttonfee() {
               </TableCell>
               <TableCell sx={{ padding: 0.5, border: "none" }} align="right">
                 {withdrawalFee ? (
-                  withdrawalFee
+                <>
+                  <>
+                    {withdrawalFee}
+                  </>
+                   <Box
+                  sx={{margin : '0 2px', display : 'inline'}}>
+                  {selectedCC.currencies[1]}
+                  </Box> 
+                </>
                 ) : (
                   <Skeleton
                     variant="text"

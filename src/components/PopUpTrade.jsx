@@ -463,16 +463,14 @@ export default function PopUpTrade(props) {
     retries: 4,
   });
 
-  const BootstrapTooltip = styled(({ className, ...props }) => (
-    <Tooltip {...props} arrow classes={{ popper: className }} />
-  ))(({ theme }) => ({
-    [`& .${tooltipClasses.arrow}`]: {
-      color: theme.palette.common.black,
-    },
-    [`& .${tooltipClasses.tooltip}`]: {
-      backgroundColor: theme.palette.common.black,
-    },
-  }));
+  const [open, setOpen] = useState(-1);
+
+  const handleTooltipClose = () => {
+    console.log('ppppppppp');
+    setOpen(-1);
+  };
+
+
 
   const [timeOut, setTimeOut] = useState(false);
 
@@ -524,7 +522,7 @@ export default function PopUpTrade(props) {
                 >
                   <TradeBoared />
                   <Grid container>
-                    <Grid item xs={selectedCC.hasExternalId[0] ? 8 : 12}>
+                    <Grid item xs={selectedCC.hasExternalId[1] ? 8 : 12}>
                       <InputTrade
                         value={data2}
                         onChange={(e) => {
@@ -555,25 +553,30 @@ export default function PopUpTrade(props) {
                           data2 ? (
                             <></>
                           ) : (
-                            <BootstrapTooltip
+                            <Tooltip
+                              PopperProps={{
+                                disablePortal: true,
+                              }}
+                              onClose={handleTooltipClose}
+                              open={open === 0}
+                              disableFocusListener
+                              disableHoverListener
+                              disableTouchListener
                               title="آدرس کیف پول دریافت کننده:
 
                           آدرس کیف پول دریافت‌کننده، همان آدرس کیف پولی است که مقدار رمزارز مبادله شده به این آدرس واریز می‌شود. توجه نمایید، مسئولیت واردکردن آدرس صحیح کیف پول بر عهده شماست."
-                              // sx={{
-                              //   " .MuiTooltip-popper": {
-                              //     backgroundColor: theme.palette.secondary.main,
-                              //   },
-                              //   backgroundColor: theme.palette.secondary.main,
-                              // }}
-                              arrow
                             >
-                              <Button color="common" sx={{ minWidth: 0 }}>
+                              <Button
+                                onClick={() => setOpen(0)}
+                                color="common"
+                                sx={{ minWidth: 0 }}
+                              >
                                 <InfoOutlinedIcon
                                   color="secondary"
                                   sx={{ height: "auto !important" }}
                                 />
                               </Button>
-                            </BootstrapTooltip>
+                            </Tooltip>
                           )
                         }
                       />
@@ -581,7 +584,7 @@ export default function PopUpTrade(props) {
 
                     <Grid item xs={0.2}></Grid>
 
-                    {selectedCC.hasExternalId[0] ? (
+                    {selectedCC.hasExternalId[1] ? (
                       <Grid item xs={3.8}>
                         <InputTrade
                           value={exteraId}
@@ -599,7 +602,7 @@ export default function PopUpTrade(props) {
                   </Grid>
 
                   <Grid container>
-                    <Grid item xs={selectedCC.hasExternalId[1] ? 8 : 12}>
+                    <Grid item xs={selectedCC.hasExternalId[0] ? 8 : 12}>
                       <InputTrade
                         value={data1}
                         onChange={(e) => {
@@ -630,7 +633,15 @@ export default function PopUpTrade(props) {
                           data1 ? (
                             <></>
                           ) : (
-                            <BootstrapTooltip
+                            <Tooltip
+                              PopperProps={{
+                                disablePortal: true,
+                              }}
+                              onClose={handleTooltipClose}
+                              open={open === 1}
+                              disableFocusListener
+                              disableHoverListener
+                              disableTouchListener
                               title="آدرس کیف پول دریافت کننده:
 
                           آدرس کیف پول دریافت‌کننده، همان آدرس کیف پولی است که مقدار رمزارز مبادله شده به این آدرس واریز می‌شود. توجه نمایید، مسئولیت واردکردن آدرس صحیح کیف پول بر عهده شماست."
@@ -642,13 +653,17 @@ export default function PopUpTrade(props) {
                               // }}
                               arrow
                             >
-                              <Button color="common" sx={{ minWidth: 0 }}>
+                              <Button
+                                onClick={() => setOpen(1)}
+                                color="common"
+                                sx={{ minWidth: 0 }}
+                              >
                                 <InfoOutlinedIcon
                                   color="secondary"
                                   sx={{ height: "auto !important" }}
                                 />
                               </Button>
-                            </BootstrapTooltip>
+                            </Tooltip>
                           )
                         }
                       />
@@ -656,7 +671,7 @@ export default function PopUpTrade(props) {
 
                     <Grid item xs={0.2}></Grid>
 
-                    {selectedCC.hasExternalId[1] ? (
+                    {selectedCC.hasExternalId[0] ? (
                       <Grid item xs={3.8}>
                         <InputTrade
                           value={exteraId2}
@@ -772,7 +787,15 @@ export default function PopUpTrade(props) {
                           data2 ? (
                             <></>
                           ) : (
-                            <BootstrapTooltip
+                            <Tooltip
+                              PopperProps={{
+                                disablePortal: true,
+                              }}
+                              onClose={handleTooltipClose}
+                              open={open === 2}
+                              disableFocusListener
+                              disableHoverListener
+                              disableTouchListener
                               title="آدرس کیف پول دریافت کننده:
 
                           آدرس کیف پول دریافت‌کننده، همان آدرس کیف پولی است که مقدار رمزارز مبادله شده به این آدرس واریز می‌شود. توجه نمایید، مسئولیت واردکردن آدرس صحیح کیف پول بر عهده شماست."
@@ -784,13 +807,17 @@ export default function PopUpTrade(props) {
                               // }}
                               arrow
                             >
-                              <Button color="common" sx={{ minWidth: 0 }}>
+                              <Button
+                                onClick={() => setOpen(2)}
+                                color="common"
+                                sx={{ minWidth: 0 }}
+                              >
                                 <InfoOutlinedIcon
                                   color="secondary"
                                   sx={{ height: "auto !important" }}
                                 />
                               </Button>
-                            </BootstrapTooltip>
+                            </Tooltip>
                           )
                         }
                       />
@@ -825,7 +852,15 @@ export default function PopUpTrade(props) {
                           data1 ? (
                             <></>
                           ) : (
-                            <BootstrapTooltip
+                            <Tooltip
+                              PopperProps={{
+                                disablePortal: true,
+                              }}
+                              onClose={handleTooltipClose}
+                              open={open === 4}
+                              disableFocusListener
+                              disableHoverListener
+                              disableTouchListener
                               title="آدرس کیف پول دریافت کننده:
 
                           آدرس کیف پول دریافت‌کننده، همان آدرس کیف پولی است که مقدار رمزارز مبادله شده به این آدرس واریز می‌شود. توجه نمایید، مسئولیت واردکردن آدرس صحیح کیف پول بر عهده شماست."
@@ -837,13 +872,17 @@ export default function PopUpTrade(props) {
                               // }}
                               arrow
                             >
-                              <Button color="common" sx={{ minWidth: 0 }}>
+                              <Button
+                                onClick={() => setOpen(4)}
+                                color="common"
+                                sx={{ minWidth: 0 }}
+                              >
                                 <InfoOutlinedIcon
                                   color="secondary"
                                   sx={{ height: "auto !important" }}
                                 />
                               </Button>
-                            </BootstrapTooltip>
+                            </Tooltip>
                           )
                         }
                       />
@@ -1023,7 +1062,15 @@ export default function PopUpTrade(props) {
                                 }}
                               >
                                 زمان انجام معامله
-                                <BootstrapTooltip
+                                <Tooltip
+                                  PopperProps={{
+                                    disablePortal: true,
+                                  }}
+                                  onClose={handleTooltipClose}
+                                  open={open === 5}
+                                  disableFocusListener
+                                  disableHoverListener
+                                  disableTouchListener
                                   title={`کاربر گرامی، برای تکمیل تبادل با نرخ شناور، مقدار رمزارز مشخص شده را به آدرسی که نمایش داده شده است واریز نموده و منتظر تایید واریز بمانید. توجه نمایید واریز هر کوینی غیر از ${selectedCC.currencies[0]} در شبکه ${selectedCC.network[0]} به آدرس ایجاد شده، منجر به از دست رفتن آن رمز ارز برای همیشه خواهد شد. ضمنا آدرس ایجاد شده فقط برای یکبار واریز رمزارز معتبر است.`}
                                   // sx={{
                                   //   " .MuiTooltip-popper": {
@@ -1034,12 +1081,13 @@ export default function PopUpTrade(props) {
                                   arrow
                                 >
                                   <InfoOutlinedIcon
+                                    onClick={() => setOpen(5)}
                                     sx={{
                                       height: "auto !important",
                                       fontSize: "1.5em !important",
                                     }}
                                   />
-                                </BootstrapTooltip>
+                                </Tooltip>
                               </TableCell>
                               <TableCell
                                 sx={{ padding: 0.5, border: "none" }}
@@ -1065,7 +1113,15 @@ export default function PopUpTrade(props) {
                               }}
                             >
                               آدرس واریزی
-                              <BootstrapTooltip
+                              <Tooltip
+                                PopperProps={{
+                                  disablePortal: true,
+                                }}
+                                onClose={handleTooltipClose}
+                                open={open === 6}
+                                disableFocusListener
+                                disableHoverListener
+                                disableTouchListener
                                 title={`کاربر گرامی، برای تکمیل تبادل با نرخ شناور، مقدار رمزارز مشخص شده را به آدرسی که نمایش داده شده است واریز نموده و منتظر تایید واریز بمانید. توجه نمایید واریز هر کوینی غیر از ${selectedCC.currencies[0]} در شبکه ${selectedCC.network[0]} به آدرس ایجاد شده، منجر به از دست رفتن آن رمز ارز برای همیشه خواهد شد. ضمنا آدرس ایجاد شده فقط برای یکبار واریز رمزارز معتبر است.`}
                                 // sx={{
                                 //   " .MuiTooltip-popper": {
@@ -1076,12 +1132,13 @@ export default function PopUpTrade(props) {
                                 arrow
                               >
                                 <InfoOutlinedIcon
+                                  onClick={() => setOpen(6)}
                                   sx={{
                                     height: "auto !important",
                                     fontSize: "1.5em !important",
                                   }}
                                 />
-                              </BootstrapTooltip>
+                              </Tooltip>
                             </TableCell>
                             <TableCell
                               sx={{ padding: 0.5, border: "none" }}
@@ -1136,7 +1193,15 @@ export default function PopUpTrade(props) {
                                 }}
                               >
                                 آدرس Memo واریزی
-                                <BootstrapTooltip
+                                <Tooltip
+                                  PopperProps={{
+                                    disablePortal: true,
+                                  }}
+                                  onClose={handleTooltipClose}
+                                  open={open === 7}
+                                  disableFocusListener
+                                  disableHoverListener
+                                  disableTouchListener
                                   title={`کاربر گرامی، برای تکمیل تبادل با نرخ شناور، مقدار رمزارز مشخص شده را به آدرسی که نمایش داده شده است واریز نموده و منتظر تایید واریز بمانید. توجه نمایید واریز هر کوینی غیر از ${selectedCC.currencies[0]} در شبکه ${selectedCC.network[0]} به آدرس ایجاد شده، منجر به از دست رفتن آن رمز ارز برای همیشه خواهد شد. ضمنا آدرس ایجاد شده فقط برای یکبار واریز رمزارز معتبر است.`}
                                   // sx={{
                                   //   " .MuiTooltip-popper": {
@@ -1147,12 +1212,13 @@ export default function PopUpTrade(props) {
                                   arrow
                                 >
                                   <InfoOutlinedIcon
+                                    onClick={() => setOpen(7)}
                                     sx={{
                                       height: "auto !important",
                                       fontSize: "1.5em !important",
                                     }}
                                   />
-                                </BootstrapTooltip>
+                                </Tooltip>
                               </TableCell>
                               <TableCell
                                 sx={{ padding: 0.5, border: "none" }}
@@ -1216,7 +1282,15 @@ export default function PopUpTrade(props) {
                               }}
                             >
                               کد پیگیری تبادل
-                              <BootstrapTooltip
+                              <Tooltip
+                                PopperProps={{
+                                  disablePortal: true,
+                                }}
+                                onClose={handleTooltipClose}
+                                open={open === 8}
+                                disableFocusListener
+                                disableHoverListener
+                                disableTouchListener
                                 title="کد پیگیری:
 
                       کد پیگیری برای پیگیری مبادله در تهران اکسچنج می باشد برای پیگیری وضعیت مبادله خود کد پیگیری را کپی و ذخیره کنید.با کد پیگیری هر زمان که بخواهید می توانید مبادله خود را در صفحه وضعیت مبادله مشاهده نمایید."
@@ -1229,12 +1303,13 @@ export default function PopUpTrade(props) {
                                 arrow
                               >
                                 <InfoOutlinedIcon
+                                  onClick={() => setOpen(8)}
                                   sx={{
                                     height: "auto !important",
                                     fontSize: "1.5em !important",
                                   }}
                                 />
-                              </BootstrapTooltip>
+                              </Tooltip>
                             </TableCell>
                             <TableCell
                               sx={{ padding: 0.5, border: "none" }}
@@ -1372,7 +1447,15 @@ export default function PopUpTrade(props) {
                       alignItems: "center",
                     }}
                   >
-                    <BootstrapTooltip
+                    <Tooltip
+                      PopperProps={{
+                        disablePortal: true,
+                      }}
+                      onClose={handleTooltipClose}
+                      open={open === 9}
+                      disableFocusListener
+                      disableHoverListener
+                      disableTouchListener
                       title="کد پیگیری:
 
                       کد پیگیری برای پیگیری مبادله در تهران اکسچنج می باشد برای پیگیری وضعیت مبادله خود کد پیگیری را کپی و ذخیره کنید.با کد پیگیری هر زمان که بخواهید می توانید مبادله خود را در صفحه وضعیت مبادله مشاهده نمایید."
@@ -1384,10 +1467,14 @@ export default function PopUpTrade(props) {
                       // }}
                       arrow
                     >
-                      <Button color="common" sx={{ minWidth: 0 }}>
+                      <Button
+                        onClick={() => setOpen(9)}
+                        color="common"
+                        sx={{ minWidth: 0 }}
+                      >
                         <InfoOutlinedIcon sx={{ height: "auto !important" }} />
                       </Button>
-                    </BootstrapTooltip>
+                    </Tooltip>
                     کد پیگیری معامله {payId}
                     <Button color="common" sx={{ minWidth: 0 }}>
                       <ContentCopyIcon

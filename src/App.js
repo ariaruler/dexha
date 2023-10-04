@@ -26,6 +26,7 @@ import { useCookies } from "react-cookie";
 import Snackbar from "@mui/material/Snackbar";
 import MuiAlert from "@mui/material/Alert";
 
+
 const darkTheme = createTheme({
   direction: "rtl",
   palette: {
@@ -411,16 +412,16 @@ function App() {
               <Header />
               {open === 2 ? (
                 <PopUpTrade
-                  toAmount={toAmount?.toAmount}
-                  id={2}
-                  borderRadius={darkTheme.shape.borderRadius["2"]}
-                  selectedValue={selectedValue}
-                  open={open}
-                  onClose={handleClose}
+                toAmount={toAmount?.toAmount}
+                id={2}
+                borderRadius={darkTheme.shape.borderRadius["2"]}
+                selectedValue={selectedValue}
+                open={open}
+                onClose={handleClose}
                 />
-              ) : (
-                <></>
-              )}
+                ) : (
+                  <></>
+                  )}
 
               <Snackbar
                 open={openAlert}

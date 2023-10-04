@@ -25,21 +25,12 @@ export default function FlowChooze(props) {
 
   const theme = useTheme();
 
-  const BootstrapTooltip = styled(({ className, ...props }) => (
-    <Tooltip {...props} arrow classes={{ popper: className }} />
-  ))(({ theme }) => ({
-    [`& .${tooltipClasses.arrow}`]: {
-      color: theme.palette.common.black,
-    },
-    [`& .${tooltipClasses.tooltip}`]: {
-      backgroundColor: theme.palette.common.black,
-    },
-  }));
+
 
     return (
         <div style={{ display: "flex" }}>
         {pages.map((page, index) => (
-          <BootstrapTooltip
+          <Tooltip
             title={page.tooltip}
             // sx={{' .MuiTooltip-popper' : {backgroundColor : theme.palette.secondary.main} ,backgroundColor : theme.palette.secondary.main}}
             arrow
@@ -53,7 +44,7 @@ export default function FlowChooze(props) {
                 changeColor={props.changeColor}
               />
             </div>
-          </BootstrapTooltip>
+          </Tooltip>
         ))}
       </div>
     );

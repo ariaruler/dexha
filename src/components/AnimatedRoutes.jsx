@@ -8,6 +8,7 @@ import FAQ from "../page/FAQ";
 import Rules from "../page/Rules";
 import { useLocation, Route, Routes } from "react-router-dom";
 import TransactionTracking from "../page/TransactionTracking";
+import AboutUs from "../page/AboutUs";
 // import {AnimatePresence } from 'framer-motion'
 
 // /dist/framer-motion
@@ -21,6 +22,7 @@ export default function AnimatedRoutes(props) {
     <Routes location={location} key={location.pathname}>
       <Route path="/swap" element={<AppTrade />} />
       <Route path="/contact-us" element={<ContactUs />} />
+      <Route path="/about-us" element={<AboutUs />} />
       <Route path="/help" element={<Help />} />
       <Route path="/faq" element={<FAQ />} />
       <Route path="/rules" element={<Rules />} />

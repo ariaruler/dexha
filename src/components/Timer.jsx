@@ -6,7 +6,7 @@ import { useEffect } from "react";
 export default function Timer(props) {
     const initialized = useRef(false)
 
-    const [time, setTime] = useState(12);
+    const [time, setTime] = useState(1200);
 
     useEffect(() => {
 
