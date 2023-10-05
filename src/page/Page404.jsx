@@ -1,6 +1,7 @@
 import * as React from 'react';
 import Typography from '@mui/material/Typography';
 import {motion } from 'framer-motion'
+import { Container } from '@mui/material';
 
 export default function Page404() {
     return (
@@ -9,9 +10,11 @@ export default function Page404() {
         animate={{opacity : 1 , width : '100%'}}
         exit={{opacity : 0, width : 0}}
         >
-        <Typography variant="h2" gutterBottom>
-            404 NOT FOUND
+      <Container maxWidth="md">
+        <Typography sx={{ textAlign: "center" }} variant="h2" gutterBottom>
+          صفحه مورد نظر پیدا نشد
         </Typography>
+        </Container>
         </motion.div>
     );
 }

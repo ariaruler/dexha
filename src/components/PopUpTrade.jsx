@@ -559,8 +559,6 @@ export default function PopUpTrade(props) {
                               }}
                               onClose={handleTooltipClose}
                               open={open === 0}
-                              disableFocusListener
-                              disableHoverListener
                               disableTouchListener
                               title="آدرس کیف پول دریافت کننده:
 
@@ -639,12 +637,10 @@ export default function PopUpTrade(props) {
                               }}
                               onClose={handleTooltipClose}
                               open={open === 1}
-                              disableFocusListener
-                              disableHoverListener
                               disableTouchListener
-                              title="آدرس کیف پول دریافت کننده:
+                              title='آدرس کیف پول بازپرداخت:
 
-                          آدرس کیف پول دریافت‌کننده، همان آدرس کیف پولی است که مقدار رمزارز مبادله شده به این آدرس واریز می‌شود. توجه نمایید، مسئولیت واردکردن آدرس صحیح کیف پول بر عهده شماست."
+                              آدرس کیف پول بازپرداخت، همان آدرسی است که در صورت عدم انجام تبادل به هر علتی، مقدار رمزارزی که توسط کاربر برای انجام مبادله واریز شده، به این آدرس عودت داده خواهد شد؛ بنابراین اکیدا توصیه می‌شود که حتما آدرس بازپرداخت را وارد نمایید.'
                               // sx={{
                               //   " .MuiTooltip-popper": {
                               //     backgroundColor: theme.palette.secondary.main,
@@ -793,8 +789,6 @@ export default function PopUpTrade(props) {
                               }}
                               onClose={handleTooltipClose}
                               open={open === 2}
-                              disableFocusListener
-                              disableHoverListener
                               disableTouchListener
                               title="آدرس کیف پول دریافت کننده:
 
@@ -858,8 +852,6 @@ export default function PopUpTrade(props) {
                               }}
                               onClose={handleTooltipClose}
                               open={open === 4}
-                              disableFocusListener
-                              disableHoverListener
                               disableTouchListener
                               title="آدرس کیف پول دریافت کننده:
 
@@ -1068,8 +1060,6 @@ export default function PopUpTrade(props) {
                                   }}
                                   onClose={handleTooltipClose}
                                   open={open === 5}
-                                  disableFocusListener
-                                  disableHoverListener
                                   disableTouchListener
                                   title={`کاربر گرامی، برای تکمیل تبادل با نرخ شناور، مقدار رمزارز مشخص شده را به آدرسی که نمایش داده شده است واریز نموده و منتظر تایید واریز بمانید. توجه نمایید واریز هر کوینی غیر از ${selectedCC.currencies[0]} در شبکه ${selectedCC.network[0]} به آدرس ایجاد شده، منجر به از دست رفتن آن رمز ارز برای همیشه خواهد شد. ضمنا آدرس ایجاد شده فقط برای یکبار واریز رمزارز معتبر است.`}
                                   // sx={{
@@ -1119,8 +1109,6 @@ export default function PopUpTrade(props) {
                                 }}
                                 onClose={handleTooltipClose}
                                 open={open === 6}
-                                disableFocusListener
-                                disableHoverListener
                                 disableTouchListener
                                 title={`کاربر گرامی، برای تکمیل تبادل با نرخ شناور، مقدار رمزارز مشخص شده را به آدرسی که نمایش داده شده است واریز نموده و منتظر تایید واریز بمانید. توجه نمایید واریز هر کوینی غیر از ${selectedCC.currencies[0]} در شبکه ${selectedCC.network[0]} به آدرس ایجاد شده، منجر به از دست رفتن آن رمز ارز برای همیشه خواهد شد. ضمنا آدرس ایجاد شده فقط برای یکبار واریز رمزارز معتبر است.`}
                                 // sx={{
@@ -1199,8 +1187,6 @@ export default function PopUpTrade(props) {
                                   }}
                                   onClose={handleTooltipClose}
                                   open={open === 7}
-                                  disableFocusListener
-                                  disableHoverListener
                                   disableTouchListener
                                   title={`کاربر گرامی، برای تکمیل تبادل با نرخ شناور، مقدار رمزارز مشخص شده را به آدرسی که نمایش داده شده است واریز نموده و منتظر تایید واریز بمانید. توجه نمایید واریز هر کوینی غیر از ${selectedCC.currencies[0]} در شبکه ${selectedCC.network[0]} به آدرس ایجاد شده، منجر به از دست رفتن آن رمز ارز برای همیشه خواهد شد. ضمنا آدرس ایجاد شده فقط برای یکبار واریز رمزارز معتبر است.`}
                                   // sx={{
@@ -1288,12 +1274,11 @@ export default function PopUpTrade(props) {
                                 }}
                                 onClose={handleTooltipClose}
                                 open={open === 8}
-                                disableFocusListener
-                                disableHoverListener
                                 disableTouchListener
+                                placement="top"
                                 title="کد پیگیری:
 
-                      کد پیگیری برای پیگیری مبادله در تهران اکسچنج می باشد برای پیگیری وضعیت مبادله خود کد پیگیری را کپی و ذخیره کنید.با کد پیگیری هر زمان که بخواهید می توانید مبادله خود را در صفحه وضعیت مبادله مشاهده نمایید."
+                      کد پیگیری برای پیگیری مبادله در دکسها می باشد برای پیگیری وضعیت مبادله خود کد پیگیری را کپی و ذخیره کنید.با کد پیگیری هر زمان که بخواهید می توانید مبادله خود را در صفحه وضعیت مبادله مشاهده نمایید."
                                 // sx={{
                                 //   " .MuiTooltip-popper": {
                                 //     backgroundColor: theme.palette.secondary.main,
@@ -1453,12 +1438,10 @@ export default function PopUpTrade(props) {
                       }}
                       onClose={handleTooltipClose}
                       open={open === 9}
-                      disableFocusListener
-                      disableHoverListener
                       disableTouchListener
                       title="کد پیگیری:
 
-                      کد پیگیری برای پیگیری مبادله در تهران اکسچنج می باشد برای پیگیری وضعیت مبادله خود کد پیگیری را کپی و ذخیره کنید.با کد پیگیری هر زمان که بخواهید می توانید مبادله خود را در صفحه وضعیت مبادله مشاهده نمایید."
+                      کد پیگیری برای پیگیری مبادله در دکسها می باشد برای پیگیری وضعیت مبادله خود کد پیگیری را کپی و ذخیره کنید.با کد پیگیری هر زمان که بخواهید می توانید مبادله خود را در صفحه وضعیت مبادله مشاهده نمایید."
                       // sx={{
                       //   " .MuiTooltip-popper": {
                       //     backgroundColor: theme.palette.secondary.main,
