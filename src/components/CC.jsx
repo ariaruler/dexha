@@ -20,9 +20,7 @@ import { useQuery } from "@tanstack/react-query";
 
 const marginOfAccordion = "1px 1.8em";
 
-const Accordion = styled((props) => (
-  <MuiAccordion disableGutters square {...props} />
-))(({ theme }) => ({
+const accordion = {
   backgroundImage : 'none',
   border: `1px solid ${theme.palette.divider}`,
   "&:not(:last-child)": {
@@ -31,7 +29,7 @@ const Accordion = styled((props) => (
   "&:before": {
     display: "none",
   },
-}));
+}
 
 const AccordionDetails = styled(MuiAccordionDetails)(({ theme }) => ({
   padding: theme.spacing(2),
@@ -53,7 +51,7 @@ export default function CC(props) {
 
   <>
       {props.currencies[0] ? props.currencies.map((x, i) => (
-        <Accordion key={i} >
+        <MuiAccordion disableGutters square sx={accordion} key={i} >
           <MuiAccordionSummary
             sx={{
               height: "56px",
@@ -98,7 +96,7 @@ export default function CC(props) {
               </Button>
             ))}
           </AccordionDetails>
-        </Accordion>
+        </MuiAccordion>
       )) : <Box sx={{width : '100%' ,display : 'flex' , alignItems: 'center' , justifyContent : 'center' , height : 300 }}>
         <CircularProgress  />
         </Box>
