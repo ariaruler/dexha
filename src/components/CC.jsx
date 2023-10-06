@@ -79,6 +79,9 @@ export default function CC(props) {
                 onClick={() => {
                   selectedCC.putCC(props.id, x.ticker, y, x.image[j] , x.hasExternalId[j] , x.legacyTicker[j]);
                 }}
+                onPress={() => {
+                  selectedCC.putCC(props.id, x.ticker, y, x.image[j] , x.hasExternalId[j] , x.legacyTicker[j]);
+                }}
                 variant="outlined"
                 sx={{
                   borderRadius: "1000px !important",

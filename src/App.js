@@ -211,7 +211,7 @@ function App() {
 
   const [ratio, setRatio] = useState();
 
-  const [cookies, setCookie] = useCookies(["name"]);
+
 
   const [indexOfPage, setIndexOfPage] = useCookies(-1);
 
