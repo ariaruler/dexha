@@ -20,16 +20,6 @@ import { useQuery } from "@tanstack/react-query";
 
 const marginOfAccordion = "1px 1.8em";
 
-const accordion = {
-  backgroundImage : 'none',
-  border: `1px solid ${theme.palette.divider}`,
-  "&:not(:last-child)": {
-    borderBottom: 0,
-  },
-  "&:before": {
-    display: "none",
-  },
-}
 
 const AccordionDetails = styled(MuiAccordionDetails)(({ theme }) => ({
   padding: theme.spacing(2),
@@ -37,11 +27,21 @@ const AccordionDetails = styled(MuiAccordionDetails)(({ theme }) => ({
 }));
 
 export default function CC(props) {
-
+  
   // console.log("kkkkkkkkkkkk");
-
+  
   const theme = useTheme();
-
+  
+  const accordion = {
+    backgroundImage : 'none',
+    border: `1px solid ${theme.palette.divider}`,
+    "&:not(:last-child)": {
+      borderBottom: 0,
+    },
+    "&:before": {
+      display: "none",
+    },
+  }
   const { selectedCC, fetchAmount } = useContext(UserContext);
 
 
