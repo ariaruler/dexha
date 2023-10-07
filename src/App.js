@@ -350,6 +350,11 @@ function App() {
     setOpenAlert(false);
   };
 
+  axiosRetry(axios, {
+    retryDelay: axiosRetry.exponentialDelay,
+    retries: 2,
+  });
+
   const client = new QueryClient();
 
   return (

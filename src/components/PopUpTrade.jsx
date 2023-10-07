@@ -460,7 +460,7 @@ export default function PopUpTrade(props) {
 
   axiosRetry(axios, {
     retryDelay: axiosRetry.exponentialDelay,
-    retries: 4,
+    retries: 2,
   });
 
   const [open, setOpen] = useState(-1);

@@ -223,7 +223,7 @@ export default function Tradecard(props) {
 
   axiosRetry(axios, {
     retryDelay: axiosRetry.exponentialDelay,
-    retries: 4,
+    retries: 2,
   });
 
   // console.log(minData);
