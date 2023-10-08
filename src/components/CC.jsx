@@ -71,29 +71,31 @@ export default function CC(props) {
           </MuiAccordionSummary>
           <MuiAccordionDetails sx={accordionDetails}>
             {x.network.map((y, j) => (
+              <div 
+              onClick={() => {
+                selectedCC.putCC(props.id, x.ticker, y, x.image[j] , x.hasExternalId[j] , x.legacyTicker[j]);
+              }}>
+
+
               <Button
               
-                key={j}
-                onClick={() => {
-                  selectedCC.putCC(props.id, x.ticker, y, x.image[j] , x.hasExternalId[j] , x.legacyTicker[j]);
-                }}
-                onPress={() => {
-                  selectedCC.putCC(props.id, x.ticker, y, x.image[j] , x.hasExternalId[j] , x.legacyTicker[j]);
-                }}
-                variant="outlined"
-                sx={{
-                  borderRadius: "1000px !important",
-                  margin: 0.5,
-                  border: 0,
-                  padding: 1,
-                  backgroundColor: theme.palette.background.paper,
-                  "&:hover": { border: 0 },
-                }}
-                color="common"
-                >
+              key={j}
+              
+              variant="outlined"
+              sx={{
+                borderRadius: "1000px !important",
+                margin: 0.5,
+                border: 0,
+                padding: 1,
+                backgroundColor: theme.palette.background.paper,
+                "&:hover": { border: 0 },
+              }}
+              color="common"
+              >
                 <AvatarCC image={x.image[j]} />
                 {y}
               </Button>
+                  </div>
             ))}
           </MuiAccordionDetails>
         </MuiAccordion>
