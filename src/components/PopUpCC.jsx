@@ -113,12 +113,7 @@ export default function PopUpCC(props) {
 
 
   return (
-    // <AnimatePresence>
-    //   <motion.div
-    //     initial={{ opacity: 0, width: 0 }}
-    //     animate={{ opacity: 1, width: "100%" }}
-    //     exit={{ opacity: 0, width: 0 }}
-    //   >
+
         <Dialog
           id={props.id}
           sx={Dialogstyle}
@@ -132,11 +127,7 @@ export default function PopUpCC(props) {
               <DialogTitle
                 sx={{ backgroundColor: theme.palette.background.paper }}
               >
-                <motion.div
-                  initial={{ opacity: 0, width: 0 }}
-                  animate={{ opacity: 1, width: "100%" }}
-                  exit={{ opacity: 0, width: 0 }}
-                >
+
                   <Grid
                     item
                     sx={{
@@ -166,7 +157,7 @@ export default function PopUpCC(props) {
                       endAdornment={<SearchIcon sx={{ marginLeft: 20 }} />}
                     />
                   </Grid>
-                </motion.div>
+
               </DialogTitle>
 
               <DialogContent
@@ -177,18 +168,14 @@ export default function PopUpCC(props) {
                 }}
                 dividers
               >
-                <motion.div
-                  initial={{ opacity: 0, width: 0 }}
-                  animate={{ opacity: 1, width: "100%" }}
-                  exit={{ opacity: 0, width: 0 }}
-                >
+
                   <CC id={props.id}
                    currencies={
                     filteredList(data,  search)
                     // currencies
                   } 
                    />
-                </motion.div>
+
               </DialogContent>
 
               <DialogActions
@@ -213,8 +200,7 @@ export default function PopUpCC(props) {
             </>
 
         </Dialog>
-    //   </motion.div>
-    // </AnimatePresence>
+
   );
 }
 //
