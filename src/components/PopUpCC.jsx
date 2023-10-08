@@ -113,12 +113,12 @@ export default function PopUpCC(props) {
 
 
   return (
-    <AnimatePresence>
-      <motion.div
-        initial={{ opacity: 0, width: 0 }}
-        animate={{ opacity: 1, width: "100%" }}
-        exit={{ opacity: 0, width: 0 }}
-      >
+    // <AnimatePresence>
+    //   <motion.div
+    //     initial={{ opacity: 0, width: 0 }}
+    //     animate={{ opacity: 1, width: "100%" }}
+    //     exit={{ opacity: 0, width: 0 }}
+    //   >
         <Dialog
           id={props.id}
           sx={Dialogstyle}
@@ -213,8 +213,8 @@ export default function PopUpCC(props) {
             </>
 
         </Dialog>
-      </motion.div>
-    </AnimatePresence>
+    //   </motion.div>
+    // </AnimatePresence>
   );
 }
 //
