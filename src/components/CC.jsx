@@ -74,8 +74,9 @@ export default function CC(props) {
               <div 
               onClick={() => {
                 selectedCC.putCC(props.id, x.ticker, y, x.image[j] , x.hasExternalId[j] , x.legacyTicker[j]);
-              }}>
-
+              }}
+                style={{display :' inline'}}
+              >
 
               <Button
               
