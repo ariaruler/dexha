@@ -21,10 +21,10 @@ import { useQuery } from "@tanstack/react-query";
 const marginOfAccordion = "1px 1.8em";
 
 
-const AccordionDetails = styled(MuiAccordionDetails)(({ theme }) => ({
-  padding: theme.spacing(2),
+const accordionDetails = {
+  padding: "1em 2em !important" ,
   borderTop: "1px solid rgba(0, 0, 0, .125)",
-}));
+}
 
 export default function CC(props) {
   
@@ -69,7 +69,7 @@ export default function CC(props) {
               {x.ticker}
             </Typography>
           </MuiAccordionSummary>
-          <AccordionDetails sx={{ padding: "1em 2em !important" }}>
+          <MuiAccordionDetails sx={accordionDetails}>
             {x.network.map((y, j) => (
               <Button
               
@@ -95,7 +95,7 @@ export default function CC(props) {
                 {y}
               </Button>
             ))}
-          </AccordionDetails>
+          </MuiAccordionDetails>
         </MuiAccordion>
       )) : <Box sx={{width : '100%' ,display : 'flex' , alignItems: 'center' , justifyContent : 'center' , height : 300 }}>
         <CircularProgress  />
