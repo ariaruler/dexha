@@ -102,16 +102,7 @@ export default function Header() {
     setState(open);
   };
 
-  const BootstrapTooltip = styled(({ className, ...props }) => (
-    <Tooltip {...props} arrow classes={{ popper: className }} />
-  ))(({ theme }) => ({
-    [`& .${tooltipClasses.arrow}`]: {
-      color: theme.palette.common.black,
-    },
-    [`& .${tooltipClasses.tooltip}`]: {
-      backgroundColor: theme.palette.common.black,
-    },
-  }));
+
 
   return (
     <AppBar
@@ -170,13 +161,13 @@ export default function Header() {
             </CardBox>
           </Box>
 
-          <BootstrapTooltip
+          {/* <BootstrapTooltip
             title='به زودی'
             // sx={{' .MuiTooltip-popper' : {backgroundColor : theme.palette.secondary.main} ,backgroundColor : theme.palette.secondary.main}}
             arrow
-          >
+          > */}
           <ButtonTrade  display={ "none"  } borderRadius="6px" content=" اتصال به کیف پول" connect={true} />
-          </BootstrapTooltip>
+          {/* </BootstrapTooltip> */}
           <Box
             component="img"
             sx={{ display: {xs : "flex" , md : 'none'}, mr: 1, width: 120 }}
@@ -235,6 +226,33 @@ export default function Header() {
               role="presentation"
             >
               <List sx={{ width: "100%" }}>
+              <ListItem key={100} disablePadding>
+                    <a
+                      key={100}
+                      style={{
+                        textDecoration: "none",
+                        color: theme.palette.secondary.contrastText,
+                        width: "100%",
+                      }}
+                      href='https://dexha.io/'
+                    >
+                      <ListItemButton
+                        onClick={() => {
+                          toggleDrawer(false);
+                          // console.log('ooooo');
+                        }}
+                      >
+                        <ListItemText
+                          sx={{
+                            display: "flex",
+                            justifyContent: "center",
+                            padding: 0.5,
+                          }}
+                          primary='صفحه اصلی'
+                        />
+                      </ListItemButton>
+                    </a>
+                  </ListItem>
                 {pages.map((x, index) => (
                   <ListItem key={x.content} disablePadding>
                     <Link
