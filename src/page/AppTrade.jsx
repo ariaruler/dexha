@@ -30,14 +30,11 @@ export default function AppTrade() {
       }}
     >
     <Container maxWidth="xs">
-      {/* <Grid container spacing={2}  sx={{ justifyContent : 'center'}}>
-        <Grid item xs={4}> */}
+
         <Tradecard borderRadius={theme.shape.borderRadius['2']} />
-        {/* </Grid> */}
-        {/* <Grid item xs={8}>
-          <Item>xs=8</Item>
-        </Grid> */}
-      {/* </Grid> */}
+
+        
+
     </Container>
     </motion.div>
   );

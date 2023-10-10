@@ -466,7 +466,7 @@ export default function PopUpTrade(props) {
   const [open, setOpen] = useState(-1);
 
   const handleTooltipClose = () => {
-    console.log('ppppppppp');
+    // console.log('ppppppppp');
     setOpen(-1);
   };
 
@@ -496,7 +496,8 @@ export default function PopUpTrade(props) {
                 <PopUpTitle
                   header="شروع تبادل"
                   handleClose={() => {
-                    handleClickOpen(2);
+                    handleClose();
+                    // handleClickOpen(2);
                   }}
                   backgroundPaper={theme.palette.background.paper}
                   rightComponent={
