@@ -45,13 +45,13 @@ export default function CC(props) {
   const { selectedCC, fetchAmount } = useContext(UserContext);
 
 
-
+const [expand, setExpand] = useState(-1);
 
   return (
 
   <>
       {props.currencies[0] ? props.currencies.map((x, i) => (
-        <MuiAccordion disableGutters square sx={accordion} key={i} >
+        <MuiAccordion expanded={i === expand} disableGutters square sx={accordion} key={i} >
           <MuiAccordionSummary
             sx={{
               height: "56px",
@@ -62,6 +62,22 @@ export default function CC(props) {
               },
               margin: marginOfAccordion,
               borderBottom: `1px  solid ${theme.palette.grey["50"]}`,
+            }}
+            onClick={()=>{
+              if(expand === i){
+                setExpand(-1)
+              }else{
+
+                setExpand(i)
+              }
+            }}
+            onTouchStart={()=>{
+              if(expand === i){
+                setExpand(-1)
+              }else{
+
+                setExpand(i)
+              }
             }}
             >
             <AvatarCC image={x.image[0]} />

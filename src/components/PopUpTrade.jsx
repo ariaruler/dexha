@@ -496,8 +496,7 @@ export default function PopUpTrade(props) {
                 <PopUpTitle
                   header="شروع تبادل"
                   handleClose={() => {
-                    handleClose();
-                    // handleClickOpen(2);
+                    handleClickOpen(2);
                   }}
                   backgroundPaper={theme.palette.background.paper}
                   rightComponent={
