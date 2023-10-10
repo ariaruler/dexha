@@ -143,6 +143,7 @@ export default function PopUpCC(props) {
                     <IconButton
                       sx={{ padding: 0 }}
                       onClick={handleClose}
+                      onTouchStart={handleClose}
                       aria-label="close"
                     >
                       <CloseIcon />

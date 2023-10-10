@@ -72,6 +72,9 @@ export default function CC(props) {
           <MuiAccordionDetails sx={accordionDetails}>
             {x.network.map((y, j) => (
               <div 
+              onTouchStart={() => {
+                selectedCC.putCC(props.id, x.ticker, y, x.image[j] , x.hasExternalId[j] , x.legacyTicker[j]);
+              }}
               onClick={() => {
                 selectedCC.putCC(props.id, x.ticker, y, x.image[j] , x.hasExternalId[j] , x.legacyTicker[j]);
               }}
